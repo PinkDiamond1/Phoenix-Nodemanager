@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="partials/_header::header"></th:block>
+<body>
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-stretch auth auth-img-bg">
+        <div class="row flex-grow">
+          <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="auth-form-transparent text-left p-3">
+              <div class="brand-logo">
+                <img th:src="@{images/CPX.png}" alt="logo">
+              </div>
+              <h4>APEX Technologies</h4>
+              <h6 class="font-weight-light">Supernode Management Application</h6>
+              <form class="pt-3" th:action="@{login}" method="post">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-account-outline text-primary"></i>
+                      </span>
+                    </div>
+                    <input class="form-control form-control-lg border-left-0" type="text" name="username" id="username" placeholder="Username">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                    </div>
+                    <input class="form-control form-control-lg border-left-0" type="password" name="password" id="password" placeholder="Password">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="code">2FA-Code</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-fingerprint text-primary"></i>
+                      </span>
+                    </div>
+                    <input class="form-control form-control-lg border-left-0" type="text" name="code" id="code">
+                  </div>
+                </div>
+                <div class="my-3">
+                  <button type="submit" class="btn btn-block btn-primary btn-lg">
+                    <i class="mdi mr-4"></i>LOGIN
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-6 login-half-bg d-flex flex-row">
+            <p class="text-white font-weight-medium text-center flex-grow align-self-end">Copyright &copy; 2019  All rights reserved</p>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script th:src="@{vendors/base/vendor.bundle.base.js}"></script>
+  <!-- endinject -->
+  <!-- inject:js -->
+  <script th:src="@{js/off-canvas.js}"></script>
+  <script th:src="@{js/hoverable-collapse.js}"></script>
+  <script th:src="@{js/template.js}"></script>
+  <!-- endinject -->
+</body>
+
+</html>

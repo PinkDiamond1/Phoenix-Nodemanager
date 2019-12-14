@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="partials/_header::header"></th:block>
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <th:block th:include="partials/_navbar::navbar"></th:block>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <th:block th:include="partials/_sidebar::sidebar"></th:block>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <th:block th:include="partials/_footer::footer"></th:block>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <th:block th:include="partials/_script::script"></th:block>
+</body>
+
+</html>
+

@@ -1,0 +1,30 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar">
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">
+                    <i class="mdi mdi-home menu-icon"></i>
+                    <span class="menu-title">Home</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/config}">
+                    <i class="mdi mdi-cube menu-icon"></i>
+                    <span class="menu-title">Configuration</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/settings}">
+                    <i class="mdi mdi-settings menu-icon"></i>
+                    <span class="menu-title">Settings</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">
+                    <i class="mdi mdi-logout menu-icon"></i>
+                    <span class="menu-title">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
