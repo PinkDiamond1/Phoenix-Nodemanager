@@ -32,14 +32,15 @@ public class RegisterController {
     public String postRegisterPage(@RequestParam(value = "inputUsername") final String username,
                                    @RequestParam(value = "inputPassword") final String password,
                                    @RequestParam(value = "secret") final String secret) {
-
-        final ApplicationUser initialUser = ApplicationUser.builder()
-                .username(username)
-                .password(password)
-                .secret(secret)
-                .enabled(true)
-                .build();
-        applicationUserRepository.save(initialUser);
+        if(!applicationUserRepository.findAll().iterator().hasNext()) {
+            final ApplicationUser initialUser = ApplicationUser.builder()
+                    .username(username)
+                    .password(password)
+                    .secret(secret)
+                    .enabled(true)
+                    .build();
+            applicationUserRepository.save(initialUser);
+        }
         return ApplicationPaths.LOGIN_PATH;
     }
 
