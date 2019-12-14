@@ -6,4 +6,4 @@ From the project directory run:
 You will find the Fat-Jar inside the generated target folder
 # Run
 ##### java -jar nodemanager-0.0.1.jar
-The application runs default on localhost:9100
+The application enforces HTTPS and runs on https://localhost:9100
