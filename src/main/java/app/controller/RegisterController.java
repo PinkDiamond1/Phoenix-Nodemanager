@@ -31,8 +31,9 @@ public class RegisterController {
     @PostMapping
     public String postRegisterPage(@RequestParam(value = "inputUsername") final String username,
                                    @RequestParam(value = "inputPassword") final String password,
+                                   @RequestParam(value = "inputPasswordRepeat") final String passwordRepeat,
                                    @RequestParam(value = "secret") final String secret) {
-        if(!applicationUserRepository.findAll().iterator().hasNext()) {
+        if(!applicationUserRepository.findAll().iterator().hasNext() && password.equals(passwordRepeat)) {
             final ApplicationUser initialUser = ApplicationUser.builder()
                     .username(username)
                     .password(password)
