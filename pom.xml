@@ -18,6 +18,7 @@
         <start-class>app.ManagerApplication</start-class>
         <logback.version>1.2.3</logback.version>
         <otp.version>1.0.0</otp.version>
+        <typesafe.version>1.4.0</typesafe.version>
         <h2.version>1.4.200</h2.version>
         <spring.version>5.2.0.RELEASE</spring.version>
     </properties>
@@ -96,6 +97,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.version}</version>
         </dependency>
 
         <dependency>
