@@ -1,0 +1,138 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="actor">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Actor Settings</h4>
+            <div class="form-group">
+                <label for="mailBoxType">Mailbox Type</label>
+                <input type="text" class="form-control" name="mailBoxType" id="mailBoxType" required>
+            </div>
+            <div class="form-group">
+                <label for="executor">Executor</label>
+                <input type="text" class="form-control" name="executor" id="executor" required>
+            </div>
+            <div class="form-group">
+                <label for="poolSize">Thread Pool Size</label>
+                <input type="number" class="form-control" id="poolSize" name="poolSize" required>
+            </div>
+            <div class="form-group">
+                <label for="throughput">Throughput</label>
+                <input type="number" class="form-control" name="throughput" id="throughput" required>
+            </div>
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input type="text" class="form-control" name="type" id="type" required>
+            </div>
+        </div>
+    </div>
+</div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="blockDB">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Blockchain Database</h4>
+            <div class="form-inline">
+                <label class="sr-only" for="blockCacheSize">Cache Size</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Cache Size</div>
+                    </div>
+                    <input type="number" class="form-control" id="blockCacheSize" name="blockCacheSize" required>
+                </div>
+                <label class="sr-only" for="blockDir">Directory</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Directory</div>
+                    </div>
+                    <input type="text" class="form-control" id="blockDir" name="blockDir" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="blockDbType">Database Type</label>
+                <select class="form-control" id="blockDbType" name="blockDbType" required>
+                    <option value="0">In Memory</option>
+                    <option value="1">LevelDB</option>
+                    <option value="2" selected>RocksDB</option>
+                </select>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" id="blockEnabled" name="blockEnabled" checked required>
+                    Cache Enabled
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="defaultDB">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Default Database</h4>
+            <div class="form-inline">
+                <label class="sr-only" for="defaultCacheSize">Cache Size</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Cache Size</div>
+                    </div>
+                    <input type="number" class="form-control" id="defaultCacheSize" name="defaultCacheSize" required>
+                </div>
+                <label class="sr-only" for="defaultDir">Directory</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Directory</div>
+                    </div>
+                    <input type="text" class="form-control" id="defaultDir" name="defaultDir" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="defaultDbType">Database Type</label>
+                <select class="form-control" id="defaultDbType" name="defaultDbType" required>
+                    <option value="0" >In Memory</option>
+                    <option value="1">LevelDB</option>
+                    <option value="2" selected>RocksDB</option>
+                </select>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" id="defaultEnabled" name="defaultEnabled" checked required>
+                    Cache Enabled
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="forkDB">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Default Database</h4>
+            <div class="form-inline">
+                <label class="sr-only" for="forkCacheSize">Cache Size</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Cache Size</div>
+                    </div>
+                    <input type="number" class="form-control" id="forkCacheSize" name="forkCacheSize" required>
+                </div>
+                <label class="sr-only" for="forkDir">Directory</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Directory</div>
+                    </div>
+                    <input type="text" class="form-control" id="forkDir" name="forkDir" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="forkDbType">Database Type</label>
+                <select class="form-control" id="forkDbType" name="forkDbType" required>
+                    <option value="0" >In Memory</option>
+                    <option value="1">LevelDB</option>
+                    <option value="2" selected>RocksDB</option>
+                </select>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" id="forkEnabled" name="forkEnabled" checked required>
+                    Cache Enabled
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
