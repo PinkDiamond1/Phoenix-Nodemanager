@@ -286,7 +286,7 @@
             </div>
             <div class="form-group">
                 <label for="poolSize">RPC Port</label>
-                <input type="number" class="form-control" id="rpcPort" th:value="${rpc.getPort()}" name="rpcPort" required>
+                <input type="number" step="1" class="form-control" id="rpcPort" th:value="${rpc.getPort()}" name="rpcPort" required>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
@@ -296,7 +296,7 @@
             </div>
             <div class="form-group">
                 <label for="throughput">Mongo DB URL</label>
-                <input type="number" class="form-control" name="mongoUrl" th:value="${plugins.getMongoDb().get('uri')}" id="mongoUrl" required>
+                <input type="text" class="form-control" name="mongoUrl" th:value="${plugins.getMongoDb().get('uri')}" id="mongoUrl" required>
             </div>
         </div>
     </div>
