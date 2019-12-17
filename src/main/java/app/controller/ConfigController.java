@@ -5,14 +5,19 @@ import app.settings.ConfigurationFileService;
 import app.settings.component.*;
 import message.util.GenericJacksonWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @Controller
@@ -22,9 +27,20 @@ public class ConfigController {
     @Autowired
     private GenericJacksonWriter jacksonWriter;
 
+    @Autowired
+    ResourceLoader resourceLoader;
+
+    @Value("${app.settings}")
+    private String settingsPath;
+
+    @Value("${app.settings.default}")
+    private String settingsDefaultPath;
+
     @GetMapping
     public String getConfig(Model model) throws IOException {
-        final RootComponent component = ConfigurationFileService.loadSettings("settings.conf");
+        final RootComponent component = Files.isReadable(Paths.get(settingsPath)) ?
+                ConfigurationFileService.loadSettings(settingsPath) :
+                ConfigurationFileService.loadSettings(ResourceUtils.getFile(settingsDefaultPath).getAbsolutePath());
         model.addAttribute(ActorComponent.NAME, jacksonWriter.getObjectFromString(ActorComponent.class,
                 jacksonWriter.getStringFromRequestObject(component.getComponents().get(ActorComponent.NAME))));
         model.addAttribute(ChainComponent.NAME, jacksonWriter.getObjectFromString(ChainComponent.class,

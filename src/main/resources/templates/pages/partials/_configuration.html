@@ -1,7 +1,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="actor">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Actor Parameters</h4>
+            <h4 class="card-title mdi mdi-adjust">  Actor Parameters</h4>
             <div class="form-group">
                 <label for="mailBoxType">Mailbox Type</label>
                 <input type="text" class="form-control" name="mailBoxType" id="mailBoxType" th:value="${actor.getNodeMailbox().get('mailbox-type')}" required>
@@ -28,7 +28,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="blockDB">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Blockchain Database</h4>
+            <h4 class="card-title mdi mdi-database">  Blockchain Database</h4>
             <div class="form-inline">
                 <label class="sr-only" for="blockCacheSize">Cache Size</label>
                 <div class="input-group mb-2 mr-sm-2">
@@ -65,7 +65,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="defaultDB">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Main Database</h4>
+            <h4 class="card-title mdi mdi-database">  Main Database</h4>
             <div class="form-inline">
                 <label class="sr-only" for="defaultCacheSize">Cache Size</label>
                 <div class="input-group mb-2 mr-sm-2">
@@ -102,7 +102,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="forkDB">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Fork Database</h4>
+            <h4 class="card-title mdi mdi-database">  Fork Database</h4>
             <div class="form-inline">
                 <label class="sr-only" for="forkCacheSize">Cache Size</label>
                 <div class="input-group mb-2 mr-sm-2">
@@ -139,7 +139,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="genesis">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Genesis Block</h4>
+            <h4 class="card-title mdi mdi-regex">  Genesis Block</h4>
             <div class="form-group">
                 <label for="timestamp">Timestamp</label>
                 <input type="text" class="form-control" id="timestamp" th:value="${chain.getGenesis().get('timeStamp')}" name="timestamp" required>
@@ -162,7 +162,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="airdrop">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Initial Airdrop</h4>
+            <h4 class="card-title mdi mdi-weather-cloudy">  Initial Airdrop</h4>
             <div class="form-inline" th:each="drop,iter : ${chain.getGenesis().get('genesisCoinAirdrop')}">
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
@@ -183,7 +183,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="consensus">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Consensus</h4>
+            <h4 class="card-title mdi mdi-vector-circle">  Consensus</h4>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
@@ -244,7 +244,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="initialWitnesses">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Initial Witnesses</h4>
+            <h4 class="card-title mdi mdi-account-star">  Initial Witnesses</h4>
             <div class="form-inline" th:each="witness,iter : ${consensus.getInitialWitness()}">
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
@@ -265,7 +265,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="general">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">General Settings</h4>
+            <h4 class="card-title mdi mdi-shape-polygon-plus">  General Settings</h4>
             <div class="form-group">
                 <label for="executor">Producer Private Key</label>
                 <input type="password" class="form-control" name="producerPrivKey" th:value="${miner.getPrivKeys().get(0)}" id="producerPrivKey" required>
@@ -304,7 +304,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="network">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Network</h4>
+            <h4 class="card-title mdi mdi-google-circles-extended">  Network</h4>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
@@ -451,9 +451,9 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="knownPeers">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Known Peers</h4>
+            <h4 class="card-title mdi mdi-apps">  Known Peers</h4>
             <div class="form-group" th:each="peer,iter : ${network.getKnownPeers()}">
-                <label th:for="${'knownPeer'+iter.index}" th:text="${'Peer '+iter.index}"></label>
+                <label th:for="${'knownPeer'+iter.index}" th:text="${'Peer '+ __${iter.index+1}__ }"></label>
                 <input type="text" class="form-control" th:value="${peer}" th:name="${'knownPeer'+iter.index}" th:id="${'knownPeer'+iter.index}" required>
             </div>
         </div>
@@ -462,9 +462,9 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="seedPeers">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Known Peers</h4>
+            <h4 class="card-title mdi mdi-apps">  Seed Peers</h4>
             <div class="form-group" th:each="peer,iter : ${network.getSeedPeers()}">
-                <label th:for="${'seedPeer'+iter.index}" th:text="${'Peer '+iter.index}"></label>
+                <label th:for="${'seedPeer'+iter.index}" th:text="${'Peer '+ __${iter.index+1}__ }"></label>
                 <input type="text" class="form-control" th:value="${peer}" th:name="${'seedPeer'+iter.index}" th:id="${'seedPeer'+iter.index}" required>
             </div>
         </div>
