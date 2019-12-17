@@ -2,7 +2,6 @@ package app.settings.component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
 import java.util.HashMap;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = PluginsComponent.NAME)
 public class PluginsComponent {
 
     @JsonIgnore

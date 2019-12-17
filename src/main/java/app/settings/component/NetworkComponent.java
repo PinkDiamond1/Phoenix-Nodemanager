@@ -2,7 +2,6 @@ package app.settings.component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = NetworkComponent.NAME)
 public class NetworkComponent {
 
     @JsonIgnore
@@ -58,13 +56,13 @@ public class NetworkComponent {
     private String nodeName;
 
     @JsonProperty(value = SettingsField.NETWORK_PEER_DB_MAX)
-    private int peerDbMax;
+    private int peerDatabaseMax;
 
     @JsonProperty(value = SettingsField.NETWORK_PEER_MAX_GAP)
     private int peerMaxTimeGap;
 
     @JsonProperty(value = SettingsField.NETWORK_PEER_SYNC_NUM)
-    private int peerMaxSyncNum;
+    private int peerSyncNumber;
 
     @JsonProperty(value = SettingsField.NETWORK_PEERS_DB)
     private String peersDb;

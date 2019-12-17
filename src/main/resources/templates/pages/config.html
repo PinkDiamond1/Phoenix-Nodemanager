@@ -12,22 +12,58 @@
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
-                <div class="row">
-                    <div class="col-md-6 grid-margin stretch-card">
-                        <th:block th:include="partials/_configuration::actor"></th:block>
+                <form class="pt-3" th:action="@{config}" method="post">
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::general"></th:block>
+                        </div>
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::genesis"></th:block>
+                        </div>
                     </div>
-                    <div class="col-md-6 grid-margin stretch-card">
-                        <th:block th:include="partials/_configuration::defaultDB"></th:block>
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::blockDB"></th:block>
+                        </div>
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::forkDB"></th:block>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 grid-margin stretch-card">
-                        <th:block th:include="partials/_configuration::blockDB"></th:block>
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::defaultDB"></th:block>
+                        </div>
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::airdrop"></th:block>
+                        </div>
                     </div>
-                    <div class="col-md-6 grid-margin stretch-card">
-                        <th:block th:include="partials/_configuration::forkDB"></th:block>
+                    <div class="row">
+                        <div class="col-md-12 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::consensus"></th:block>
+                        </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::initialWitnesses"></th:block>
+                        </div>
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::actor"></th:block>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::network"></th:block>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::knownPeers"></th:block>
+                        </div>
+                        <div class="col-md-6 grid-margin stretch-card">
+                            <th:block th:include="partials/_configuration::seedPeers"></th:block>
+                        </div>
+                    </div>
+                </form>
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->

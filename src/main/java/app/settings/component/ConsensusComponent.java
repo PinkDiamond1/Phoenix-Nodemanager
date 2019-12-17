@@ -2,7 +2,6 @@ package app.settings.component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -13,20 +12,19 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = ConsensusComponent.NAME)
 public class ConsensusComponent {
 
     @JsonIgnore
     public static final String NAME = "consensus";
 
     @JsonProperty(value = SettingsField.CONSENSUS_TIME_ERROR)
-    private int timeError;
+    private int acceptableTimeError;
 
     @JsonProperty(value = SettingsField.CONSENSUS_AWARD)
     private double candidateAward;
 
     @JsonProperty(value = SettingsField.CONSENSUS_ELECT_TIME)
-    private int electTime;
+    private int electeTime;
 
     @JsonProperty(value = SettingsField.CONSENSUS_INITIAL_WITNESS)
     private ArrayList<HashMap<String, String>> initialWitness;

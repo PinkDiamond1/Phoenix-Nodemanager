@@ -13,7 +13,6 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = ActorComponent.NAME)
 public class ActorComponent {
 
     @JsonIgnore
