@@ -1,9 +1,8 @@
 # APEX-Nodemanager
 This application provides a graphical interface to manage Supernodes
-# Build
-From the project directory run:
-##### mvn clean package
-You will find the Fat-Jar inside the generated target folder
+# Requirements
+##### Maven & Java
 # Run
-##### java -jar nodemanager-0.0.1.jar
+From the project directory execute:
+##### mvn spring-boot:run
 The application enforces HTTPS and runs on https://localhost:9100
