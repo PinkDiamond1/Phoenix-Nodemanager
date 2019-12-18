@@ -270,21 +270,9 @@
                 <label for="privKeys">Producer Private Key</label>
                 <input type="password" class="form-control" name="privKeys" th:value="${miner.getPrivKeys().get(0)}" id="privKeys" required>
             </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="lightNode" name="lightNode" th:checked="${chain.isLightNode()}">
-                    Light Node
-                </label>
-            </div>
             <div class="form-group">
                 <label for="stopProcessTxTimeSlot">Stop Process Time</label>
                 <input type="number" step="1" class="form-control" name="stopProcessTxTimeSlot" th:value="${runtimeParas.getStopProcessTxTimeSlot()}" id="stopProcessTxTimeSlot" required>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="enabled" name="enabled" th:checked="${rpc.isEnabled()}">
-                    RPC Enabled
-                </label>
             </div>
             <div class="form-group">
                 <label for="host">RPC Host IP</label>
@@ -294,21 +282,51 @@
                 <label for="port">RPC Port</label>
                 <input type="number" step="1" class="form-control" id="port" th:value="${rpc.getPort()}" name="port" required>
             </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="mongodbenabled" name="mongodbenabled" th:checked="${plugins.getMongoDb().get('enabled')}">
-                    MongoDB Enabled
-                </label>
-            </div>
             <div class="form-group">
                 <label for="uri">Mongo DB URL</label>
                 <input type="text" class="form-control" name="uri" th:value="${plugins.getMongoDb().get('uri')}" id="uri" required>
             </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="forceStartProduce" name="forceStartProduce" th:checked="${miner.isForceStartProduce()}">
-                    Force Production
-                </label>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" id="forceStartProduce" name="forceStartProduce" th:checked="${miner.isForceStartProduce()}">
+                                Force Production
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" id="mongodbenabled" name="mongodbenabled" th:checked="${plugins.getMongoDb().get('enabled')}">
+                                MongoDB Enabled
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" id="enabled" name="enabled" th:checked="${rpc.isEnabled()}">
+                                RPC Enabled
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group row">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" id="lightNode" name="lightNode" th:checked="${chain.isLightNode()}">
+                                Light Node
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
