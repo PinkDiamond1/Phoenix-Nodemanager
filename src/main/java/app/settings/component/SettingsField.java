@@ -30,6 +30,7 @@ public class SettingsField {
     public static final String CHAIN_GENESIS_PRIVATEKEY = "privateKey";
     public static final String CHAIN_TIMESTAMP = "timeStamp";
     public static final String CHAIN_MINERAWARD = "minerAward";
+    public static final String CHAIN_LIGHTNODE = "lightNode";
 
 
     // Consensus component fields
@@ -44,6 +45,7 @@ public class SettingsField {
 
     // Miner component fields
     public static final String MINER_PRIVKEY = "privKeys";
+    public static final String FORCE_START_PRODUCE = "forceStartProduce";
 
     // Network component fields
     public static final String NETWORK_ACCEPT_OTHER_PEERS = "acceptOtherPeers";
@@ -78,5 +80,4 @@ public class SettingsField {
 
     // Runtime component fields
     public static final String RUNTIME_STOP_PROCESS = "stopProcessTxTimeSlot";
-
 }

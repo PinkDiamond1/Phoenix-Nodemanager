@@ -1,12 +1,13 @@
 package app.controller;
 
 import app.config.ApplicationPaths;
+import app.service.IParseRootComponent;
 import app.settings.ConfigurationFileService;
 import app.settings.component.*;
 import message.util.GenericJacksonWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -28,7 +29,8 @@ public class ConfigController {
     private GenericJacksonWriter jacksonWriter;
 
     @Autowired
-    ResourceLoader resourceLoader;
+    @Qualifier("RootComponentParser")
+    private IParseRootComponent parseRootComponent;
 
     @Value("${app.settings}")
     private String settingsPath;
@@ -38,9 +40,11 @@ public class ConfigController {
 
     @GetMapping
     public String getConfig(Model model) throws IOException {
+
         final RootComponent component = Files.isReadable(Paths.get(settingsPath)) ?
                 ConfigurationFileService.loadSettings(settingsPath) :
                 ConfigurationFileService.loadSettings(ResourceUtils.getFile(settingsDefaultPath).getAbsolutePath());
+
         model.addAttribute(ActorComponent.NAME, jacksonWriter.getObjectFromString(ActorComponent.class,
                 jacksonWriter.getStringFromRequestObject(component.getComponents().get(ActorComponent.NAME))));
         model.addAttribute(ChainComponent.NAME, jacksonWriter.getObjectFromString(ChainComponent.class,
@@ -57,13 +61,15 @@ public class ConfigController {
                 jacksonWriter.getStringFromRequestObject(component.getComponents().get(RpcComponent.NAME))));
         model.addAttribute(RuntimeComponent.NAME, jacksonWriter.getObjectFromString(RuntimeComponent.class,
                 jacksonWriter.getStringFromRequestObject(component.getComponents().get(RuntimeComponent.NAME))));
+
         return ApplicationPaths.CONFIG_PAGE;
+
     }
 
     @PostMapping
-    public String postConfig(@RequestParam Map<String, Object> formParams){
-        System.out.println(formParams.toString());
-        return ApplicationPaths.CONFIG_PAGE;
+    public String postConfig(@RequestParam final Map<String, Object> formParams) throws IOException {
+        ConfigurationFileService.writeSettings(settingsPath, parseRootComponent.getRootComponent(formParams));
+        return ApplicationPaths.CONFIG_PATH;
     }
 
 }

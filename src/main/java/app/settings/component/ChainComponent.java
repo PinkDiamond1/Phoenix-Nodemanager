@@ -31,4 +31,7 @@ public class ChainComponent {
     @JsonProperty(value = SettingsField.CHAIN_MINERAWARD)
     private double minerAward;
 
+    @JsonProperty(value = SettingsField.CHAIN_LIGHTNODE)
+    private boolean lightNode;
+
 }

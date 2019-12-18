@@ -19,4 +19,7 @@ public class MinerComponent {
     @JsonProperty(value = SettingsField.MINER_PRIVKEY)
     private ArrayList<String> privKeys;
 
+    @JsonProperty(value = SettingsField.FORCE_START_PRODUCE)
+    private boolean forceStartProduce;
+
 }
