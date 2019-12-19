@@ -14,9 +14,10 @@ RUN     cd /usr/local && \
 ENV     GRADLE_HOME=/usr/local/gradle-4.10.3
 ENV     PATH=$PATH:$GRADLE_HOME/bin
 
+WORKDIR "~/"
+
 RUN     git clone https://github.com/yuomii/APEX-Nodemanager.git && \
         git clone https://github.com/APEX-Network/APEX-Blockchain-Core.git
 
-WORKDIR "APEX-Nodemanager"
-
+WORKDIR "~/APEX-Nodemanager"
 CMD ["mvn", "spring-boot:run"]

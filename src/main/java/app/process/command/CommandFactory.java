@@ -6,6 +6,10 @@ public final class CommandFactory {
         return () -> new String[]{"git", "checkout", branch};
     }
 
+    public static ICommand gitClone(final String repo){
+        return () -> new String[]{"git", "clone", repo};
+    }
+
     public static ICommand gradleShadowJar(){
         return () -> new String[]{"gradle", "shadowJar"};
     }
