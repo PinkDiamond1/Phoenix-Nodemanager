@@ -17,5 +17,7 @@ public final class ApplicationPaths {
     public static final String CONFIG_PATH = "redirect:/config";
     public static final String CONFIG_PAGE = "config";
 
+    public static final String NODE_PATH = "redirect:/node";
+    public static final String NODE_PAGE = "node";
 
 }
