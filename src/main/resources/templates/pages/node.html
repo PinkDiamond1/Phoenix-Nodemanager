@@ -14,8 +14,15 @@
             <div class="content-wrapper">
                 <form th:action="@{node}" method="post">
                     <div class="my-3">
-                        <button type="submit" class="btn btn-block btn-primary btn-lg">
+                        <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="install">
                             <i class="mdi mr-4"></i>Install
+                        </button>
+                    </div>
+                </form>
+                <form th:action="@{node}" method="post">
+                    <div class="my-3">
+                        <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="run">
+                            <i class="mdi mr-4"></i>Run
                         </button>
                     </div>
                 </form>

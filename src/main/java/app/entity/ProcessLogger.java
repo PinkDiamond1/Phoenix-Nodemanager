@@ -15,17 +15,12 @@ import javax.transaction.Transactional;
 public class ProcessLogger {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String name;
 
     private long pid;
 
     private long timestamp;
 
-    private String name;
-
     private String status;
-
-    private int exitCode;
 
 }

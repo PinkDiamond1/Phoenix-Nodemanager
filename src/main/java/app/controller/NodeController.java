@@ -2,6 +2,7 @@ package app.controller;
 
 import app.config.ApplicationPaths;
 import app.process.ProcessExecutor;
+import app.repository.ProcessLoggerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +21,15 @@ public class NodeController {
         return ApplicationPaths.NODE_PAGE;
     }
 
-    @PostMapping
+    @PostMapping(value = "install")
     public String installApexCore() {
-        new Thread(() -> {
-            processExecutor.installCore("master", "0.9.2");
-        }).start();
+        new Thread(() -> processExecutor.installCore("master", "0.9.2")).start();
+        return ApplicationPaths.NODE_PATH;
+    }
+
+    @PostMapping(value = "run")
+    public String runApexCore() {
+        new Thread(() -> processExecutor.runJar("blockchain-core.jar")).start();
         return ApplicationPaths.NODE_PATH;
     }
 
