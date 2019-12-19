@@ -2,7 +2,6 @@ package app.controller;
 
 import app.config.ApplicationPaths;
 import app.process.ProcessExecutor;
-import app.repository.ProcessLoggerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
