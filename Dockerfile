@@ -1,5 +1,6 @@
 FROM adoptopenjdk/openjdk12:jdk-12.0.1_12-slim
 
+
 RUN     apt-get update -y && \
         apt-get install unzip -y && \
         apt-get install git -y && \
@@ -14,10 +15,11 @@ RUN     cd /usr/local && \
 ENV     GRADLE_HOME=/usr/local/gradle-4.10.3
 ENV     PATH=$PATH:$GRADLE_HOME/bin
 
-WORKDIR "~/"
 
-RUN     git clone https://github.com/yuomii/APEX-Nodemanager.git && \
+RUN     cd /root && \
+        git clone https://github.com/yuomii/APEX-Nodemanager.git && \
         git clone https://github.com/APEX-Network/APEX-Blockchain-Core.git
 
-WORKDIR "~/APEX-Nodemanager"
+WORKDIR "/root/APEX-Nodemanager"
+
 CMD ["mvn", "spring-boot:run"]

@@ -21,7 +21,7 @@ public class ProcessExecutor {
 
     public void installCore(final String branch, final String version) {
 
-        final File workingDir = new File("~/APEX-Blockchain-Core");
+        final File workingDir = new File("APEX-Blockchain-Core");
         final String source = "build/libs/APEX-Blockchain-Core-"+version+".jar";
         final String target = "~/blockchain-core.jar";
         log.info("Installing core");
