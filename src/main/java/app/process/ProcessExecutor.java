@@ -23,7 +23,7 @@ public class ProcessExecutor {
 
         final File workingDir = new File("APEX-Blockchain-Core");
         final String source = "build/libs/APEX-Blockchain-Core-"+version+".jar";
-        final String target = "~/blockchain-core.jar";
+        final String target = "blockchain-core.jar";
         log.info("Installing core");
         try {
             new ProcessBuilder(CommandFactory.gitCheckout(branch).getCommand())
@@ -33,7 +33,7 @@ public class ProcessExecutor {
                     .directory(workingDir).start().waitFor();
             log.info("Core build");
             new ProcessBuilder(CommandFactory.copy(source, target).getCommand())
-                    .directory(workingDir).start().waitFor();
+                    .start().waitFor();
             log.info("Installation finished");
         } catch (InterruptedException | IOException e) {
             log.error("Installation failed: ");
