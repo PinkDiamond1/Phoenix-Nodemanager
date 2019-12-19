@@ -21,13 +21,13 @@ public class NodeController {
         return ApplicationPaths.NODE_PAGE;
     }
 
-    @PostMapping(value = "install")
+    @PostMapping(params = "action=install")
     public String installApexCore() {
         new Thread(() -> processExecutor.installCore("master", "0.9.2")).start();
         return ApplicationPaths.NODE_PATH;
     }
 
-    @PostMapping(value = "run")
+    @PostMapping(params = "action=run")
     public String runApexCore() {
         new Thread(() -> processExecutor.runJar("blockchain-core.jar")).start();
         return ApplicationPaths.NODE_PATH;
