@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 public class ProcessExecutor {
 
     private final Logger log = LoggerFactory.getLogger(ProcessExecutor.class);
+    public static final String JAR_NAME = "blockchain-core.jar";
 
     @Autowired
     private ProcessLoggerRepository processLoggerRepository;
@@ -25,8 +26,8 @@ public class ProcessExecutor {
 
         final File workingDir = new File("APEX-Blockchain-Core");
         final String source = "APEX-Blockchain-Core/build/libs/APEX-Blockchain-Core-"+version+".jar";
-        final String target = "blockchain-core.jar";
         log.info("Installing core");
+        logProcess(ProcessStatus.INSTALL);
         try {
             log.info("Start Checkout");
             new ProcessBuilder(CommandFactory.gitCheckout(branch).getCommand())
@@ -42,40 +43,68 @@ public class ProcessExecutor {
                     .start()
                     .waitFor();
             log.info("Core build finished");
-            new ProcessBuilder(CommandFactory.copy(source, target).getCommand())
+            log.info("Copy new jar");
+            new ProcessBuilder(CommandFactory.copy(source, JAR_NAME).getCommand())
                     .inheritIO()
                     .start()
                     .waitFor();
+            logProcess(ProcessStatus.FINISHED);
             log.info("Installation finished");
         } catch (InterruptedException | IOException e) {
+            logProcess(ProcessStatus.FAILED);
             log.error("Installation failed: ");
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
         }
 
     }
 
-    public void runJar(final String jarPath) {
+    public void runJar() {
+
         try {
-            log.info("Started Jar " + jarPath);
-            final Process process = new ProcessBuilder(CommandFactory.runJar(jarPath).getCommand())
+            log.info("Started jar");
+            final Process process = new ProcessBuilder(CommandFactory.runJar(JAR_NAME).getCommand())
                     .inheritIO()
                     .start();
-            processLoggerRepository.save(ProcessLogger.builder()
-                    .name("blockchain-core")
-                    .pid(process.pid())
-                    .status(ProcessStatus.RUNNING.getStatus())
-                    .timestamp(Instant.now().toEpochMilli())
-                    .build());
+            logProcess(ProcessStatus.RUNNING, process.pid());
         } catch (IOException e){
-            processLoggerRepository.save(ProcessLogger.builder()
-                    .name("blockchain-core")
-                    .pid(0)
-                    .status(ProcessStatus.FAILED.getStatus())
-                    .timestamp(Instant.now().toEpochMilli())
-                    .build());
-            log.error("Running jar " + jarPath + "failed");
+            logProcess(ProcessStatus.FAILED);
+            log.error("Running jar failed");
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
         }
+
+    }
+
+    public void stopJar(){
+
+        processLoggerRepository.findById(JAR_NAME).ifPresent(processLogger -> {
+            if(processLogger.getStatus().equals(ProcessStatus.RUNNING.getStatus())) {
+                ProcessHandle.of(processLogger.getPid()).ifPresent(ProcessHandle::destroy);
+                logProcess(ProcessStatus.FINISHED);
+                log.info("Stopped jar");
+            }
+        });
+
+    }
+
+    private void logProcess(final ProcessStatus status){
+
+        processLoggerRepository.save(ProcessLogger.builder()
+                .name(JAR_NAME)
+                .pid(0)
+                .status(status.getStatus())
+                .timestamp(Instant.now().toEpochMilli())
+                .build());
+
+    }
+
+    private void logProcess(final ProcessStatus status, final long pid){
+
+        processLoggerRepository.save(ProcessLogger.builder()
+                .name(JAR_NAME)
+                .pid(pid)
+                .status(status.getStatus())
+                .timestamp(Instant.now().toEpochMilli())
+                .build());
 
     }
 

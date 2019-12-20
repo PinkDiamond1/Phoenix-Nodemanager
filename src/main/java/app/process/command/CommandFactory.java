@@ -6,8 +6,8 @@ public final class CommandFactory {
         return () -> new String[]{"git", "checkout", branch};
     }
 
-    public static ICommand gitClone(final String repo){
-        return () -> new String[]{"git", "clone", repo};
+    public static ICommand gitPull(){
+        return () -> new String[]{"git", "pull"};
     }
 
     public static ICommand gradleShadowJar(){
@@ -18,8 +18,16 @@ public final class CommandFactory {
         return () -> new String[]{"cp", source, target};
     }
 
+    public static ICommand remove(final String target, final boolean recursive){
+        return recursive? () -> new String[]{"rm", "-r", target} : () -> new String[]{"rm", target};
+    }
+
     public static ICommand runJar(final String jarPath){
-        return () -> new String[]{"java", "-jar", jarPath};
+        return () -> new String[]{"java", "-jar",
+                "-Xms512m", "-Xmx12G" ,"-XX:+UnlockExperimentalVMOptions",
+                "-XX:+UseG1GC" ,"-XX:G1NewSizePercent=20",
+                "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=6500" ,
+                "-XX:G1HeapRegionSize=32M", jarPath};
     }
 
 }

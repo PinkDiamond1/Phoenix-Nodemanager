@@ -12,20 +12,19 @@
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
-                <form th:action="@{node}" method="post">
-                    <div class="my-3">
-                        <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="install">
-                            <i class="mdi mr-4"></i>Install
-                        </button>
+                <div class="row">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <th:block th:include="partials/_node::nodeControl"></th:block>
                     </div>
-                </form>
-                <form th:action="@{node}" method="post">
-                    <div class="my-3">
-                        <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="run">
-                            <i class="mdi mr-4"></i>Run
-                        </button>
+                    <div class="col-lg-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Future Chart</h4>
+                                <canvas id="areaChart"></canvas>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
@@ -38,6 +37,7 @@
 </div>
 <!-- container-scroller -->
 <th:block th:include="partials/_script::script"></th:block>
+<script src="js/chart.js"></script>
 </body>
 
 </html>

@@ -9,7 +9,8 @@ public enum ProcessStatus {
 
     FINISHED("finished"),
     RUNNING("running"),
-    FAILED("failed");
+    FAILED("failed"),
+    INSTALL("install");
 
     private String status;
 
