@@ -24,7 +24,7 @@
             </form>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} eq 'running'">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="stop">
+                    <button type="submit" class="btn btn-block btn-danger btn-lg" name="action" value="stop">
                         <i class="mdi mr-4"></i>Stop
                     </button>
                 </div>
