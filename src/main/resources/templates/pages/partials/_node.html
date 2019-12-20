@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="run">
+                    <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-primary btn-lg" name="action" value="run">
                         <i class="mdi mr-4"></i>Start
                     </button>
                 </div>
