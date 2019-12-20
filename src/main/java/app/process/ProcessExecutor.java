@@ -35,7 +35,13 @@ public class ProcessExecutor {
                     .inheritIO()
                     .start()
                     .waitFor();
-            log.info("Checkout " + branch + " finished");
+            log.info("Git pull");
+            new ProcessBuilder(CommandFactory.gitPull().getCommand())
+                    .directory(workingDir)
+                    .inheritIO()
+                    .start()
+                    .waitFor();
+            log.info("Git pull finished");
             log.info("Start core build");
             new ProcessBuilder(CommandFactory.gradleShadowJar().getCommand())
                     .inheritIO()

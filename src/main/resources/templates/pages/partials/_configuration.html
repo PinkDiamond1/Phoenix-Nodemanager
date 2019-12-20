@@ -266,11 +266,11 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title mdi mdi-shape-polygon-plus">  General Settings</h4>
-            <div th:if="${miner.getPrivKeys().size > 0}" class="form-group">
+            <div th:if="${miner.getPrivKeys().size() > 0}" class="form-group">
                 <label for="privKeysNotEmpty">Producer Private Key</label>
                 <input type="password" class="form-control" name="privKeys" th:value="${miner.getPrivKeys().get(0)}" id="privKeysNotEmpty">
             </div>
-            <div th:if="${miner.getPrivKeys().size eq 0}" class="form-group">
+            <div th:if="${miner.getPrivKeys().size() eq 0}" class="form-group">
                 <label for="privKeysEpty">Producer Private Key</label>
                 <input type="password" class="form-control" name="privKeys" id="privKeysEpty">
             </div>
