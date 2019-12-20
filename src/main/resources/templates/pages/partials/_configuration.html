@@ -271,8 +271,8 @@
                 <input type="password" class="form-control" name="privKeys" th:value="${miner.getPrivKeys().get(0)}" id="privKeysNotEmpty">
             </div>
             <div th:if="${miner.getPrivKeys().size() eq 0}" class="form-group">
-                <label for="privKeysEpty">Producer Private Key</label>
-                <input type="password" class="form-control" name="privKeys" id="privKeysEpty">
+                <label for="privKeysEmpty">Producer Private Key</label>
+                <input type="password" class="form-control" name="privKeys" th:value="" id="privKeysEmpty">
             </div>
             <div class="form-group">
                 <label for="stopProcessTxTimeSlot">Stop Process Time</label>

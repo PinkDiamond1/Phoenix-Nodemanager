@@ -140,6 +140,8 @@ public class RootComponentParser implements IParseRootComponent {
 
         // Miner
         final ArrayList<String> minerList = new ArrayList<>();
+        final String minerKey = (String) formParams.get(SettingsField.MINER_PRIVKEY);
+        if(minerKey != null && !minerKey.equals(""))
         minerList.add((String) formParams.get(SettingsField.MINER_PRIVKEY));
         components.put(MinerComponent.NAME, MinerComponent.builder()
                 .privKeys(minerList)
