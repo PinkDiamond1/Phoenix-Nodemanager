@@ -27,7 +27,7 @@ public final class CommandFactory {
                 "-Xms512m", "-Xmx12G" ,"-XX:+UnlockExperimentalVMOptions",
                 "-XX:+UseG1GC" ,"-XX:G1NewSizePercent=20",
                 "-XX:G1ReservePercent=20", "-XX:MaxGCPauseMillis=6500" ,
-                "-XX:G1HeapRegionSize=32M", jarPath};
+                "-XX:G1HeapRegionSize=32M", "-XX:ActiveProcessorCount=6", jarPath};
     }
 
 }
