@@ -9,7 +9,11 @@
                 </div>
                 <div class="form-group">
                     <label for="release">Release Version</label>
-                    <input type="text" class="form-control" name="release" id="release" placeholder="0.9.2" required>
+                    <select class="form-control" id="release" name="release" required>
+                        <option value="0.9.2" selected>0.9.2</option>
+                        <option value="0.9.1" >0.9.1</option>
+                        <option value="0.9.0" >0.9.0</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-success btn-lg" name="action" value="install">
@@ -29,6 +33,36 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="nodeStatus">
+    <div class="row" id="proBanner">
+        <div class="col-md-3 grid-margin">
+        </div>
+        <div class="col-md-6 grid-margin">
+            <div class="card bg-github border-0">
+                <div class="card-body d-flex align-items-center justify-content-center flex-wrap">
+                    <p th:if="${nodeStatus} eq 'running'" class="mb-0 text-white font-weight-bold">
+                        Supernode is running
+                    </p>
+                    <p th:if="${nodeStatus} eq 'finished'" class="mb-0 text-white font-weight-bold">
+                        Supernode is shut down
+                    </p>
+                    <p th:if="${nodeStatus} eq 'failed'" class="mb-0 text-white font-weight-bold">
+                        Something failed - Please retry
+                    </p>
+                    <p th:if="${nodeStatus} eq 'install'" class="mb-0 text-white font-weight-bold">
+                        Supernode is installing
+                    </p>
+                    <p th:if="${nodeStatus} eq 'no'" class="mb-0 text-white font-weight-bold">
+                        Supernode is not installed yet
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 grid-margin">
         </div>
     </div>
 </div>

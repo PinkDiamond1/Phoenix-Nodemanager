@@ -2,7 +2,6 @@ package app.controller;
 
 import app.config.ApplicationPaths;
 import app.process.ProcessExecutor;
-import app.process.ProcessStatus;
 import app.repository.ProcessLoggerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/" + ApplicationPaths.NODE_PAGE)
@@ -25,13 +25,17 @@ public class NodeController {
     public String getNode(Model model) {
         processLoggerRepository.findById(ProcessExecutor.JAR_NAME).ifPresentOrElse(
                 process -> model.addAttribute("nodeStatus", process.getStatus()),
-                () -> model.addAttribute("nodeStatus", ProcessStatus.FINISHED));
+                () -> model.addAttribute("nodeStatus", "no"));
         return ApplicationPaths.NODE_PAGE;
     }
 
     @PostMapping(params = "action=install")
-    public String installApexCore() {
-        new Thread(() -> processExecutor.installCore("master", "0.9.2")).start();
+    public String installApexCore(@RequestParam(value = "release", required = false) final String release,
+                                  @RequestParam(value = "commit", required = false) final String commit) {
+        if(release != null && commit != null)
+            new Thread(() -> processExecutor.installCore(release, commit)).start();
+        else
+            new Thread(() -> processExecutor.installCore("master", "0.9.2")).start();
         return ApplicationPaths.NODE_PATH;
     }
 
