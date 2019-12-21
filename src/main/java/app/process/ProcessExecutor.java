@@ -64,6 +64,28 @@ public class ProcessExecutor {
 
     }
 
+    public void updateManager(){
+        final File workingDir = new File("APEX-Nodemanager");
+        try {
+            log.info("Starting update");
+            new ProcessBuilder(CommandFactory.gitCheckout("master").getCommand())
+                    .directory(workingDir)
+                    .inheritIO()
+                    .start()
+                    .waitFor();
+            new ProcessBuilder(CommandFactory.gitPull().getCommand())
+                    .directory(workingDir)
+                    .inheritIO()
+                    .start()
+                    .waitFor();
+            log.info("Update finished");
+        } catch (InterruptedException | IOException e) {
+            log.error("Update failed");
+            Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
+        }
+
+    }
+
     public void runJar() {
 
         try {
