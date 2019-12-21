@@ -17,6 +17,8 @@
             <h5 th:if="${nodeStatus} eq 'no'" class="mb-0 text-danger font-weight-bold">
                 No Installation found
             </h5>
+            <p> </p>
+            <p> </p>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} ne 'running'">
                 <div class="form-group">
                     <label for="commit">Git Commit Hash or Branch</label>
