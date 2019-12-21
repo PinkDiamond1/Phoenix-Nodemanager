@@ -2,6 +2,23 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title mdi mdi mdi-earth">  Supernode</h4>
+            <h5 th:if="${nodeStatus} eq 'running'" class="mb-0 text-success font-weight-bold">
+                RUNNING
+            </h5>
+            <h5 th:if="${nodeStatus} eq 'finished'" class="mb-0 text-dark font-weight-bold">
+                STOPPED
+            </h5>
+            <h5 th:if="${nodeStatus} eq 'failed'" class="mb-0 text-danger font-weight-bold">
+                FAILED
+            </h5>
+            <h5 th:if="${nodeStatus} eq 'install'" class="mb-0 text-primary font-weight-bold">
+                Installation running
+            </h5>
+            <h5 th:if="${nodeStatus} eq 'no'" class="mb-0 text-danger font-weight-bold">
+                No Installation found
+            </h5>
+            <p> </p>
+            <p> </p>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} ne 'running'">
                 <div class="form-group">
                     <label for="commit">Git Commit Hash or Branch</label>
@@ -33,36 +50,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-<div xmlns:th="http://www.thymeleaf.org" th:fragment="nodeStatus">
-    <div class="row" id="proBanner">
-        <div class="col-md-3 grid-margin">
-        </div>
-        <div class="col-md-6 grid-margin">
-            <div class="card bg-github border-0">
-                <div class="card-body d-flex align-items-center justify-content-center flex-wrap">
-                    <p th:if="${nodeStatus} eq 'running'" class="mb-0 text-white font-weight-bold">
-                        Supernode is running
-                    </p>
-                    <p th:if="${nodeStatus} eq 'finished'" class="mb-0 text-white font-weight-bold">
-                        Supernode is shut down
-                    </p>
-                    <p th:if="${nodeStatus} eq 'failed'" class="mb-0 text-white font-weight-bold">
-                        Something failed - Please retry
-                    </p>
-                    <p th:if="${nodeStatus} eq 'install'" class="mb-0 text-white font-weight-bold">
-                        Supernode is installing
-                    </p>
-                    <p th:if="${nodeStatus} eq 'no'" class="mb-0 text-white font-weight-bold">
-                        Supernode is not installed yet
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 grid-margin">
         </div>
     </div>
 </div>
