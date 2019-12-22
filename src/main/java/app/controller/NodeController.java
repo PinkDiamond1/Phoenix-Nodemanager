@@ -46,8 +46,9 @@ public class NodeController {
     }
 
     @PostMapping(params = "action=stop")
-    public String stopApexCore() {
+    public String stopApexCore() throws InterruptedException {
         processExecutor.stopJar();
+        Thread.sleep(5000L);
         return ApplicationPaths.NODE_PATH;
     }
 
