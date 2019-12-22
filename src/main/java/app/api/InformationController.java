@@ -34,7 +34,7 @@ public class InformationController {
                 .getCollection("transaction")
                 .find().sort(new Document("createdAt", -1))
                 .limit(1).iterator();
-        return cursor.hasNext() ? (String) cursor.next().get("txHash") : "";
+        return cursor.hasNext() ? (String) cursor.next().get("createdAt") : "";
     }
 
 }
