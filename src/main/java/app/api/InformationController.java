@@ -19,7 +19,7 @@ public class InformationController {
     @Autowired
     private MongoClient mongoClient;
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
     @GetMapping("/height")
     @ResponseBody
