@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+
 @Controller
 @RequestMapping(ApplicationPaths.INFO_PATH)
 public class InformationController {
@@ -17,7 +19,9 @@ public class InformationController {
     @Autowired
     private MongoClient mongoClient;
 
-    @GetMapping("/height")
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+
+    @GetMapping("/nodeHeight")
     @ResponseBody
     public long getCurrentBlockHeight() {
        final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
@@ -34,7 +38,7 @@ public class InformationController {
                 .getCollection("transaction")
                 .find().sort(new Document("createdAt", -1))
                 .limit(1).iterator();
-        return cursor.hasNext() ? (String) cursor.next().get("txHash") : "";
+        return cursor.hasNext() ? dateFormat.format(cursor.next().get("createdAt")) : "";
     }
 
 }

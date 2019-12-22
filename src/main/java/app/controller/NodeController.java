@@ -40,14 +40,16 @@ public class NodeController {
     }
 
     @PostMapping(params = "action=run")
-    public String runApexCore() {
+    public String runApexCore() throws InterruptedException {
         new Thread(() -> processExecutor.runJar()).start();
+        Thread.sleep(1000L);
         return ApplicationPaths.NODE_PATH;
     }
 
     @PostMapping(params = "action=stop")
-    public String stopApexCore() {
+    public String stopApexCore() throws InterruptedException {
         processExecutor.stopJar();
+        Thread.sleep(5000L);
         return ApplicationPaths.NODE_PATH;
     }
 
