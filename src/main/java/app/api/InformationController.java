@@ -32,7 +32,7 @@ public class InformationController {
     public String getLastTx() {
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("transaction")
-                .find().sort(new Document("executeTime", 1))
+                .find().sort(new Document("createdAt", -1))
                 .limit(1).iterator();
         return cursor.hasNext() ? (String) cursor.next().get("txHash") : "";
     }
