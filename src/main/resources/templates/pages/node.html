@@ -14,7 +14,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <div class="col-md-4 grid-margin stretch-card">
-                        <th:block th:include="partials/_info::blockHeight"></th:block>
+                        <th:block th:include="partials/_info::nodeHeight"></th:block>
                     </div>
                     <div class="col-md-4 grid-margin stretch-card">
                         <th:block th:include="partials/_info::lastTx"></th:block>
@@ -53,9 +53,9 @@
     });
     function getHeight() {
         $.ajax({
-            url: 'info/height',
+            url: 'info/nodeHeight',
             success: function(data) {
-                $("#count").text(data);
+                $("#nodeHeight").text(data);
             }
         });
         setTimeout(getHeight, 500);

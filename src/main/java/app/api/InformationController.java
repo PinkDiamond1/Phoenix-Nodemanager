@@ -21,7 +21,7 @@ public class InformationController {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
-    @GetMapping("/height")
+    @GetMapping("/nodeHeight")
     @ResponseBody
     public long getCurrentBlockHeight() {
        final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
