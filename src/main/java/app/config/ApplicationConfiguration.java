@@ -1,6 +1,7 @@
 package app.config;
 
 import app.ManagerApplication;
+import com.mongodb.MongoClient;
 import message.util.GenericJacksonWriter;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -15,6 +16,11 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(ManagerApplication.class);
+    }
+
+    @Bean
+    public MongoClient mongo() {
+        return new MongoClient("localhost");
     }
 
     @Bean

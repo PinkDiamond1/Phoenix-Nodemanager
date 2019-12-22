@@ -2,23 +2,23 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title mdi mdi mdi-earth">  Supernode</h4>
-            <h5 th:if="${nodeStatus} eq 'running'" class="mb-0 text-success font-weight-bold">
-                RUNNING
-            </h5>
-            <h5 th:if="${nodeStatus} eq 'finished'" class="mb-0 text-dark font-weight-bold">
-                STOPPED
-            </h5>
-            <h5 th:if="${nodeStatus} eq 'failed'" class="mb-0 text-danger font-weight-bold">
-                FAILED
-            </h5>
-            <h5 th:if="${nodeStatus} eq 'install'" class="mb-0 text-primary font-weight-bold">
-                Installation running
-            </h5>
-            <h5 th:if="${nodeStatus} eq 'no'" class="mb-0 text-danger font-weight-bold">
-                No Installation found
-            </h5>
-            <p> </p>
-            <p> </p>
+            <div class="form-group">
+                <h4 th:if="${nodeStatus} eq 'running'" class="mb-0 text-success font-weight-bold">
+                    RUNNING
+                </h4>
+                <h4 th:if="${nodeStatus} eq 'finished'" class="mb-0 text-dark font-weight-bold">
+                    STOPPED
+                </h4>
+                <h4 th:if="${nodeStatus} eq 'failed'" class="mb-0 text-danger font-weight-bold">
+                    FAILED
+                </h4>
+                <h4 th:if="${nodeStatus} eq 'install'" class="mb-0 text-primary font-weight-bold">
+                    Installation running
+                </h4>
+                <h4 th:if="${nodeStatus} eq 'no'" class="mb-0 text-danger font-weight-bold">
+                    No Installation found
+                </h4>
+            </div>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} ne 'running'">
                 <div class="form-group">
                     <label for="commit">Git Commit Hash or Branch</label>
