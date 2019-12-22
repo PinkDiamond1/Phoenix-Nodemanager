@@ -20,7 +20,7 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
 
     @Bean
     public MongoClient mongo() {
-        return new MongoClient("localhost");
+        return new MongoClient("mongodb", 27017);
     }
 
     @Bean
