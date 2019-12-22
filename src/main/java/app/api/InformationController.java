@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+
 @Controller
 @RequestMapping(ApplicationPaths.INFO_PATH)
 public class InformationController {
 
     @Autowired
     private MongoClient mongoClient;
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
 
     @GetMapping("/height")
     @ResponseBody
@@ -34,7 +38,7 @@ public class InformationController {
                 .getCollection("transaction")
                 .find().sort(new Document("createdAt", -1))
                 .limit(1).iterator();
-        return cursor.hasNext() ? (String) cursor.next().get("createdAt") : "";
+        return cursor.hasNext() ? dateFormat.format(cursor.next().get("createdAt")) : "";
     }
 
 }
