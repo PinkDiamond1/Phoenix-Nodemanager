@@ -63,7 +63,7 @@ public class InformationController {
         return cursor.hasNext() ? dateFormat.format(cursor.next().get("createdAt")) : "";
     }
 
-    @GetMapping("/lastblock")
+    @RequestMapping(value = "/lastblock", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getLastBlock() {
         return getCoreMessage(new GetLatestBlockInfoCmd());
