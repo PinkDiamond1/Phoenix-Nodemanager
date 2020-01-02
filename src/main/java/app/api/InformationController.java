@@ -3,6 +3,8 @@ package app.api;
 import app.config.ApplicationPaths;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
+import message.request.IRPCMessage;
+import message.request.cmd.GetLatestBlockInfoCmd;
 import message.request.cmd.GetProducersCmd;
 import message.response.ExecResult;
 import message.util.GenericJacksonWriter;
@@ -61,12 +63,22 @@ public class InformationController {
         return cursor.hasNext() ? dateFormat.format(cursor.next().get("createdAt")) : "";
     }
 
+    @GetMapping("/lastblock")
+    @ResponseBody
+    public String getLastBlock() {
+        return getCoreMessage(new GetLatestBlockInfoCmd());
+    }
+
     @RequestMapping(value = "/witness", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getWitnesses() {
+        return getCoreMessage(new GetProducersCmd());
+    }
+
+    private String getCoreMessage(final IRPCMessage msg){
         try {
             final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class,
-                    requestCaller.postRequest(rpcUrl, new GetProducersCmd()));
+                    requestCaller.postRequest(rpcUrl, msg));
             return response.isSucceed() ? jacksonWriter.getStringFromRequestObject(response.getResult()) : "{}";
         } catch (Exception e) {
             log.error("RPC Endpoint connection error: " + rpcUrl);
