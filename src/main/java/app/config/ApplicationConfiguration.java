@@ -3,6 +3,7 @@ package app.config;
 import app.ManagerApplication;
 import com.mongodb.MongoClient;
 import message.util.GenericJacksonWriter;
+import message.util.RequestCallerService;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,11 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
     @Bean
     public GenericJacksonWriter getWriter(){
         return new GenericJacksonWriter();
+    }
+
+    @Bean
+    public RequestCallerService getCaller(){
+        return new RequestCallerService();
     }
 
 }
