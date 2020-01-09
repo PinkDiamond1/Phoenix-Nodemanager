@@ -1,6 +1,5 @@
 package app.api;
 
-import app.config.ApplicationPaths;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import message.request.IRPCMessage;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.SimpleDateFormat;
 
 @Controller
-@RequestMapping(ApplicationPaths.INFO_PATH)
+@RequestMapping(ApiPaths.API)
 public class InformationController {
 
     @Autowired
@@ -43,7 +42,7 @@ public class InformationController {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
-    @GetMapping("/nodeHeight")
+    @GetMapping(ApiPaths.NODE_HEIGHT)
     @ResponseBody
     public long getCurrentBlockHeight() {
        final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
@@ -53,7 +52,7 @@ public class InformationController {
        return cursor.hasNext() ? (long) cursor.next().get("height") : 0L;
     }
 
-    @GetMapping("/lasttx")
+    @GetMapping(ApiPaths.LAST_TX)
     @ResponseBody
     public String getLastTx() {
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
@@ -63,13 +62,13 @@ public class InformationController {
         return cursor.hasNext() ? dateFormat.format(cursor.next().get("createdAt")) : "";
     }
 
-    @RequestMapping(value = "/lastblock", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = ApiPaths.LAST_BLOCK, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getLastBlock() {
         return getCoreMessage(new GetLatestBlockInfoCmd());
     }
 
-    @RequestMapping(value = "/witness", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = ApiPaths.WITNESS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getWitnesses() {
         return getCoreMessage(new GetProducersCmd());

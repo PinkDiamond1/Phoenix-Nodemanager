@@ -53,7 +53,7 @@
     });
     function getHeight() {
         $.ajax({
-            url: 'info/nodeHeight',
+            url: 'api/nodeHeight',
             success: function(data) {
                 $("#nodeHeight").text(data);
             }
@@ -62,7 +62,7 @@
     }
     function getTx() {
         $.ajax({
-            url: 'info/lasttx',
+            url: 'api/lasttx',
             success: function(data) {
                 $("#lastTx").text(data);
             }
