@@ -2,6 +2,8 @@ package app.config;
 
 public final class ApplicationPaths {
 
+    private ApplicationPaths(){}
+
     public static final String LOGIN_PATH = "redirect:/login";
     public static final String LOGIN_PAGE = "login";
 
@@ -19,7 +21,5 @@ public final class ApplicationPaths {
 
     public static final String NODE_PATH = "redirect:/node";
     public static final String NODE_PAGE = "node";
-
-    public static final String INFO_PATH = "/info";
 
 }

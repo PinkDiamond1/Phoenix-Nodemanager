@@ -27,8 +27,8 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Future Chart</h4>
-                                <canvas id="areaChart"></canvas>
+                                <h4 class="card-title">TPS</h4>
+                                <canvas id="tpsChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -47,28 +47,56 @@
 <th:block th:include="partials/_script::script"></th:block>
 <script src="js/chart.js"></script>
 <script>
+
+    var tps;
+
     $(document).ready(function() {
-        setTimeout(getHeight, 100);
-        setTimeout(getTx, 100);
+        setTimeout(getHeight, 200);
+        setTimeout(getTx, 200);
+        initTps();
+        setTimeout(updateTps, 200);
     });
+
     function getHeight() {
         $.ajax({
-            url: 'info/nodeHeight',
+            url: 'api/nodeheight',
             success: function(data) {
                 $("#nodeHeight").text(data);
             }
         });
-        setTimeout(getHeight, 500);
+        setTimeout(getHeight, 1000);
     }
+
     function getTx() {
         $.ajax({
-            url: 'info/lasttx',
+            url: 'api/lasttx',
             success: function(data) {
                 $("#lastTx").text(data);
             }
         });
-        setTimeout(getTx, 500);
+        setTimeout(getTx, 1000);
     }
+
+    function initTps(){
+        $.ajax({
+            url: 'api/tpschart',
+            success: function(data) {
+                tps = new Chart($("#tpsChart"), $.parseJSON(data));
+            }
+        });
+    }
+
+    function updateTps(){
+        $.ajax({
+            url: 'api/tpschart',
+            success: function(data) {
+                tps.data.datasets[0] = $.parseJSON(data).data.datasets[0];
+                tps.update(0);
+            }
+        });
+        setTimeout(updateTps, 10000);
+    }
+
 </script>
 </body>
 

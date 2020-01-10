@@ -21,8 +21,10 @@
         <typesafe.version>1.4.0</typesafe.version>
         <h2.version>1.4.200</h2.version>
         <mongodb.version>3.12.0</mongodb.version>
+        <chart.api.version>2.5.0</chart.api.version>
         <apex.sdk.version>1aa522a3cdf342c38d3eed42c62975449158af52</apex.sdk.version>
         <spring.version>5.2.0.RELEASE</spring.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <repositories>
@@ -127,9 +129,22 @@
         </dependency>
 
         <dependency>
+            <groupId>be.ceau</groupId>
+            <artifactId>chart</artifactId>
+            <version>${chart.api.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

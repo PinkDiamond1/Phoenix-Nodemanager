@@ -39,12 +39,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 final Totp totp = new Totp(user.get().getSecret());
                 try {
                     if (!totp.verify(verificationCode)) {
-                        log.warn("Invalid verfication code: " + verificationCode);
-                        throw new BadCredentialsException("Invalid verfication code");
+                        log.warn("Invalid verification code: " + verificationCode);
+                        throw new BadCredentialsException("Invalid verification code");
                     }
                 } catch (Exception e) {
-                    log.warn("Invalid verfication code: " + verificationCode);
-                    throw new BadCredentialsException("Invalid verfication code");
+                    log.warn("Invalid verification code: " + verificationCode);
+                    throw new BadCredentialsException("Invalid verification code");
                 }
                 return new UsernamePasswordAuthenticationToken(user, password, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
             }
