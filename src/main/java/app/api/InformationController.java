@@ -88,12 +88,11 @@ public class InformationController {
         final ArrayList<String> labelsList = new ArrayList<>();
         final ArrayList<Integer> pointsList = new ArrayList<>();
         cursor.forEachRemaining(entry -> {
-            final Date date = (Date) entry.get("timeStamp");
-            labelsList.add(date.toString());
+            labelsList.add("");
             pointsList.add((int) entry.get("txs"));
         });
 
-        final Optional<LineChart> chart = lineChart.getChart(
+        final Optional<LineChart> chart = lineChart.getChart("Transactions",
                 labelsList.toArray(new String[0]),
                 pointsList.stream().mapToInt(i -> i).toArray());
 

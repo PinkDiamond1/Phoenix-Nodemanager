@@ -13,12 +13,12 @@ import java.util.Optional;
 public class DefaultLineChart implements IProvideLineChart {
 
     @Override
-    public Optional<LineChart> getChart(String[] labels, int[] points) {
+    public Optional<LineChart> getChart(final String name, final String[] labels, final int[] points) {
 
         if(labels.length != points.length) return Optional.empty();
 
         final LineDataset dataset = new LineDataset()
-                .setLabel("LineData")
+                .setLabel(name)
                 .setFill(new Fill(true))
                 .setLineTension(0.1f)
                 .setBackgroundColor(new Color(75, 192, 192, 0.4))
