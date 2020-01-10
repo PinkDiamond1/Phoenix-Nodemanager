@@ -27,8 +27,8 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Future Chart</h4>
-                                <canvas id="areaChart"></canvas>
+                                <h4 class="card-title">TPS</h4>
+                                <canvas id="tpsChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -50,6 +50,7 @@
     $(document).ready(function() {
         setTimeout(getHeight, 200);
         setTimeout(getTx, 200);
+        setTimeout(getTps, 200);
     });
     function getHeight() {
         $.ajax({
@@ -68,6 +69,15 @@
             }
         });
         setTimeout(getTx, 1000);
+    }
+    function getTps(){
+        $.ajax({
+            url: 'api/tpschart',
+            success: function(data) {
+                new Chart($("#tpsChart"), data);
+            }
+        });
+        setTimeout(getTps, 10000);
     }
 </script>
 </body>
