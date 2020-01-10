@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -87,7 +88,8 @@ public class InformationController {
         final ArrayList<String> labelsList = new ArrayList<>();
         final ArrayList<Integer> pointsList = new ArrayList<>();
         cursor.forEachRemaining(entry -> {
-            labelsList.add((String) entry.get("timeStamp"));
+            final Date date = (Date) entry.get("timeStamp");
+            labelsList.add(date.toString());
             pointsList.add((int) entry.get("txs"));
         });
 
