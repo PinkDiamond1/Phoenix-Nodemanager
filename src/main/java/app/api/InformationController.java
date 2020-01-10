@@ -94,7 +94,7 @@ public class InformationController {
         });
 
         final Optional<LineChart> chart = lineChart.getChart(
-                (String[]) labelsList.toArray(),
+                labelsList.toArray(new String[0]),
                 pointsList.stream().mapToInt(i -> i).toArray());
 
         if(chart.isPresent()){
