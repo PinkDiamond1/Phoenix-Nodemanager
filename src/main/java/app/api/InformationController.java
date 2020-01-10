@@ -83,7 +83,7 @@ public class InformationController {
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("tps_tensec")
                 .find().sort(new Document("timeStamp", -1))
-                .limit(10).iterator();
+                .limit(20).iterator();
 
         final ArrayList<String> labelsList = new ArrayList<>();
         final ArrayList<Integer> pointsList = new ArrayList<>();
