@@ -47,6 +47,7 @@
 <th:block th:include="partials/_script::script"></th:block>
 <script src="js/chart.js"></script>
 <script>
+    let tps = new Chart($("#tpsChart"), $.parseJSON("{}"));
     $(document).ready(function() {
         setTimeout(getHeight, 200);
         setTimeout(getTx, 200);
@@ -74,7 +75,8 @@
         $.ajax({
             url: 'api/tpschart',
             success: function(data) {
-                new Chart($("#tpsChart"), $.parseJSON(data));
+                tps.data($.parseJSON(data));
+                tps.update(0);
             }
         });
         setTimeout(getTps, 10000);
