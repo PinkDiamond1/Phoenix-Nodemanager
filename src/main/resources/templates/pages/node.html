@@ -75,7 +75,7 @@
         $.ajax({
             url: 'api/tpschart',
             success: function(data) {
-                tps.data = $.parseJSON(data);
+                tps.data.updateDatasets($.parseJSON(data));
                 tps.update(0);
             }
         });
