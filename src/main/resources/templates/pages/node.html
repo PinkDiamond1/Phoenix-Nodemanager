@@ -47,11 +47,14 @@
 <th:block th:include="partials/_script::script"></th:block>
 <script src="js/chart.js"></script>
 <script>
-    let tps = new Chart($("#tpsChart"), $.parseJSON("{}"));
+
+    var tps = new Chart($("#tpsChart"), $.parseJSON("{}"));
+
     $(document).ready(function() {
         setTimeout(getHeight, 200);
         setTimeout(getTx, 200);
-        setTimeout(getTps, 200);
+        initTps();
+        setTimeout(updateTps, 200);
     });
     function getHeight() {
         $.ajax({
@@ -71,16 +74,27 @@
         });
         setTimeout(getTx, 1000);
     }
-    function getTps(){
+
+    function initTps(){
         $.ajax({
             url: 'api/tpschart',
             success: function(data) {
-                tps = $.parseJSON(data);
+                tps = new Chart($("#tpsChart"), $.parseJSON(data));
+            }
+        });
+    }
+
+    function updateTps(){
+        $.ajax({
+            url: 'api/tpschart',
+            success: function(data) {
+                tps.data.datasets[0] = $.parseJSON(data).data.datasets[0];
                 tps.update(0);
             }
         });
-        setTimeout(getTps, 10000);
+        setTimeout(updateTps, 10000);
     }
+    
 </script>
 </body>
 
