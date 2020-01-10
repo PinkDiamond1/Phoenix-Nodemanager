@@ -2,6 +2,8 @@ package app.config;
 
 public final class ApplicationPaths {
 
+    private ApplicationPaths(){}
+
     public static final String LOGIN_PATH = "redirect:/login";
     public static final String LOGIN_PAGE = "login";
 

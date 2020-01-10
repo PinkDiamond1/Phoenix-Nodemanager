@@ -1,12 +1,14 @@
 package app.api;
 
-public interface ApiPaths {
+public final class ApiPaths {
 
-    String API = "/api";
+    private ApiPaths(){}
 
-    String NODE_HEIGHT = "/nodeHeight";
-    String LAST_TX = "/lasttx";
-    String LAST_BLOCK = "/lastblock";
-    String WITNESS = "/witness";
+    public static final String API = "/api";
+
+    public static final String NODE_HEIGHT = "/nodeheight";
+    public static final String LAST_TX = "/lasttx";
+    public static final String LAST_BLOCK = "/lastblock";
+    public static final String WITNESS = "/witness";
 
 }

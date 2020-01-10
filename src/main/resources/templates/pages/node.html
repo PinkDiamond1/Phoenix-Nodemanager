@@ -48,17 +48,17 @@
 <script src="js/chart.js"></script>
 <script>
     $(document).ready(function() {
-        setTimeout(getHeight, 100);
-        setTimeout(getTx, 100);
+        setTimeout(getHeight, 200);
+        setTimeout(getTx, 200);
     });
     function getHeight() {
         $.ajax({
-            url: 'api/nodeHeight',
+            url: 'api/nodeheight',
             success: function(data) {
                 $("#nodeHeight").text(data);
             }
         });
-        setTimeout(getHeight, 500);
+        setTimeout(getHeight, 1000);
     }
     function getTx() {
         $.ajax({
@@ -67,7 +67,7 @@
                 $("#lastTx").text(data);
             }
         });
-        setTimeout(getTx, 500);
+        setTimeout(getTx, 1000);
     }
 </script>
 </body>
