@@ -55,8 +55,8 @@
         $.ajax({
             url: 'api/tps',
             success: function(data) {
-                chart.data.datasets[0] = $.parseJSON( "\'" + data.values +  "\'");
-                chart.data.labels = $.parseJSON( "\'" + data.labels +  "\'");
+                chart.data.datasets[0].data = data.values;
+                chart.data.labels = data.labels;
                 chart.update(0);
             }
         });
