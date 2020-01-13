@@ -63,10 +63,9 @@
         $.ajax({
             url: 'api/lastblock',
             success: function(data) {
-                let res = $.parseJSON(data);
-                $("#nodeHeight").text(res.height);
-                $("#lastTx").text(res.timeStamp);
-                $("#lastProducer").text(res.producer);
+                $("#nodeHeight").text(data.height);
+                $("#lastTx").text(data.timeStamp);
+                $("#lastProducer").text(data.producer);
             }
         });
         setTimeout(getStatus, 2000);
