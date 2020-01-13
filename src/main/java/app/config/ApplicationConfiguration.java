@@ -1,8 +1,6 @@
 package app.config;
 
-import app.ManagerApplication;
-import app.chart.DefaultLineChart;
-import app.chart.IProvideLineChart;
+import app.ManagerApplication;;
 import app.event.EventHandler;
 import app.event.ManagerEvent;
 import app.event.channel.CoreChannel;
@@ -45,9 +43,6 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
     public RequestCallerService getCaller(){
         return new RequestCallerService();
     }
-
-    @Bean
-    public IProvideLineChart getLineChart() { return new DefaultLineChart(); }
 
     @Bean
     public EventHandler getEventHandler(){
