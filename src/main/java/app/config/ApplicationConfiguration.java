@@ -1,6 +1,6 @@
 package app.config;
 
-import app.ManagerApplication;;
+import app.ManagerApplication;
 import app.event.EventHandler;
 import app.event.ManagerEvent;
 import app.event.channel.CoreChannel;
