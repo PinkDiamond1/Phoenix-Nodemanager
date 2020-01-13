@@ -1,7 +1,6 @@
 package app.api;
 
-import app.chart.IProvideLineChart;
-import be.ceau.chart.LineChart;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import message.request.IRPCMessage;
@@ -16,13 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping(ApiPaths.API)
@@ -36,9 +34,6 @@ public class InformationController {
 
     @Autowired
     private GenericJacksonWriter jacksonWriter;
-
-    @Autowired
-    private IProvideLineChart lineChart;
 
     @Value("${app.core.rpc}")
     private String rpcUrl;
@@ -58,7 +53,7 @@ public class InformationController {
 
     }
 
-    @GetMapping("/tpschart")
+    @RequestMapping(value = ApiPaths.TPS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getTps() {
 
@@ -74,15 +69,15 @@ public class InformationController {
             pointsList.add((int) entry.get("txs"));
         });
 
-        final Optional<LineChart> chart = lineChart.getChart("Transactions",
-                labelsList.toArray(new String[0]),
-                pointsList.stream().mapToInt(i -> i).toArray());
+        final HashMap<String, Object> dataPoints = new HashMap<>();
+        dataPoints.put("labels", labelsList);
+        dataPoints.put("values", pointsList);
 
-        if(chart.isPresent()){
-            return chart.get().isDrawable() ? chart.get().toJson() : "{}";
+        try {
+            return jacksonWriter.getStringFromRequestObject(dataPoints);
+        } catch (JsonProcessingException e) {
+            return "{}";
         }
-
-        return "{}";
 
     }
 
