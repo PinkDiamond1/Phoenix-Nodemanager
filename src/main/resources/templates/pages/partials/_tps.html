@@ -11,18 +11,18 @@
                 label: 'Tx',
                 backgroundColor: '#0275d8',
                 borderColor: '#0275d8',
-                fill: false,
+                fill: true,
                 borderCapStyle : "butt",
                 borderDashOffset : 0.0,
                 borderJoinStyle : "miter",
-                pointBorderColor : "rgba(75,192,192,1.000)",
-                pointBackgroundColor : "rgba(255,255,255,1.000)",
+                pointBorderColor : "#000000",
+                pointBackgroundColor : "#000000",
                 pointBorderWidth : 1,
                 pointRadius : 1,
                 pointHoverRadius : 5,
                 pointHitRadius : 10,
-                pointHoverBackgroundColor : "rgba(75,192,192,1.000)",
-                pointHoverBorderColor : "rgba(220,220,220,1.000)",
+                pointHoverBackgroundColor : "#000000",
+                pointHoverBorderColor : "#000000",
                 pointHoverBorderWidth : 2,
                 spanGaps : false
             }]
@@ -33,14 +33,14 @@
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Transactions'
+                        labelString: '10 Seconds'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: '10 Seconds'
+                        labelString: 'Transactions'
                     },
                     ticks: {
                         min: 0,
@@ -64,7 +64,7 @@
                 chart.update(0);
             }
         });
-        setTimeout(updateTps, 1000);
+        setTimeout(updateTps, 10000);
     }
 
 </script>
