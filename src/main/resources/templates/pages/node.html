@@ -63,8 +63,8 @@
         $.ajax({
             url: 'api/lastblock',
             success: function(data) {
-                $("#nodeHeight").text(data.height.toString());
-                $("#lastTx").text(data.timeStamp.toString());
+                $("#nodeHeight").text(data.height.$numberLong);
+                $("#lastTx").text(data.timeStamp.$date);
                 $("#lastProducer").text(data.producer);
             }
         });
