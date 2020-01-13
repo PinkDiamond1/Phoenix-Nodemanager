@@ -5,7 +5,6 @@ import be.ceau.chart.LineChart;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import message.request.IRPCMessage;
-import message.request.cmd.GetLatestBlockInfoCmd;
 import message.request.cmd.GetProducersCmd;
 import message.response.ExecResult;
 import message.util.GenericJacksonWriter;
@@ -22,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -48,31 +45,16 @@ public class InformationController {
 
     private Logger log = LoggerFactory.getLogger(InformationController.class);
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
-
-    @GetMapping(ApiPaths.NODE_HEIGHT)
+    @RequestMapping(value = ApiPaths.LAST_BLOCK, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public long getCurrentBlockHeight() {
+    public String getLastBlock() {
 
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("block")
                 .find().sort(new Document("height", -1))
                 .limit(1).iterator();
 
-        return cursor.hasNext() ? (long) cursor.next().get("height") : 0L;
-
-    }
-
-    @GetMapping(ApiPaths.LAST_TX)
-    @ResponseBody
-    public String getLastTx() {
-
-        final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
-                .getCollection("transaction")
-                .find().sort(new Document("createdAt", -1))
-                .limit(1).iterator();
-
-        return cursor.hasNext() ? dateFormat.format(cursor.next().get("createdAt")) : "";
+        return cursor.hasNext() ? cursor.next().toJson() : "{}";
 
     }
 
@@ -104,25 +86,20 @@ public class InformationController {
 
     }
 
-    @RequestMapping(value = ApiPaths.LAST_BLOCK, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String getLastBlock() {
-        return getCoreMessage(new GetLatestBlockInfoCmd());
-    }
-
     @RequestMapping(value = ApiPaths.WITNESS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getWitnesses() {
 
-        return getCoreMessage(new GetProducersCmd());
+        return getCoreMessage(new GetProducersCmd("list"));
 
     }
 
     private String getCoreMessage(final IRPCMessage msg){
 
         try {
-            final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class,
-                    requestCaller.postRequest(rpcUrl, msg));
+            final String responseString = requestCaller.postRequest(rpcUrl, msg);
+            log.info(responseString);
+            final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class, responseString);
             return response.isSucceed() ? jacksonWriter.getStringFromRequestObject(response.getResult()) : "{}";
         } catch (Exception e) {
             log.error("RPC Endpoint connection error: " + rpcUrl);
