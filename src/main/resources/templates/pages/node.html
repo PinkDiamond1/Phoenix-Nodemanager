@@ -19,6 +19,9 @@
                     <div class="col-md-4 grid-margin stretch-card">
                         <th:block th:include="partials/_info::lastTx"></th:block>
                     </div>
+                    <div class="col-md-4 grid-margin stretch-card">
+                        <th:block th:include="partials/_info::lastProducer"></th:block>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 grid-margin stretch-card">
@@ -27,7 +30,7 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">TPS</h4>
+                                <h4 class="card-title">Transactions 10 sec</h4>
                                 <canvas id="tpsChart"></canvas>
                             </div>
                         </div>
@@ -51,30 +54,22 @@
     var tps;
 
     $(document).ready(function() {
-        setTimeout(getHeight, 200);
-        setTimeout(getTx, 200);
+        setTimeout(getStatus, 10);
         initTps();
-        setTimeout(updateTps, 200);
+        setTimeout(updateTps, 10);
     });
 
-    function getHeight() {
+    function getStatus() {
         $.ajax({
-            url: 'api/nodeheight',
+            url: 'api/lastblock',
             success: function(data) {
-                $("#nodeHeight").text(data);
+                let res = $.parseJSON(data);
+                $("#nodeHeight").text(res.height);
+                $("#lastTx").text(res.timeStamp);
+                $("#lastProducer").text(res.producer);
             }
         });
-        setTimeout(getHeight, 1000);
-    }
-
-    function getTx() {
-        $.ajax({
-            url: 'api/lasttx',
-            success: function(data) {
-                $("#lastTx").text(data);
-            }
-        });
-        setTimeout(getTx, 1000);
+        setTimeout(getStatus, 2000);
     }
 
     function initTps(){
