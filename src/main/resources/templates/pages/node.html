@@ -30,7 +30,6 @@
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Transactions 10 sec</h4>
                                 <canvas id="tpsChart"></canvas>
                             </div>
                         </div>
@@ -48,14 +47,12 @@
 </div>
 <!-- container-scroller -->
 <th:block th:include="partials/_script::script"></th:block>
+<th:block th:include="partials/_tps::tps"></th:block>
 <script src="js/chart.js"></script>
 <script>
 
-    var tps;
-
     $(document).ready(function() {
         setTimeout(getStatus, 10);
-        initTps();
         setTimeout(updateTps, 10);
     });
 
@@ -69,26 +66,6 @@
             }
         });
         setTimeout(getStatus, 2000);
-    }
-
-    function initTps(){
-        $.ajax({
-            url: 'api/tpschart',
-            success: function(data) {
-                tps = new Chart($("#tpsChart"), $.parseJSON(data));
-            }
-        });
-    }
-
-    function updateTps(){
-        $.ajax({
-            url: 'api/tpschart',
-            success: function(data) {
-                tps.data.datasets[0] = $.parseJSON(data).data.datasets[0];
-                tps.update(0);
-            }
-        });
-        setTimeout(updateTps, 10000);
     }
 
 </script>

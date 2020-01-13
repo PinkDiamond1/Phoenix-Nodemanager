@@ -1,0 +1,68 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="tps">
+
+<script>
+    let chart;
+    let tpschart = {
+        type: 'line',
+        data: {
+            labels: ['', '', '', '', '', '', '', '', '', ''],
+            datasets: [{
+                label: 'Tx',
+                backgroundColor: '#0275d8',
+                borderColor: '#0275d8',
+                data: [0,0,0,0,0,0,0,0,0,0],
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: false,
+                text: 'TPS Chart'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Transactions'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '10 Seconds'
+                    }
+                }]
+            }
+        }
+    };
+
+    window.onload = function() {
+        chart = new Chart($("#tpsChart"), tpschart);
+    };
+
+    function updateTps(){
+        $.ajax({
+            url: 'api/tps',
+            success: function(data) {
+                chart.data.datasets[0] = data.values;
+                chart.data.labels = data.labels;
+                chart.update(0);
+            }
+        });
+        setTimeout(updateTps, 500);
+    }
+
+</script>
+
+</div>
