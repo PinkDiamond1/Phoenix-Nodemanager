@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import message.request.IRPCMessage;
+import message.request.ProducerListType;
 import message.request.cmd.GetProducersCmd;
 import message.response.ExecResult;
 import message.util.GenericJacksonWriter;
@@ -85,7 +86,7 @@ public class InformationController {
     @ResponseBody
     public String getWitnesses() {
 
-        return getCoreMessage(new GetProducersCmd("list"));
+        return getCoreMessage(new GetProducersCmd(ProducerListType.ALL));
 
     }
 
