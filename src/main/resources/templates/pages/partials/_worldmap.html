@@ -192,7 +192,26 @@
             return scaleSet[shift];
         };
 
-        function Datamap() {
+        let startData = [
+            {
+                addr:"APNt8tU3gyHt4FTFnz7vEXc8Wa5MdveK2eX",
+                isGenesisWitness:"true",
+                name:"Jimmy_Hu",
+                url:"www.apexnetwork.io",
+                country:"china",
+                address:"shanghai",
+                longitude:31,
+                latitude:121,
+                voteCounts:"1000000",
+                register:"true",
+                frozen:"false",
+                fillKey: 'redFill',
+                radius: 4,
+                version:1
+            }
+        ];
+
+        function Datamap(bubbleData) {
             this.$container = $("#container");
             this.instance = new Datamaps({
                 scope: 'world',
@@ -227,32 +246,24 @@
                     highlightBorderWidth: 2,
                     highlightBorderOpacity: 1
                 },});
-            this.instance.bubbles([
-                {
-                    name: 'APEX Network',
-                    radius: 3,
-                    fillKey: 'redFill',
-                    rank: 1,
-                    votes: 100000,
-                    address: 'APPwFzFUTeUFucXCw96Rsa6nLx4re7cafZX',
-                    latitude: 31,
-                    longitude: 121
-                }
-            ], {
+            this.instance.bubbles(bubbleData, {
                 popupTemplate: function(geo, data) {
                     return '<div class="hoverinfo">'+
-                        'Rank: ' + data.rank + '<br>' +
-                        'Address: ' + data.address + '<br>' +
-                        'Votes: ' + data.votes + '<br>'
+                        'Name: ' + data.name + '<br>' +
+                        'Address: ' + data.addr + '<br>' +
+                        'Votes: ' + data.voteCounts + '<br>'
                 }
             });
         }
+
         Datamap.prototype._handleMapReady = function(datamap) {
             this.zoom = new Zoom({
                 $container: this.$container,
                 datamap: datamap
             });
         };
-        new Datamap();
+
+        new Datamap(startData);
+
     </script>
 </div>
