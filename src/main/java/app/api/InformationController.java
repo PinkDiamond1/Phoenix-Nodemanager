@@ -96,7 +96,7 @@ public class InformationController {
                 .limit(1).iterator();
         if(witnesses.hasNext() && producer.hasNext()){
             final String currentProducer = producer.next().getString("producer");
-            final List<HashMap> witnessList = witnesses.next().getList("witnesses", HashMap.class);
+            final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
             witnessList.forEach(witness -> {
                 final HashMap<String, Object> entry = new HashMap<>();
                 final String address = (String) witness.get("addr");
