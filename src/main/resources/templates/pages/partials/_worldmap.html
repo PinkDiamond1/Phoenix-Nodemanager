@@ -193,25 +193,6 @@
             return scaleSet[shift];
         };
 
-        let startData = [
-            {
-                addr:"APNt8tU3gyHt4FTFnz7vEXc8Wa5MdveK2eX",
-                isGenesisWitness:"true",
-                name:"Jimmy_Hu",
-                url:"www.apexnetwork.io",
-                country:"china",
-                address:"shanghai",
-                longitude:31,
-                latitude:121,
-                voteCounts:"1000000",
-                register:"true",
-                frozen:"false",
-                fillKey: 'redFill',
-                radius: 4,
-                version:1
-            }
-        ];
-
         function Datamap(bubbleData) {
             this.$container = $("#container");
             this.instance = new Datamaps({
@@ -246,7 +227,7 @@
                     highlightBorderColor: '#FDFDFD',
                     highlightBorderWidth: 2,
                     highlightBorderOpacity: 1
-                },});
+                }, });
             this.instance.bubbles(bubbleData, {
                 popupTemplate: function(geo, data) {
                     return '<div class="hoverinfo">'+
@@ -266,20 +247,24 @@
 
         $(document).ready(function() {
             setTimeout(getMapData, 1);
+            $.ajax({
+                url: 'api/refresh',
+                type: "POST"
+            });
         });
 
         function getMapData() {
             $.ajax({
-                url: 'api/lastblock',
+                url: 'api/witness',
                 success: function(data) {
-                    new Datamap(startData);
+                    new Datamap(data);
                 },
                 error: function(){
-                    new Datamap(startData);
+                    new Datamap([]);
                 }
             });
-            setTimeout(getStatus, 5000);
+            setTimeout(getMapData, 2000);
         }
-
     </script>
+
 </div>
