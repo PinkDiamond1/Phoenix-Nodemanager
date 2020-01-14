@@ -3,6 +3,7 @@
     <script src="js/topojson.min.js"></script>
     <script src="js/datamaps.world.min.js"></script>
     <script>
+
         function Zoom(args) {
             $.extend(this, {
                 $buttons:   $(".zoom-button"),
@@ -192,7 +193,16 @@
             return scaleSet[shift];
         };
 
-        function Datamap() {
+        let popupConf = {
+            popupTemplate: function(geo, data) {
+                return '<div class="hoverinfo">'+
+                    'Name: ' + data.name + '<br>' +
+                    'Address: ' + data.addr + '<br>' +
+                    'Votes: ' + data.voteCounts + '<br>'
+            }
+        };
+
+        function Datamap(bubbleData) {
             this.$container = $("#container");
             this.instance = new Datamaps({
                 scope: 'world',
@@ -205,6 +215,7 @@
                     redFill: '#ff0000'
                 },
                 bubblesConfig:{
+                    defaultFill: '#ff0000',
                     borderWidth: 1,
                     borderOpacity: 1,
                     borderColor: '#FDFDFD',
@@ -226,33 +237,36 @@
                     highlightBorderColor: '#FDFDFD',
                     highlightBorderWidth: 2,
                     highlightBorderOpacity: 1
-                },});
-            this.instance.bubbles([
-                {
-                    name: 'APEX Network',
-                    radius: 3,
-                    fillKey: 'redFill',
-                    rank: 1,
-                    votes: 100000,
-                    address: 'APPwFzFUTeUFucXCw96Rsa6nLx4re7cafZX',
-                    latitude: 31,
-                    longitude: 121
-                }
-            ], {
-                popupTemplate: function(geo, data) {
-                    return '<div class="hoverinfo">'+
-                        'Rank: ' + data.rank + '<br>' +
-                        'Address: ' + data.address + '<br>' +
-                        'Votes: ' + data.votes + '<br>'
-                }
-            });
+                }, });
+            this.instance.bubbles(bubbleData, popupConf);
         }
+
         Datamap.prototype._handleMapReady = function(datamap) {
             this.zoom = new Zoom({
                 $container: this.$container,
                 datamap: datamap
             });
         };
-        new Datamap();
+
+        let map;
+        $(document).ready(function() {
+            map = new Datamap([]);
+            $.ajax({
+                url: 'api/refresh',
+                type: "POST"
+            });
+            setTimeout(getMapData, 1);
+        });
+
+        function getMapData() {
+            $.ajax({
+                url: 'api/witness',
+                success: function(data) {
+                    map.instance.bubbles(data, popupConf);
+                }
+            });
+            setTimeout(getMapData, 2000);
+        }
     </script>
+
 </div>

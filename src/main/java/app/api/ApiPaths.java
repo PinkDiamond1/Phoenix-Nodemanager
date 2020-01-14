@@ -9,5 +9,6 @@ public final class ApiPaths {
     public static final String LAST_BLOCK = "/lastblock";
     public static final String TPS = "/tps";
     public static final String WITNESS = "/witness";
+    public static final String WITNESS_REFRESH = "/refresh";
 
 }
