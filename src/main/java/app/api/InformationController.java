@@ -105,17 +105,10 @@ public class InformationController {
                 entry.put("voteCounts", witness.get("voteCounts"));
                 entry.put("longitude", witness.get("longitude"));
                 entry.put("latitude", witness.get("latitude"));
-                if(address.equals(currentProducer)){
-                    entry.put("radius", 12);
-                    entry.put("fillKey", witness.get("yellowFill"));
-                } else {
-                    entry.put("radius", 4);
-                    entry.put("fillKey", witness.get("redFill"));
-                }
+                entry.put("radius", address.equals(currentProducer) ? 12 : 4);
                 responseList.add(entry);
             });
             try {
-                log.info(responseList.toString());
                 return jacksonWriter.getStringFromRequestObject(responseList);
             } catch (JsonProcessingException e) {
                 return "[]";
