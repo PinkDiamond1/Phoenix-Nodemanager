@@ -106,7 +106,7 @@ public class InformationController {
                 entry.put("longitude", witness.get("longitude"));
                 entry.put("latitude", witness.get("latitude"));
                 entry.put("radius", address.equals(currentProducer) ? 12 : 4);
-                entry.put("fillColor", address.equals(currentProducer) ? "#ffff00" : "#ff0000");
+                entry.put("fillKey", address.equals(currentProducer) ? "redFill" : "yellowFill");
                 responseList.add(entry);
             });
             try {
