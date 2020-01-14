@@ -3,6 +3,7 @@
     <script src="js/topojson.min.js"></script>
     <script src="js/datamaps.world.min.js"></script>
     <script>
+
         function Zoom(args) {
             $.extend(this, {
                 $buttons:   $(".zoom-button"),
@@ -263,7 +264,22 @@
             });
         };
 
-        new Datamap(startData);
+        $(document).ready(function() {
+            setTimeout(getMapData, 1);
+        });
+
+        function getMapData() {
+            $.ajax({
+                url: 'api/lastblock',
+                success: function(data) {
+                    new Datamap(startData);
+                },
+                error: function(){
+                    new Datamap(startData);
+                }
+            });
+            setTimeout(getStatus, 5000);
+        }
 
     </script>
 </div>
