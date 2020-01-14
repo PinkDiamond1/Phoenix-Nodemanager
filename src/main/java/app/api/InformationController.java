@@ -87,7 +87,7 @@ public class InformationController {
     @RequestMapping(value = ApiPaths.WITNESS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getWitnesses() {
-        final HashMap<String, Object> responseMap = new HashMap<>();
+        final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
         final MongoCursor<Document> producer = mongoClient.getDatabase("apex")
@@ -98,27 +98,29 @@ public class InformationController {
             final String currentProducer = producer.next().getString("producer");
             final List<HashMap> witnessList = witnesses.next().getList("witnesses", HashMap.class);
             witnessList.forEach(witness -> {
+                final HashMap<String, Object> entry = new HashMap<>();
                 final String address = (String) witness.get("addr");
-                responseMap.put("name", witness.get("name"));
-                responseMap.put("addr", witness.get("addr"));
-                responseMap.put("voteCounts", witness.get("voteCounts"));
-                responseMap.put("longitude", witness.get("longitude"));
-                responseMap.put("latitude", witness.get("latitude"));
+                entry.put("name", witness.get("name"));
+                entry.put("addr", witness.get("addr"));
+                entry.put("voteCounts", witness.get("voteCounts"));
+                entry.put("longitude", witness.get("longitude"));
+                entry.put("latitude", witness.get("latitude"));
                 if(address.equals(currentProducer)){
-                    responseMap.put("radius", 12);
-                    responseMap.put("fillKey", witness.get("yellowFill"));
+                    entry.put("radius", 12);
+                    entry.put("fillKey", witness.get("yellowFill"));
                 } else {
-                    responseMap.put("radius", 4);
-                    responseMap.put("fillKey", witness.get("redFill"));
+                    entry.put("radius", 4);
+                    entry.put("fillKey", witness.get("redFill"));
                 }
+                responseList.add(entry);
             });
             try {
-                return jacksonWriter.getStringFromRequestObject(responseMap);
+                return jacksonWriter.getStringFromRequestObject(responseList);
             } catch (JsonProcessingException e) {
-                return "{}";
+                return "[]";
             }
         }
-        return "{}";
+        return "[]";
     }
 
     @RequestMapping(value = ApiPaths.WITNESS_REFRESH, method = RequestMethod.POST)

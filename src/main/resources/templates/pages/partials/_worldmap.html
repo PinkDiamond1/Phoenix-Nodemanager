@@ -194,12 +194,11 @@
         };
 
         function Datamap(bubbleData) {
-            this.$container = $("#container");
             this.instance = new Datamaps({
                 scope: 'world',
                 responsive: false,
                 done: this._handleMapReady.bind(this),
-                element: this.$container.get(0),
+                element: $("#container"),
                 fills: {
                     defaultFill: '#292B2C',
                     yellowFill: '#ffff00',
