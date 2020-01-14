@@ -247,23 +247,21 @@
             });
         };
 
+        let map;
         $(document).ready(function() {
-            new Datamap([]);
-            setTimeout(getMapData, 1);
+            map = new Datamap([]);
             $.ajax({
                 url: 'api/refresh',
                 type: "POST"
             });
+            setTimeout(getMapData, 1);
         });
 
         function getMapData() {
             $.ajax({
                 url: 'api/witness',
                 success: function(data) {
-                    $("#container").instance.bubbles(data, popupConf);
-                },
-                error: function(){
-                    $("#container").instance.bubbles([], popupConf);
+                    map.instance.bubbles(data, popupConf);
                 }
             });
             setTimeout(getMapData, 2000);
