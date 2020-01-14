@@ -248,6 +248,7 @@
         };
 
         $(document).ready(function() {
+            new Datamap([]);
             setTimeout(getMapData, 1);
             $.ajax({
                 url: 'api/refresh',
