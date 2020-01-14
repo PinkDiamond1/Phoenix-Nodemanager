@@ -115,6 +115,7 @@ public class InformationController {
                 responseList.add(entry);
             });
             try {
+                log.info(responseList.toString());
                 return jacksonWriter.getStringFromRequestObject(responseList);
             } catch (JsonProcessingException e) {
                 return "[]";

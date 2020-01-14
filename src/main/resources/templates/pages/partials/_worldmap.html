@@ -193,12 +193,22 @@
             return scaleSet[shift];
         };
 
+        let popupConf = {
+            popupTemplate: function(geo, data) {
+                return '<div class="hoverinfo">'+
+                    'Name: ' + data.name + '<br>' +
+                    'Address: ' + data.addr + '<br>' +
+                    'Votes: ' + data.voteCounts + '<br>'
+            }
+        };
+
         function Datamap(bubbleData) {
+            this.$container = $("#container");
             this.instance = new Datamaps({
                 scope: 'world',
                 responsive: false,
                 done: this._handleMapReady.bind(this),
-                element: $("#container"),
+                element: this.$container.get(0),
                 fills: {
                     defaultFill: '#292B2C',
                     yellowFill: '#ffff00',
@@ -227,14 +237,7 @@
                     highlightBorderWidth: 2,
                     highlightBorderOpacity: 1
                 }, });
-            this.instance.bubbles(bubbleData, {
-                popupTemplate: function(geo, data) {
-                    return '<div class="hoverinfo">'+
-                        'Name: ' + data.name + '<br>' +
-                        'Address: ' + data.addr + '<br>' +
-                        'Votes: ' + data.voteCounts + '<br>'
-                }
-            });
+            this.instance.bubbles(bubbleData, popupConf);
         }
 
         Datamap.prototype._handleMapReady = function(datamap) {
@@ -256,10 +259,10 @@
             $.ajax({
                 url: 'api/witness',
                 success: function(data) {
-                    new Datamap(data);
+                    $("#container").instance.bubbles(data, popupConf);
                 },
                 error: function(){
-                    new Datamap([]);
+                    $("#container").instance.bubbles([], popupConf);
                 }
             });
             setTimeout(getMapData, 2000);
