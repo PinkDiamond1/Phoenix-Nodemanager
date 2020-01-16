@@ -22,4 +22,7 @@ public final class ApplicationPaths {
     public static final String NODE_PATH = "redirect:/node";
     public static final String NODE_PAGE = "node";
 
+    public static final String WALLET_PATH = "redirect:/wallet";
+    public static final String WALLET_PAGE = "wallet";
+
 }

@@ -1,0 +1,372 @@
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-mandatory">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-chevron-double-right">  Transaction</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="fromAddress">From</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="fromAddress" id="fromAddress" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="toAddress">To</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="toAddress" id="toAddress" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="amount">Amount</label>
+                        <div class="col-sm-9">
+                            <input type="number" min="0" step="any" value="0" class="form-control" name="amount" id="amount" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="currency">Currency</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="currency" name="currency" required>
+                                <option value="P">P</option>
+                                <option value="KP">KP</option>
+                                <option value="MP">MP</option>
+                                <option value="GP">GP</option>
+                                <option value="KGP">KGP</option>
+                                <option value="MGP">MGP</option>
+                                <option value="CPX" selected>CPX</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="gasPrice">Fee/KGP</label>
+                        <div class="col-sm-9">
+                            <input type="number" min="0" step="any" class="form-control" value="1" name="gasPrice" id="gasPrice" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="walletPassword">Wallet Password</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" name="walletPassword" id="walletPassword">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-mandatory-vm">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-chevron-double-right">  Transaction</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="fromAddressVm">From</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="fromAddressVm" id="fromAddressVm" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="gasPriceVm">Fee/KGP</label>
+                        <div class="col-sm-9">
+                            <input type="number" min="0" step="any" class="form-control" value="1" name="gasPriceVm" id="gasPriceVm" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="gasLimitVm">Limit/KGP</label>
+                        <div class="col-sm-9">
+                            <input type="number" min="0" step="any" class="form-control" value="30000" name="gasLimitVm" id="gasLimitVm" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="walletPasswordVm">Wallet Password</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" name="walletPasswordVm" id="walletPasswordVm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-create">
+    <div class="col">
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#createModal">
+            CREATE
+        </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mdi mdi-account-plus">  New Wallet</h4>
+                                <div class="form-group">
+                                    <label for="newWalletPass">Password</label>
+                                    <input type="password" class="form-control" name="newWalletPass" id="newWalletPass">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newWalletPassRep">Repeat</label>
+                                    <input type="password" class="form-control" name="newWalletPassRep" id="newWalletPassRep">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" class="btn btn-github">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-import">
+    <div class="col">
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#importModal">
+            IMPORT
+        </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mdi mdi-account-plus">  Import Wallet</h4>
+                                <div class="form-group">
+                                    <label for="importSecret">Secret</label>
+                                    <textarea class="form-control" rows="6" name="importSecret" id="importSecret"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="importWalletPass">Password</label>
+                                    <input type="password" class="form-control" name="newWalletPass" id="importWalletPass">
+                                </div>
+                                <div class="form-group">
+                                    <label for="importWalletPassRep">Repeat</label>
+                                    <input type="password" class="form-control" name="newWalletPassRep" id="importWalletPassRep">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" class="btn btn-github">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-transfer">
+    <div class="col">
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#transferModal">
+            TRANSFER
+        </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="transferTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <th:block th:include="partials/_wallet::tx-mandatory"></th:block>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" class="btn btn-github">Execute Transaction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-vote">
+    <div class="col">
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#voteModal">
+            VOTE
+        </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="voteModal" tabindex="-1" role="dialog" aria-labelledby="voteTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <th:block th:include="partials/_wallet::tx-mandatory-vm"></th:block>
+                        </div>
+                        <div class="form-group">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mdi mdi-shape-polygon-plus">  Voting Payload</h4>
+                                    <div class="form-group">
+                                        <label for="voteCandidate">Candidate</label>
+                                        <select class="form-control" id="voteCandidate" name="voteCandidate" required>
+                                            <option value="add">APENSiQ6AK3SoVAG4ixJ6kr3pmjtRLy9EvN</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="voteAmount">Amount Votes</label>
+                                        <input type="number" min="0" step="any" value="1" class="form-control" name="voteAmount" id="voteAmount">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="voteType">Mode</label>
+                                        <select class="form-control" id="voteType" name="voteType" required>
+                                            <option value="add">Add</option>
+                                            <option value="remove">Revoke</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" class="btn btn-github">Execute Transaction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-register">
+    <div class="col">
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#registerModal">
+            REGISTER
+        </button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                    <div class="form-group">
+                        <th:block th:include="partials/_wallet::tx-mandatory-vm"></th:block>
+                    </div>
+                    <div class="form-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mdi mdi-account-plus">  Registration Payload</h4>
+                                <div class="form-group">
+                                    <label for="registerAddress">Address</label>
+                                    <select class="form-control" id="registerAddress" name="registerAddress" required>
+                                        <option value="add">APENSiQ6AK3SoVAG4ixJ6kr3pmjtRLy9EvN</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="registerType">Mode</label>
+                                    <select class="form-control" id="registerType" name="registerType" required>
+                                        <option value="add" selected>Register</option>
+                                        <option value="remove">Revoke</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="companyDiv">
+                                    <label for="company">Company Name</label>
+                                    <input type="text" class="form-control" name="company" id="company">
+                                </div>
+                                <div class="form-group" id="urlDiv">
+                                    <label for="url">Company Name</label>
+                                    <input type="text" class="form-control" name="url" id="url">
+                                </div>
+                                <div class="form-group" id="countryDiv">
+                                    <label for="country">Country</label>
+                                    <input type="text" class="form-control" name="country" id="country">
+                                </div>
+                                <div class="form-group" id="locationDiv">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" name="location" id="location">
+                                </div>
+                                <div class="form-group" id="longitudeDiv">
+                                    <label for="longitude">Longitude</label>
+                                    <input type="number" min="-180" max="180" step="any" value="1" class="form-control" name="longitude" id="longitude">
+                                </div>
+                                <div class="form-group" id="latitudeDiv">
+                                    <label for="latitude">Latitude</label>
+                                    <input type="number" min="-90" max="90" step="any" value="1" class="form-control" name="latitude" id="latitude">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" class="btn btn-github">Execute Transaction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="register-script">
+    <script>
+        $("#registerType").change(function() {
+            if (document.getElementById("registerType").value === 'remove') {
+                $("#companyDiv").hide();
+                $("#urlDiv").hide();
+                $("#countryDiv").hide();
+                $("#locationDiv").hide();
+                $("#latitudeDiv").hide();
+                $("#longitudeDiv").hide();
+            } else {
+                $("#companyDiv").show();
+                $("#urlDiv").show();
+                $("#countryDiv").show();
+                $("#locationDiv").show();
+                $("#latitudeDiv").show();
+                $("#longitudeDiv").show();
+            }
+        });
+    </script>
+</div>
