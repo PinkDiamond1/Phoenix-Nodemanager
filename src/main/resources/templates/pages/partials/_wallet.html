@@ -136,6 +136,10 @@
                             <div class="card-body">
                                 <h4 class="card-title mdi mdi-account-plus">  New Wallet</h4>
                                 <div class="form-group">
+                                    <label for="mnemonic">Mnemonic</label>
+                                    <textarea rows="4" class="form-control" name="mnemonic" id="mnemonic" th:text="${mnemonic}"></textarea>
+                                </div>
+                                <div class="form-group">
                                     <label for="newWalletPass">Password</label>
                                     <input type="password" class="form-control" name="newWalletPass" id="newWalletPass">
                                 </div>
@@ -148,7 +152,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="submit" class="btn btn-github">Create</button>
+                    <button type="submit" class="btn btn-github" name="action" th:value="create">Create</button>
                 </div>
             </div>
         </div>
@@ -191,7 +195,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="submit" class="btn btn-github">Import</button>
+                    <button type="submit" class="btn btn-github" name="action" th:value="import">Import</button>
                 </div>
             </div>
         </div>
@@ -345,6 +349,83 @@
                     <button type="submit" class="btn btn-github">Execute Transaction</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="walletList">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title text-primary mdi mdi-wallet icon-md">  Wallets</h4>
+            <!-- Accordion card -->
+            <div class="card" th:each="wallet : ${wallets}">
+                <!-- Card header -->
+                <div class="card-header" role="tab" th:id="${'headingOne_'+wallet.get('walletAddress')}">
+                    <a data-toggle="collapse" th:data-target="${'#collapseOne_'+wallet.get('walletAddress')}" aria-expanded="true">
+                        <p class="mb-0" th:text="${wallet.get('walletAddress')}"></p>
+                    </a>
+                </div>
+                <!-- Card body -->
+                <div th:id="${'collapseOne_'+wallet.get('walletAddress')}" class="collapse hide">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="mdi mdi-cash-100 icon-sm" th:text="${' ' + __${wallet.get('balance')}__ + ' CPX'}"></h5>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="mdi mdi-chevron-double-up icon-sm" th:text="${' ' + __${wallet.get('nonce')}__}"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Accordion card -->
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="txList">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title text-primary mdi mdi-chevron-double-right icon-md">  Transactions</h4>
+            <!-- Accordion card -->
+            <div class="card" th:each="transaction : ${transactions}">
+                <!-- Card header -->
+                <div class="card-header" role="tab" th:id="${'headingOne_' + transaction.get('txHash')}">
+                    <a data-toggle="collapse" th:data-target="${'#collapseOne_'+transaction.get('txHash')}" aria-expanded="true">
+                        <p class="mb-0" th:text="${transaction.get('txHash')}"></p>
+                    </a>
+                </div>
+                <!-- Card body -->
+                <div th:id="${'collapseOne_'+transaction.get('txHash')}" class="collapse hide">
+                    <div class="card-body">
+                        <div class="row justify-content-center form-group">
+                            <p th:text="${transaction.get('from')}"></p>
+                        </div>
+                        <div class="row justify-content-center form-group">
+                            <h3 class="mdi mdi-chevron-double-down icon-md"> </h3>
+                        </div>
+                        <div class="row justify-content-center form-group">
+                            <p th:text="${transaction.get('to')}"></p>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3">
+                                <h3 class="mdi mdi-console icon-sm text-primary" th:text="' ' + ${transaction.get('type')}"></h3>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="mdi mdi-cash-100 icon-sm" th:text="' ' + ${transaction.get('amount')}"></h3>
+                            </div>
+                            <div class="col-md-3">
+                                <h3 class="mdi mdi-check-all icon-sm text-success" th:if="${transaction.get('confirmed')}"> Confirmed</h3>
+                                <h3 class="mdi mdi-window-close icon-sm text-danger" th:if="${!transaction.get('confirmed')}"> Unconfirmed</h3>
+                            </div>
+                        </div>
+                        <div class="row form-group h-100">
+                            <textarea rows="4" class="h-100 form-control" name="txData" th:id="'data' + ${transaction.get('txHash')}" th:text="${transaction.get('data')}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Accordion card -->
         </div>
     </div>
 </div>
