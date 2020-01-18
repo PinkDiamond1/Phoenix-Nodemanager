@@ -97,7 +97,7 @@ public class WalletController {
                         Filters.or(Filters.all("from", addresses),
                                 Filters.all("to", addresses))))
                 .sort(new Document("createdAt", -1))
-                .limit(20).iterator();
+                .limit(10).iterator();
 
         final ArrayList<Map<String, Object>> txList = new ArrayList<>();
         cursor.forEachRemaining(document -> {
@@ -193,7 +193,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 30000L);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 0L);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
