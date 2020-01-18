@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.interfaces.ECPrivateKey;
 import java.util.*;
@@ -191,7 +193,8 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 0.0000000000003);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount,
+                            new FixedNumber(gasPrice).getValue().divide(FixedNumber.KGP).doubleValue(), 0.0000000000003);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -228,8 +231,9 @@ public class WalletController {
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .voterPubKeyHash(CPXKey.getScriptHashFromCPXAddress(candidate))
                             .build();
-                    final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce,
-                            0, gasPrice, gasLimit);
+                    final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce, 0,
+                            new FixedNumber(gasPrice).getValue().divide(FixedNumber.KGP).doubleValue(),
+                            new FixedNumber(gasLimit).getValue().divide(FixedNumber.KGP).doubleValue());
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -274,8 +278,9 @@ public class WalletController {
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
                             .build();
-                    final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH,
-                            nonce, 0, gasPrice, gasLimit);
+                    final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce, 0,
+                            new FixedNumber(gasPrice).getValue().divide(FixedNumber.KGP).doubleValue(),
+                            new FixedNumber(gasLimit).getValue().divide(FixedNumber.KGP).doubleValue());
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
