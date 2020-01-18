@@ -191,7 +191,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 0.0000003);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 0.0000000000003);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
