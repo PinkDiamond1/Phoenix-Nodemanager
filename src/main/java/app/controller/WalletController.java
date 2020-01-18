@@ -194,7 +194,7 @@ public class WalletController {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
                             CPXKey.getScriptHashFromCPXAddress(to), nonce, amount,
-                            new FixedNumber(gasPrice).getValue().divide(FixedNumber.KGP).doubleValue(), 0.0000000000003);
+                            gasPrice / FixedNumber.KGP.doubleValue(), 0.0000000000003);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -232,8 +232,8 @@ public class WalletController {
                             .voterPubKeyHash(CPXKey.getScriptHashFromCPXAddress(candidate))
                             .build();
                     final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce, 0,
-                            new FixedNumber(gasPrice).getValue().divide(FixedNumber.KGP).doubleValue(),
-                            new FixedNumber(gasLimit).getValue().divide(FixedNumber.KGP).doubleValue());
+                            gasPrice / FixedNumber.KGP.doubleValue(),
+                            gasLimit / FixedNumber.KGP.doubleValue());
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -279,8 +279,7 @@ public class WalletController {
                             .latitude(latitude != null ? latitude : 0)
                             .build();
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce, 0,
-                            new FixedNumber(gasPrice).getValue().divide(FixedNumber.KGP).doubleValue(),
-                            new FixedNumber(gasLimit).getValue().divide(FixedNumber.KGP).doubleValue());
+                            gasPrice / FixedNumber.KGP.doubleValue(), gasLimit / FixedNumber.KGP.doubleValue());
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
