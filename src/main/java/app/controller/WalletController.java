@@ -9,7 +9,15 @@ import com.mongodb.client.model.Filters;
 import crypto.CPXKey;
 import crypto.CryptoService;
 import message.request.cmd.GetAccountCmd;
+import message.request.cmd.SendRawTransactionCmd;
 import message.response.ExecResult;
+import message.transaction.FixedNumber;
+import message.transaction.IProduceTransaction;
+import message.transaction.Transaction;
+import message.transaction.TxObj;
+import message.transaction.payload.OperationType;
+import message.transaction.payload.Registration;
+import message.transaction.payload.Vote;
 import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 import org.bson.Document;
@@ -48,6 +56,9 @@ public class WalletController {
     @Autowired
     private GenericJacksonWriter jacksonWriter;
 
+    @Autowired
+    private IProduceTransaction txFactory;
+
     @Value("${app.core.rpc}")
     private String rpcUrl;
 
@@ -68,7 +79,7 @@ public class WalletController {
                 final String responseString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(wallet.getAddress()));
                 final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class, responseString);
                 result.put("balance", response.isSucceed() ? (String) response.getResult().get("balance") : "0");
-                result.put("nonce", response.isSucceed() ? (String) response.getResult().get("nonce"): "0");
+                result.put("nonce", response.isSucceed() ? (String) response.getResult().get("nextNonce"): "0");
                 walletList.add(result);
             } catch (Exception e) {
                 walletList.add(result);
@@ -92,8 +103,16 @@ public class WalletController {
             txList.add(txEntry);
         });
 
+        final MongoCursor<Document> witnessesDoc = mongoClient.getDatabase("apex")
+                .getCollection("witnessStatus").find().limit(1).iterator();
+        final List<Map> witnessList = witnessesDoc.next().getList("witnesses", Map.class);
+        final ArrayList<String> witnesses = new ArrayList<>();
+        witnessList.forEach(w -> witnesses.add((String)w.get("addr")));
+
+        model.addAttribute("addresses", addresses);
         model.addAttribute("transactions", txList);
         model.addAttribute("wallets", walletList);
+        model.addAttribute("witnesses", witnesses);
         model.addAttribute( "mnemonic", CPXKey.generateMnemonic());
 
         return ApplicationPaths.WALLET_PAGE;
@@ -140,6 +159,126 @@ public class WalletController {
         return ApplicationPaths.WALLET_PATH;
 
     }
+
+    @PostMapping(params = "action=transfer")
+    public String transfer(@RequestParam(value = "fromAddress") final String from,
+                           @RequestParam(value = "toAddress") final String to,
+                           @RequestParam(value = "amount") final double amount,
+                           @RequestParam(value = "gasPrice") final double gasPrice,
+                           @RequestParam(value = "walletPassword") final String password) {
+
+        final Optional<Wallet> wallet = walletRepository.findById(from);
+        try {
+            CPXKey.getScriptHashFromCPXAddress(to);
+        } catch (Exception e) {
+            log.warn("This is not a valid address: " + to);
+            return ApplicationPaths.WALLET_PATH;
+        }
+
+        wallet.ifPresent(account -> {
+            try {
+                final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
+                        password, CryptoService.KEY_NAME).getPrivate();
+                final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(from));
+                final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
+                if(resultAccount.isSucceed()) {
+                    final long nonce = (long) resultAccount.getResult().get("nextNonce");
+                    final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 30000L);
+                    final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
+                    requestCaller.postRequest(rpcUrl, cmd);
+                }
+            } catch (Exception e){
+                log.warn("Transfer failed with: " + e.getMessage());
+            }
+        });
+
+        return ApplicationPaths.WALLET_PATH;
+
+    }
+
+    @PostMapping(params = "action=vote")
+    public String vote(@RequestParam(value = "fromAddressVm") final String from,
+                       @RequestParam(value = "gasPriceVm") final double gasPrice,
+                       @RequestParam(value = "gasLimitVm") final long gasLimit,
+                       @RequestParam(value = "walletPasswordVm") final String password,
+                       @RequestParam(value = "voteCandidate") final String candidate,
+                       @RequestParam(value = "voteAmount") final double votes,
+                       @RequestParam(value = "voteType") final String type) {
+
+        final Optional<Wallet> wallet = walletRepository.findById(from);
+        wallet.ifPresent(account -> {
+            try {
+                final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
+                        password, CryptoService.KEY_NAME).getPrivate();
+                final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(from));
+                final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
+                if(resultAccount.isSucceed()) {
+                    final long nonce = (long) resultAccount.getResult().get("nextNonce");
+                    final Vote vote = Vote.builder()
+                            .amount(new FixedNumber(votes))
+                            .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
+                            .voterPubKeyHash(CPXKey.getScriptHashFromCPXAddress(candidate))
+                            .build();
+                    final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce,
+                            0, gasPrice, gasLimit);
+                    final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
+                    requestCaller.postRequest(rpcUrl, cmd);
+                }
+            } catch (Exception e){
+                log.warn("Vote failed with: " + e.getMessage());
+            }
+        });
+
+        return ApplicationPaths.WALLET_PATH;
+
+    }
+
+    @PostMapping(params = "action=register")
+    public String register(@RequestParam(value = "fromAddressVm") final String from,
+                           @RequestParam(value = "gasPriceVm") final double gasPrice,
+                           @RequestParam(value = "gasLimitVm") final long gasLimit,
+                           @RequestParam(value = "walletPasswordVm") final String password,
+                           @RequestParam(value = "registerType") final String type,
+                           @RequestParam(value = "company", required = false) final String company,
+                           @RequestParam(value = "url", required = false) final String url,
+                           @RequestParam(value = "country", required = false) final String country,
+                           @RequestParam(value = "location", required = false) final String location,
+                           @RequestParam(value = "longitude", required = false) final Integer longitude,
+                           @RequestParam(value = "latitude", required = false) final Integer latitude) {
+
+        final Optional<Wallet> wallet = walletRepository.findById(from);
+        wallet.ifPresent(account -> {
+            try {
+                final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
+                        password, CryptoService.KEY_NAME).getPrivate();
+                final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(from));
+                final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
+                if(resultAccount.isSucceed()) {
+                    final long nonce = (long) resultAccount.getResult().get("nextNonce");
+                    final Registration registration = Registration.builder()
+                            .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
+                            .country(country != null ? country : "")
+                            .url(url != null ? url : "")
+                            .name(company != null ? company : "")
+                            .address(location != null ? location : "")
+                            .longitude(longitude != null ? longitude : 0)
+                            .latitude(latitude != null ? latitude : 0)
+                            .build();
+                    final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH,
+                            nonce, 0, gasPrice, gasLimit);
+                    final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
+                    requestCaller.postRequest(rpcUrl, cmd);
+                }
+            } catch (Exception e){
+                log.warn("Registration failed with: " + e.getMessage());
+            }
+        });
+
+        return ApplicationPaths.WALLET_PATH;
+
+    }
+
 
     private void saveKeystore(final KeyStore keyStore, final String password){
 

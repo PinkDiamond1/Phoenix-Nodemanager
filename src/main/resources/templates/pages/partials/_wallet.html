@@ -3,45 +3,33 @@
         <div class="card-body">
             <h4 class="card-title mdi mdi-chevron-double-right">  Transaction</h4>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label" for="fromAddress">From</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="fromAddress" id="fromAddress" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="toAddress">To</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="toAddress" id="toAddress" required>
+                            <select class="form-control" id="fromAddress" name="fromAddress" required>
+                                <option th:each="address : ${addresses}" th:value="${address}" th:text="${address}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="amount">Amount</label>
+                        <label class="col-sm-3 col-form-label" for="toAddress">To</label>
                         <div class="col-sm-9">
-                            <input type="number" min="0" step="any" value="0" class="form-control" name="amount" id="amount" required>
+                            <input type="text" class="form-control" name="toAddress" id="toAddress" maxlength="35" minlength="35" required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="currency">Currency</label>
+                        <label class="col-sm-3 col-form-label" for="amount">CPX</label>
                         <div class="col-sm-9">
-                            <select class="form-control" id="currency" name="currency" required>
-                                <option value="P">P</option>
-                                <option value="KP">KP</option>
-                                <option value="MP">MP</option>
-                                <option value="GP">GP</option>
-                                <option value="KGP">KGP</option>
-                                <option value="MGP">MGP</option>
-                                <option value="CPX" selected>CPX</option>
-                            </select>
+                            <input type="number" min="0" step="any" value="0" class="form-control" name="amount" id="amount" required>
                         </div>
                     </div>
                 </div>
@@ -78,7 +66,9 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label" for="fromAddressVm">From</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="fromAddressVm" id="fromAddressVm" required>
+                            <select class="form-control" id="fromAddressVm" name="fromAddressVm" required>
+                                <option th:each="address : ${addresses}" th:value="${address}" th:text="${address}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -96,7 +86,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label" for="gasLimitVm">Limit/KGP</label>
                         <div class="col-sm-9">
-                            <input type="number" min="0" step="any" class="form-control" value="30000" name="gasLimitVm" id="gasLimitVm" required>
+                            <input type="number" min="0" step="1" class="form-control" value="30000" name="gasLimitVm" id="gasLimitVm" required>
                         </div>
                     </div>
                 </div>
@@ -216,12 +206,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <th:block th:include="partials/_wallet::tx-mandatory"></th:block>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="submit" class="btn btn-github">Execute Transaction</button>
-                </div>
+                <form th:method="post" th:action="@{wallet}">
+                    <div class="modal-body">
+                        <th:block th:include="partials/_wallet::tx-mandatory"></th:block>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="submit" class="btn btn-github" name="action" th:value="transfer">Execute Transaction</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -241,8 +233,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <form th:method="post" th:action="@{wallet}">
+                    <div class="modal-body">
                         <div class="form-group">
                             <th:block th:include="partials/_wallet::tx-mandatory-vm"></th:block>
                         </div>
@@ -253,7 +245,7 @@
                                     <div class="form-group">
                                         <label for="voteCandidate">Candidate</label>
                                         <select class="form-control" id="voteCandidate" name="voteCandidate" required>
-                                            <option value="add">APENSiQ6AK3SoVAG4ixJ6kr3pmjtRLy9EvN</option>
+                                            <option th:each="witness : ${witnesses}" th:value="${witness}" th:text="${witness}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -270,11 +262,11 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="submit" class="btn btn-github">Execute Transaction</button>
-                </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="submit" class="btn btn-github" name="action" th:value="vote">Execute Transaction</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -294,60 +286,60 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                    <div class="form-group">
-                        <th:block th:include="partials/_wallet::tx-mandatory-vm"></th:block>
-                    </div>
-                    <div class="form-group">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mdi mdi-account-plus">  Registration Payload</h4>
-                                <div class="form-group">
-                                    <label for="registerAddress">Address</label>
-                                    <select class="form-control" id="registerAddress" name="registerAddress" required>
-                                        <option value="add">APENSiQ6AK3SoVAG4ixJ6kr3pmjtRLy9EvN</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="registerType">Mode</label>
-                                    <select class="form-control" id="registerType" name="registerType" required>
-                                        <option value="add" selected>Register</option>
-                                        <option value="remove">Revoke</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="companyDiv">
-                                    <label for="company">Company Name</label>
-                                    <input type="text" class="form-control" name="company" id="company">
-                                </div>
-                                <div class="form-group" id="urlDiv">
-                                    <label for="url">URL</label>
-                                    <input type="text" class="form-control" name="url" id="url">
-                                </div>
-                                <div class="form-group" id="countryDiv">
-                                    <label for="country">Country</label>
-                                    <input type="text" class="form-control" name="country" id="country">
-                                </div>
-                                <div class="form-group" id="locationDiv">
-                                    <label for="location">Location</label>
-                                    <input type="text" class="form-control" name="location" id="location">
-                                </div>
-                                <div class="form-group" id="longitudeDiv">
-                                    <label for="longitude">Longitude</label>
-                                    <input type="number" min="-180" max="180" step="any" value="1" class="form-control" name="longitude" id="longitude">
-                                </div>
-                                <div class="form-group" id="latitudeDiv">
-                                    <label for="latitude">Latitude</label>
-                                    <input type="number" min="-90" max="90" step="any" value="1" class="form-control" name="latitude" id="latitude">
+                <form th:method="post" th:action="@{wallet}">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <th:block th:include="partials/_wallet::tx-mandatory-vm"></th:block>
+                        </div>
+                        <div class="form-group">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mdi mdi-account-plus">  Registration Payload</h4>
+                                    <div class="form-group">
+                                        <label for="registerAddress">Address</label>
+                                        <select class="form-control" id="registerAddress" name="registerAddress" required>
+                                            <option th:each="wallet : ${wallets}" th:value="${wallet.get('walletAddress')}" th:text="${wallet.get('walletAddress')}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerType">Mode</label>
+                                        <select class="form-control" id="registerType" name="registerType" required>
+                                            <option value="add" selected>Register</option>
+                                            <option value="remove">Revoke</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="companyDiv">
+                                        <label for="company">Company Name</label>
+                                        <input type="text" class="form-control" name="company" id="company">
+                                    </div>
+                                    <div class="form-group" id="urlDiv">
+                                        <label for="url">URL</label>
+                                        <input type="text" class="form-control" name="url" id="url">
+                                    </div>
+                                    <div class="form-group" id="countryDiv">
+                                        <label for="country">Country</label>
+                                        <input type="text" class="form-control" name="country" id="country">
+                                    </div>
+                                    <div class="form-group" id="locationDiv">
+                                        <label for="location">Location</label>
+                                        <input type="text" class="form-control" name="location" id="location">
+                                    </div>
+                                    <div class="form-group" id="longitudeDiv">
+                                        <label for="longitude">Longitude</label>
+                                        <input type="number" min="-180" max="180" step="any" value="1" class="form-control" name="longitude" id="longitude">
+                                    </div>
+                                    <div class="form-group" id="latitudeDiv">
+                                        <label for="latitude">Latitude</label>
+                                        <input type="number" min="-90" max="90" step="any" value="1" class="form-control" name="latitude" id="latitude">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="submit" class="btn btn-github" name="action" th:value="register">Execute Transaction</button>
+                    </div>
                 </form>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="submit" class="btn btn-github">Execute Transaction</button>
-                </div>
             </div>
         </div>
     </div>
