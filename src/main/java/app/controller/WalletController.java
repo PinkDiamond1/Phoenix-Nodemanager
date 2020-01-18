@@ -129,6 +129,12 @@ public class WalletController {
         return importWallet(mnemonic, password, repeat);
     }
 
+    @PostMapping(params = "action=deleteWallet")
+    public String deleteWallet(@RequestParam(value = "address") final String address) {
+        walletRepository.deleteById(address);
+        return ApplicationPaths.WALLET_PATH;
+    }
+
     @PostMapping(params = "action=import")
     public String importWallet(@RequestParam(value = "importSecret") final String secret,
                             @RequestParam(value = "newWalletPass") final String password,
@@ -185,7 +191,7 @@ public class WalletController {
                 final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(from));
                 final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
                 if(resultAccount.isSucceed()) {
-                    final long nonce = (long) resultAccount.getResult().get("nextNonce");
+                    final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
                             CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 30000L);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
@@ -218,7 +224,7 @@ public class WalletController {
                 final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(from));
                 final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
                 if(resultAccount.isSucceed()) {
-                    final long nonce = (long) resultAccount.getResult().get("nextNonce");
+                    final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Vote vote = Vote.builder()
                             .amount(new FixedNumber(votes))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
@@ -260,7 +266,7 @@ public class WalletController {
                 final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(from));
                 final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
                 if(resultAccount.isSucceed()) {
-                    final long nonce = (long) resultAccount.getResult().get("nextNonce");
+                    final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Registration registration = Registration.builder()
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .country(country != null ? country : "")
