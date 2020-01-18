@@ -193,8 +193,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount,
-                            gasPrice / FixedNumber.KGP.doubleValue(), 0.0000000000003);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice , 3);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -211,7 +210,7 @@ public class WalletController {
     @PostMapping(params = "action=vote")
     public String vote(@RequestParam(value = "fromAddressVm") final String from,
                        @RequestParam(value = "gasPriceVm") final double gasPrice,
-                       @RequestParam(value = "gasLimitVm") final double gasLimit,
+                       @RequestParam(value = "gasLimitVm") final long gasLimit,
                        @RequestParam(value = "walletPasswordVm") final String password,
                        @RequestParam(value = "voteCandidate") final String candidate,
                        @RequestParam(value = "voteAmount") final double votes,
@@ -231,9 +230,8 @@ public class WalletController {
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .voterPubKeyHash(CPXKey.getScriptHashFromCPXAddress(candidate))
                             .build();
-                    final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce, 0,
-                            gasPrice / FixedNumber.KGP.doubleValue(),
-                            gasLimit / FixedNumber.KGP.doubleValue());
+                    final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce,
+                            0, gasPrice, gasLimit);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -250,7 +248,7 @@ public class WalletController {
     @PostMapping(params = "action=register")
     public String register(@RequestParam(value = "fromAddressVm") final String from,
                            @RequestParam(value = "gasPriceVm") final double gasPrice,
-                           @RequestParam(value = "gasLimitVm") final double gasLimit,
+                           @RequestParam(value = "gasLimitVm") final long gasLimit,
                            @RequestParam(value = "walletPasswordVm") final String password,
                            @RequestParam(value = "registerType") final String type,
                            @RequestParam(value = "company", required = false) final String company,
@@ -278,8 +276,8 @@ public class WalletController {
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
                             .build();
-                    final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce, 0,
-                            gasPrice / FixedNumber.KGP.doubleValue(), gasLimit / FixedNumber.KGP.doubleValue());
+                    final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH,
+                            nonce, 0, gasPrice , gasLimit);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
