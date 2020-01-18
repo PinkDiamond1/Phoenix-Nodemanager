@@ -36,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.security.KeyStore;
 import java.security.interfaces.ECPrivateKey;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping(value = "/" + ApplicationPaths.WALLET_PAGE)
@@ -78,8 +79,10 @@ public class WalletController {
             try {
                 final String responseString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(wallet.getAddress()));
                 final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class, responseString);
-                result.put("balance", response.isSucceed() ? (String) response.getResult().get("balance") : "0");
-                result.put("nonce", response.isSucceed() ? (String) response.getResult().get("nextNonce"): "0");
+                result.put("balance", response.getResult().get("balance") != null ?
+                        (String) response.getResult().get("balance") : "0");
+                result.put("nonce", response.getResult().get("nextNonce") != null ?
+                        (String) response.getResult().get("nextNonce") : "0");
                 walletList.add(result);
             } catch (Exception e) {
                 walletList.add(result);
@@ -190,6 +193,7 @@ public class WalletController {
                 }
             } catch (Exception e){
                 log.warn("Transfer failed with: " + e.getMessage());
+                Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             }
         });
 
@@ -227,6 +231,7 @@ public class WalletController {
                 }
             } catch (Exception e){
                 log.warn("Vote failed with: " + e.getMessage());
+                Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             }
         });
 
@@ -272,6 +277,7 @@ public class WalletController {
                 }
             } catch (Exception e){
                 log.warn("Registration failed with: " + e.getMessage());
+                Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             }
         });
 
