@@ -93,11 +93,9 @@ public class WalletController {
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("transaction")
                 .find()
-                .filter(Filters.and(Filters.ne("type", "Miner"),
-                        Filters.or(Filters.all("from", addresses),
-                                Filters.all("to", addresses))))
+                .filter(Filters.and(Filters.ne("type", "Miner"), Filters.all("from", addresses)))
                 .sort(new Document("createdAt", -1))
-                .limit(10).iterator();
+                .limit(20).iterator();
 
         final ArrayList<Map<String, Object>> txList = new ArrayList<>();
         cursor.forEachRemaining(document -> {
@@ -193,7 +191,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 0L);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 30000L);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
