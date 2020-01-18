@@ -191,7 +191,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 30000L);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice, 0.0000003);
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -208,7 +208,7 @@ public class WalletController {
     @PostMapping(params = "action=vote")
     public String vote(@RequestParam(value = "fromAddressVm") final String from,
                        @RequestParam(value = "gasPriceVm") final double gasPrice,
-                       @RequestParam(value = "gasLimitVm") final long gasLimit,
+                       @RequestParam(value = "gasLimitVm") final double gasLimit,
                        @RequestParam(value = "walletPasswordVm") final String password,
                        @RequestParam(value = "voteCandidate") final String candidate,
                        @RequestParam(value = "voteAmount") final double votes,
@@ -246,7 +246,7 @@ public class WalletController {
     @PostMapping(params = "action=register")
     public String register(@RequestParam(value = "fromAddressVm") final String from,
                            @RequestParam(value = "gasPriceVm") final double gasPrice,
-                           @RequestParam(value = "gasLimitVm") final long gasLimit,
+                           @RequestParam(value = "gasLimitVm") final double gasLimit,
                            @RequestParam(value = "walletPasswordVm") final String password,
                            @RequestParam(value = "registerType") final String type,
                            @RequestParam(value = "company", required = false) final String company,
