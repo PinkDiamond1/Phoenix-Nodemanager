@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.security.KeyStore;
 import java.security.interfaces.ECPrivateKey;
 import java.util.*;
@@ -96,7 +97,7 @@ public class WalletController {
                 .getCollection("transaction")
                 .find(ne("type", "Miner"))
                 .sort(new Document("createdAt", -1))
-                .limit(20).iterator();
+                .limit(5).iterator();
 
         final ArrayList<Map<String, Object>> txList = new ArrayList<>();
         cursor.forEachRemaining(document -> {
@@ -112,7 +113,6 @@ public class WalletController {
         witnessList.forEach(w -> witnesses.add((String)w.get("addr")));
 
         model.addAttribute("addresses", addresses);
-        log.info(addresses.toString());
         model.addAttribute("transactions", txList);
         model.addAttribute("wallets", walletList);
         model.addAttribute("witnesses", witnesses);
@@ -226,7 +226,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Vote vote = Vote.builder()
-                            .amount(new FixedNumber(votes))
+                            .amount(new FixedNumber(new BigDecimal(votes).multiply(new BigDecimal(FixedNumber.ONE_VALUE))))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .voterPubKeyHash(CPXKey.getScriptHashFromCPXAddress(candidate))
                             .build();
