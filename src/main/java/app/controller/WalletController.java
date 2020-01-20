@@ -33,12 +33,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.interfaces.ECPrivateKey;
 import java.util.*;
 import java.util.stream.Stream;
+
+import static com.mongodb.client.model.Filters.*;
 
 @Controller
 @RequestMapping(value = "/" + ApplicationPaths.WALLET_PAGE)
@@ -94,8 +94,7 @@ public class WalletController {
 
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("transaction")
-                .find()
-                .filter(Filters.and(Filters.ne("type", "Miner"), Filters.all("from", addresses)))
+                .find(and(ne("type", "Miner"), or(all("from", addresses), all("to", addresses))))
                 .sort(new Document("createdAt", -1))
                 .limit(20).iterator();
 
