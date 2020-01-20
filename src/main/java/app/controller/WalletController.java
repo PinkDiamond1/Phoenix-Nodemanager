@@ -100,6 +100,7 @@ public class WalletController {
 
         final ArrayList<Map<String, Object>> txList = new ArrayList<>();
         cursor.forEachRemaining(document -> {
+            log.info(document.toJson());
             final HashMap<String, Object> txEntry = new HashMap<>();
             document.forEach(txEntry::put);
             txList.add(txEntry);
@@ -113,6 +114,7 @@ public class WalletController {
 
         model.addAttribute("addresses", addresses);
         model.addAttribute("transactions", txList);
+        log.info(txList.toString());
         model.addAttribute("wallets", walletList);
         model.addAttribute("witnesses", witnesses);
         model.addAttribute( "mnemonic", CPXKey.generateMnemonic());
