@@ -94,13 +94,12 @@ public class WalletController {
 
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("transaction")
-                .find(and(ne("type", "Miner"), or(all("from", addresses), all("to", addresses))))
+                .find(ne("type", "Miner"))
                 .sort(new Document("createdAt", -1))
                 .limit(20).iterator();
 
         final ArrayList<Map<String, Object>> txList = new ArrayList<>();
         cursor.forEachRemaining(document -> {
-            log.info(document.toJson());
             final HashMap<String, Object> txEntry = new HashMap<>();
             document.forEach(txEntry::put);
             txList.add(txEntry);
@@ -113,8 +112,8 @@ public class WalletController {
         witnessList.forEach(w -> witnesses.add((String)w.get("addr")));
 
         model.addAttribute("addresses", addresses);
+        log.info(addresses.toString());
         model.addAttribute("transactions", txList);
-        log.info(txList.toString());
         model.addAttribute("wallets", walletList);
         model.addAttribute("witnesses", witnesses);
         model.addAttribute( "mnemonic", CPXKey.generateMnemonic());
