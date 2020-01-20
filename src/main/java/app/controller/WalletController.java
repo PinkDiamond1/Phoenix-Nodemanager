@@ -95,8 +95,7 @@ public class WalletController {
 
         final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
                 .getCollection("transaction")
-                .find(ne("type", "Miner"))
-                .filter(all("from", addresses))
+                .find(all("from", addresses))
                 .sort(new Document("createdAt", -1))
                 .limit(10).iterator();
 
