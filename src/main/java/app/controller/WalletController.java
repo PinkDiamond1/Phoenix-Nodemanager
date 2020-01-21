@@ -5,7 +5,6 @@ import app.entity.Wallet;
 import app.repository.WalletRepository;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
 import crypto.CPXKey;
 import crypto.CryptoService;
 import message.request.cmd.GetAccountCmd;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
 import java.security.KeyStore;
 import java.security.interfaces.ECPrivateKey;
 import java.util.*;
@@ -71,10 +69,10 @@ public class WalletController {
     @GetMapping
     public String getWalletPage(Model model) {
 
-        final ArrayList<Map<String, String>> walletList = new ArrayList<>();
+        final ArrayList<Map<String, Object>> walletList = new ArrayList<>();
         final List<String> addresses = new ArrayList<>();
         walletRepository.findAll().forEach(wallet -> {
-            final HashMap<String, String> result = new HashMap<>();
+            final HashMap<String, Object> result = new HashMap<>();
             result.put("walletAddress", wallet.getAddress());
             addresses.add(wallet.getAddress());
             result.put("balance", "0");
@@ -82,10 +80,8 @@ public class WalletController {
             try {
                 final String responseString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(wallet.getAddress()));
                 final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class, responseString);
-                result.put("balance", response.getResult().get("balance") != null ?
-                        (String) response.getResult().get("balance") : "0");
-                result.put("nonce", response.getResult().get("nextNonce") != null ?
-                        (String) response.getResult().get("nextNonce") : "0");
+                result.put("balance", response.getResult().get("balance") != null ? response.getResult().get("balance") : 0);
+                result.put("nonce", response.getResult().get("nextNonce") != null ? response.getResult().get("nextNonce") : 0);
                 walletList.add(result);
             } catch (Exception e) {
                 walletList.add(result);
@@ -97,7 +93,7 @@ public class WalletController {
                 .getCollection("transaction")
                 .find(in("from", addresses))
                 .sort(new Document("createdAt", -1))
-                .limit(10).iterator();
+                .limit(15).iterator();
 
         final ArrayList<Map<String, Object>> txList = new ArrayList<>();
         cursor.forEachRemaining(document -> {
@@ -193,7 +189,8 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Transaction tx = txFactory.create(TxObj.TRANSFER, key, () -> new byte[0],
-                            CPXKey.getScriptHashFromCPXAddress(to), nonce, amount, gasPrice , 300000);
+                            CPXKey.getScriptHashFromCPXAddress(to), nonce, new FixedNumber(amount, FixedNumber.CPX),
+                            new FixedNumber(gasPrice, FixedNumber.KGP) , new FixedNumber(500, FixedNumber.KP));
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -226,12 +223,13 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Vote vote = Vote.builder()
-                            .amount(new FixedNumber(new BigDecimal(votes).multiply(new BigDecimal(FixedNumber.ONE_VALUE))))
+                            .amount(new FixedNumber(votes, FixedNumber.CPX))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .voterPubKeyHash(CPXKey.getScriptHashFromCPXAddress(candidate))
                             .build();
                     final Transaction tx = txFactory.create(TxObj.VOTE, key, vote, Vote.SCRIPT_HASH, nonce,
-                            0, gasPrice, gasLimit);
+                            new FixedNumber(0, FixedNumber.P), new FixedNumber(gasPrice, FixedNumber.KGP),
+                            new FixedNumber(gasLimit, FixedNumber.KP));
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
@@ -277,7 +275,8 @@ public class WalletController {
                             .latitude(latitude != null ? latitude : 0)
                             .build();
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH,
-                            nonce, 0, gasPrice , gasLimit);
+                            nonce, new FixedNumber(0, FixedNumber.P), new FixedNumber(gasPrice, FixedNumber.KGP),
+                            new FixedNumber(gasLimit, FixedNumber.KP));
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
