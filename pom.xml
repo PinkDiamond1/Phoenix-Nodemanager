@@ -21,7 +21,7 @@
         <typesafe.version>1.4.0</typesafe.version>
         <h2.version>1.4.200</h2.version>
         <mongodb.version>3.12.0</mongodb.version>
-        <apex.sdk.version>1826d6d435614e77873db439baeea41e909e6d74</apex.sdk.version>
+        <apex.sdk.version>89e6f9cd47545e5dab9b066a768e4347ad7ccbd8</apex.sdk.version>
         <spring.version>5.2.0.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
     </properties>
