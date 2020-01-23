@@ -7,6 +7,9 @@ import app.event.channel.CoreChannel;
 import app.event.channel.ManagerChannel;
 import app.event.subscription.AppSubscription;
 import com.mongodb.MongoClient;
+import crypto.CryptoService;
+import message.transaction.IProduceTransaction;
+import message.transaction.TransactionFactory;
 import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -43,6 +46,12 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
     public RequestCallerService getCaller(){
         return new RequestCallerService();
     }
+
+    @Bean
+    public CryptoService getCryptoService(){ return new CryptoService();}
+
+    @Bean
+    public IProduceTransaction getTxFactory(){ return new TransactionFactory();}
 
     @Bean
     public EventHandler getEventHandler(){

@@ -87,6 +87,7 @@ public class InformationController {
     @RequestMapping(value = ApiPaths.WITNESS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getWitnesses() {
+
         final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
@@ -116,11 +117,13 @@ public class InformationController {
             }
         }
         return "[]";
+
     }
 
     @RequestMapping(value = ApiPaths.WITNESS_REFRESH, method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public void refreshWitnesses() {
+
         final Document witnessEntry = Document.parse(getCoreMessage(new GetProducersCmd(ProducerListType.ALL)));
         if(!witnessEntry.isEmpty()){
             final MongoCollection<Document> collection = mongoClient.getDatabase("apex")
@@ -129,13 +132,13 @@ public class InformationController {
             if(iter.hasNext()) collection.findOneAndReplace(iter.next(), witnessEntry);
             else collection.insertOne(witnessEntry);
         }
+
     }
 
     private String getCoreMessage(final IRPCMessage msg){
 
         try {
             final String responseString = requestCaller.postRequest(rpcUrl, msg);
-            log.info(responseString);
             final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class, responseString);
             return response.isSucceed() ? jacksonWriter.getStringFromRequestObject(response.getResult()) : "{}";
         } catch (Exception e) {
