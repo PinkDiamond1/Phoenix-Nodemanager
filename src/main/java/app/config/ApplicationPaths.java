@@ -6,6 +6,7 @@ public final class ApplicationPaths {
 
     public static final String LOGIN_PATH = "redirect:/login";
     public static final String LOGIN_PAGE = "login";
+    public static final String LOGOUT_PATH = "redirect:/logout";
 
     public static final String INDEX_PATH = "redirect:/";
     public static final String INDEX_PAGE = "index";
