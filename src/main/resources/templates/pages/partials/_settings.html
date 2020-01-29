@@ -60,3 +60,18 @@
         </div>
     </div>
 </div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="wipe">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-folder-remove icon-md text-primary">  Wipe Data</h4>
+            <form th:action="@{settings}" method="post">
+                <h6 class="form-group">This action allows you to clear all blockchain related data</h6>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="wipe">
+                        <i class="mdi mdi-folder-remove icon-md"></i> Wipe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
