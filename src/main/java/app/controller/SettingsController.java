@@ -9,6 +9,7 @@ import app.settings.component.ChainComponent;
 import app.settings.component.RootComponent;
 import app.settings.component.SettingsField;
 import com.mongodb.MongoClient;
+import message.util.GenericJacksonWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class SettingsController {
 
     @Autowired
     private MongoClient mongoClient;
+
+    @Autowired
+    private GenericJacksonWriter jacksonWriter;
 
     @Autowired
     private ApplicationUserRepository userRepository;
@@ -88,7 +92,8 @@ public class SettingsController {
                     ConfigurationFileService.loadSettings(settingsPath) :
                     ConfigurationFileService.loadSettings(ResourceUtils.getFile(settingsDefaultPath).getAbsolutePath());
             final ArrayList<String> dirs = new ArrayList<>();
-            final ChainComponent chainComponent = (ChainComponent) component.getComponents().get(ChainComponent.NAME);
+            final ChainComponent chainComponent = jacksonWriter.getObjectFromString(ChainComponent.class,
+                    jacksonWriter.getStringFromRequestObject(component.getComponents().get(ChainComponent.NAME)));
             dirs.add((String) chainComponent.getBlockBase().get(SettingsField.CHAIN_DIR));
             dirs.add((String) chainComponent.getForkBase().get(SettingsField.CHAIN_DIR));
             dirs.add((String) chainComponent.getDataBase().get(SettingsField.CHAIN_DIR));
