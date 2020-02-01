@@ -65,6 +65,7 @@ public class ProcessExecutor {
     }
 
     public void updateManager(){
+
         final File workingDir = new File("APEX-Nodemanager");
         try {
             log.info("Starting update");
@@ -109,6 +110,22 @@ public class ProcessExecutor {
                 ProcessHandle.of(processLogger.getPid()).ifPresent(ProcessHandle::destroy);
                 logProcess(ProcessStatus.FINISHED);
                 log.info("Stopped jar");
+            }
+        });
+
+    }
+
+    public void wipe(final Iterable<String> directories){
+
+        directories.forEach(dir -> {
+            try {
+                new ProcessBuilder(CommandFactory.remove(dir, true).getCommand())
+                        .inheritIO()
+                        .start();
+                log.info("Wiped directory " + dir);
+            } catch (IOException e) {
+                log.error("Wipe of" + dir +" failed");
+                log.error(e.getMessage());
             }
         });
 
