@@ -126,7 +126,6 @@ public class InformationController {
         
     	Float yield = (producedBlocks *1.0f / maxBlocksPerHour) * 100.0f;
     	String formattedString = String.format("%.01f", yield);
-    	log.info("yield : " + formattedString);
     	
         final HashMap<String, Object> entry = new HashMap<>();
         entry.put("producerYield", formattedString + "% (" + producedBlocks + " blocks/hour)");
