@@ -5,6 +5,8 @@ import app.service.IParseRootComponent;
 import app.settings.ConfigurationFileService;
 import app.settings.component.*;
 import message.util.GenericJacksonWriter;
+
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.*;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/" + ApplicationPaths.CONFIG_PAGE)
@@ -32,6 +38,9 @@ public class ConfigController {
     @Qualifier("RootComponentParser")
     private IParseRootComponent parseRootComponent;
 
+    @Autowired
+    private MongoClient mongoClient;
+        
     @Value("${app.settings}")
     private String settingsPath;
 
@@ -69,6 +78,20 @@ public class ConfigController {
     @PostMapping
     public String postConfig(@RequestParam final Map<String, Object> formParams) throws IOException {
         ConfigurationFileService.writeSettings(settingsPath, parseRootComponent.getRootComponent(formParams));
+              
+        // save data that is useful for other controllers to mongodb(db: application col: data)
+        Document applicationData= (new Document())
+        		.append("localNodePrivKey", formParams.get("privKeys"));
+    
+        final MongoCollection<Document> collection = mongoClient.getDatabase("application")
+        		.getCollection("data");
+                        
+        if(collection.countDocuments() == 0L) {        	
+          	collection.insertOne( applicationData);
+        } else {
+        	collection.replaceOne(exists("localNodePrivKey"), applicationData);
+        }
+                
         return ApplicationPaths.CONFIG_PATH;
     }
 

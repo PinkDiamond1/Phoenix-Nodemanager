@@ -8,6 +8,7 @@ import app.event.channel.ManagerChannel;
 import app.event.subscription.AppSubscription;
 import com.mongodb.MongoClient;
 import crypto.CryptoService;
+import crypto.CPXKey;
 import message.transaction.IProduceTransaction;
 import message.transaction.TransactionFactory;
 import message.util.GenericJacksonWriter;
@@ -50,6 +51,9 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
     @Bean
     public CryptoService getCryptoService(){ return new CryptoService();}
 
+    @Bean
+    public CPXKey getCPXKey(){ return new CPXKey();}
+    
     @Bean
     public IProduceTransaction getTxFactory(){ return new TransactionFactory();}
 
