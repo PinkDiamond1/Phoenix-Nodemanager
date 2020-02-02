@@ -29,7 +29,6 @@ import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
 
-
 @Controller
 @RequestMapping(ApiPaths.API)
 public class InformationController {
@@ -107,26 +106,19 @@ public class InformationController {
                 .limit(1).iterator();
 
         final HashMap<String, Long> producerBlocksCount = new HashMap<>();
-        final MongoCursor<Document> cursorMiner = mongoClient.getDatabase("apex")
+        mongoClient.getDatabase("apex")
                 .getCollection("miner")
                 .find().sort(new Document("addr", -1))
-                .iterator();
+                .iterator()
+                .forEachRemaining(entry -> producerBlocksCount.put((String) entry.get("addr"), 0L));
 
-        cursorMiner.forEachRemaining(entry -> {
-            producerBlocksCount.put((String) entry.get("addr"), 0L);
-        });
-
-        final MongoCursor<Document> minerBlockCount = mongoClient.getDatabase("apex")
+        mongoClient.getDatabase("apex")
            	    .getCollection("block")
            	    .find(gte("timeStamp", new BsonDateTime(Instant.now().toEpochMilli() - 3600000L)))   
-           	    .iterator();
-
-        minerBlockCount.forEachRemaining(entry -> {  
-            if(entry.get("confirmed").toString().equals("true")) {
-        	    long newVal = (Long) producerBlocksCount.get(entry.get("producer")) + 1L;
-        	    producerBlocksCount.replace(entry.get("producer").toString(), newVal);
-            }
-        });
+           	    .iterator().forEachRemaining(entry -> {
+           	        final String address = entry.get("producer").toString();
+           	        if(address.equals("true")) producerBlocksCount.put(address, producerBlocksCount.get(address) + 1L);
+           	    });
 
         if(witnesses.hasNext() && producer.hasNext()){
             final String currentProducer = producer.next().getString("producer");
@@ -137,7 +129,7 @@ public class InformationController {
                 entry.put("name", witness.get("name"));
                 entry.put("addr", witness.get("addr"));
                 entry.put("voteCounts", witness.get("voteCounts"));               
-                double yield = ((producerBlocksCount.containsKey(address) ? producerBlocksCount.get(address) : 0L ) * 1.0 / maxBlocksPerHour) * 100.0;
+                final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / maxBlocksPerHour) * 100.0;
                 String formattedString = String.format("%.01f", yield) + "%";
                 entry.put("yield", formattedString);
                 entry.put("longitude", witness.get("longitude"));
