@@ -1,9 +1,9 @@
 package app.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.MongoClient;
 import message.request.IRPCMessage;
 import message.request.ProducerListType;
 import message.request.cmd.GetProducersCmd;
@@ -93,10 +93,10 @@ public class InformationController {
     @ResponseBody
     public String getWitnesses() {
 
-    	final int blocksPerHour = 7200;
-    	final long witnessNum = 21L;
+        final int blocksPerHour = 7200;
+        final long witnessNum = 21L;
        	final double maxBlocksPerHour = blocksPerHour/ (witnessNum *1.0f);
-    	
+
         final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
@@ -105,7 +105,7 @@ public class InformationController {
                 .getCollection("block")
                 .find().sort(new Document("height", -1))
                 .limit(1).iterator();
-        
+
         final HashMap<String, Long> producerBlocksCount = new HashMap<>();
         final MongoCursor<Document> cursorMiner = mongoClient.getDatabase("apex")
                 .getCollection("miner")
