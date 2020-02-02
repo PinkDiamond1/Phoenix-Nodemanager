@@ -95,7 +95,7 @@ public class InformationController {
 
         final int blocksPerHour = 7200;
         final long witnessNum = 21L;
-       	final double maxBlocksPerHour = blocksPerHour/ (witnessNum *1.0f);
+        final double maxBlocksPerHour = blocksPerHour/ (witnessNum *1.0f);
 
         final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
