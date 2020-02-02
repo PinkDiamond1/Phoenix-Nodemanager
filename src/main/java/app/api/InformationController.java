@@ -137,7 +137,7 @@ public class InformationController {
                 entry.put("name", witness.get("name"));
                 entry.put("addr", witness.get("addr"));
                 entry.put("voteCounts", witness.get("voteCounts"));               
-                double yield = (producerBlocksCount.containsKey(address) ? producerBlocksCount.get(address) : 0L * 1.0 / maxBlocksPerHour) * 100.0;
+                double yield = ((producerBlocksCount.containsKey(address) ? producerBlocksCount.get(address) : 0L ) * 1.0 / maxBlocksPerHour) * 100.0;
                 String formattedString = String.format("%.01f", yield) + "%";
                 entry.put("yield", formattedString);
                 entry.put("longitude", witness.get("longitude"));
