@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.MongoClient;
-import crypto.CryptoService;
 import message.request.IRPCMessage;
 import message.request.ProducerListType;
 import message.request.cmd.GetProducersCmd;
@@ -48,7 +47,7 @@ public class InformationController {
     private String rpcUrl;
 
     private Logger log = LoggerFactory.getLogger(InformationController.class);
-    
+
     @RequestMapping(value = ApiPaths.LAST_BLOCK, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getLastBlock() {
@@ -59,8 +58,9 @@ public class InformationController {
                 .limit(1).iterator();
 
         return cursor.hasNext() ? cursor.next().toJson() : "{}";
+
     }
-    
+
     @RequestMapping(value = ApiPaths.TPS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getTps() {
@@ -106,28 +106,28 @@ public class InformationController {
                 .find().sort(new Document("height", -1))
                 .limit(1).iterator();
         
-		final HashMap<String, Long> producerBlocksCount = new HashMap<>();
-		final MongoCursor<Document> cursorMiner = mongoClient.getDatabase("apex")
+        final HashMap<String, Long> producerBlocksCount = new HashMap<>();
+        final MongoCursor<Document> cursorMiner = mongoClient.getDatabase("apex")
                 .getCollection("miner")
                 .find().sort(new Document("addr", -1))
                 .iterator();
-		
-		cursorMiner.forEachRemaining(entry -> {
-			producerBlocksCount.put((String) entry.get("addr"), 0L);
-		});
+
+        cursorMiner.forEachRemaining(entry -> {
+            producerBlocksCount.put((String) entry.get("addr"), 0L);
+        });
 
         final MongoCursor<Document> minerBlockCount = mongoClient.getDatabase("apex")
-           		.getCollection("block")
-           		.find(gte("timeStamp", new BsonDateTime(Instant.now().toEpochMilli() - 3600000L)))   
-           		.iterator();
-        
+           	    .getCollection("block")
+           	    .find(gte("timeStamp", new BsonDateTime(Instant.now().toEpochMilli() - 3600000L)))   
+           	    .iterator();
+
         minerBlockCount.forEachRemaining(entry -> {  
-        	if(entry.get("confirmed").toString().equals("true")) {
-        		long newVal = (Long) producerBlocksCount.get(entry.get("producer")) + 1L;
-        		producerBlocksCount.replace(entry.get("producer").toString(), newVal);
-        	}
+            if(entry.get("confirmed").toString().equals("true")) {
+        	    long newVal = (Long) producerBlocksCount.get(entry.get("producer")) + 1L;
+        	    producerBlocksCount.replace(entry.get("producer").toString(), newVal);
+            }
         });
-                
+
         if(witnesses.hasNext() && producer.hasNext()){
             final String currentProducer = producer.next().getString("producer");
             final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
@@ -137,8 +137,8 @@ public class InformationController {
                 entry.put("name", witness.get("name"));
                 entry.put("addr", witness.get("addr"));
                 entry.put("voteCounts", witness.get("voteCounts"));               
-            	double yield = (producerBlocksCount.containsKey(address) ? producerBlocksCount.get(address) : 0L * 1.0 / maxBlocksPerHour) * 100.0;
-            	String formattedString = String.format("%.01f", yield) + "%";
+                double yield = (producerBlocksCount.containsKey(address) ? producerBlocksCount.get(address) : 0L * 1.0 / maxBlocksPerHour) * 100.0;
+                String formattedString = String.format("%.01f", yield) + "%";
                 entry.put("yield", formattedString);
                 entry.put("longitude", witness.get("longitude"));
                 entry.put("latitude", witness.get("latitude"));
