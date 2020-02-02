@@ -130,7 +130,7 @@ public class InformationController {
                 entry.put("addr", witness.get("addr"));
                 entry.put("voteCounts", witness.get("voteCounts"));               
                 final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / maxBlocksPerHour) * 100.0;
-                String formattedString = String.format("%.01f", yield) + "%";
+                final String formattedString = String.format("%.01f", yield) + "%";
                 entry.put("yield", formattedString);
                 entry.put("longitude", witness.get("longitude"));
                 entry.put("latitude", witness.get("latitude"));
