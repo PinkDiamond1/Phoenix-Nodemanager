@@ -24,11 +24,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 grid-margin stretch-card">
-                        <th:block th:include="partials/_info::producerYield"></th:block>
-                    </div>
-				</div>
-                <div class="row">
                     <div class="col-md-6 grid-margin stretch-card">
                         <th:block th:include="partials/_node::nodeControl"></th:block>
                     </div>
@@ -60,7 +55,6 @@
     $(document).ready(function() {
         setTimeout(getStatus, 10);
         setTimeout(updateTps, 10);
-		setTimeout(getProducerYield, 10);
     });
 
     function getStatus() {
@@ -75,17 +69,6 @@
         setTimeout(getStatus, 2000);
     }
 
-    function getProducerYield() {
-        $.ajax({
-            url: 'api/producer_yield',
-            success: function(data) {
-                $("#producerYield").text(data.producerYield);
-            }
-        });
-        setTimeout(getProducerYield, 1000);
-    }
-    
-    
     
 </script>
 </body>

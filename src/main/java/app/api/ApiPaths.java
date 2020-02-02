@@ -11,7 +11,4 @@ public final class ApiPaths {
     public static final String WITNESS = "/witness";
     public static final String WITNESS_REFRESH = "/refresh";
 
-    //producer yield / hour
-    public static final String PRODUCER_YIELD = "/producer_yield";
-
 }
