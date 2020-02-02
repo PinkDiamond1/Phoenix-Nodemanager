@@ -32,11 +32,12 @@ public class NodeController {
     @PostMapping(params = "action=install")
     public String installApexCore(@RequestParam(value = "release", required = false) final String release,
                                   @RequestParam(value = "commit", required = false) final String commit) {
-        if(release != null && commit != null)
-            new Thread(() -> processExecutor.installCore(commit, release)).start();
-        else
-            new Thread(() -> processExecutor.installCore("master", "0.9.2")).start();
+            new Thread(release != null && commit != null ?
+                    () -> processExecutor.installCore(commit, release) :
+                    () -> processExecutor.installCore("master", "0.9.2"))
+                    .start();
         return ApplicationPaths.NODE_PATH;
+
     }
 
     @PostMapping(params = "action=run")

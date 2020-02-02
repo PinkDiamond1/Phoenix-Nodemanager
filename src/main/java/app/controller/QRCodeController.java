@@ -19,14 +19,18 @@ public class QRCodeController {
     @ResponseBody
     public Map<String, String> getQRUrl(@RequestParam("username") final String username,
                                         @RequestParam("secret") final String secret) {
+
         final Map<String, String> result = new HashMap<>();
         result.put("url", generateQRUrl(secret, username));
         return result;
+
     }
 
     private String generateQRUrl(String secret, String username) {
+
         return QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s",
                 APP_NAME, username, secret, APP_NAME), StandardCharsets.UTF_8);
+
     }
 
 }

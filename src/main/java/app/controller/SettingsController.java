@@ -69,7 +69,6 @@ public class SettingsController {
                                  @RequestParam(value = "newPassword") final String newPassword,
                                  @RequestParam(value = "passwordRepeat") final String repeatPassword) {
 
-
         final Iterable<ApplicationUser> userIterable = userRepository.findAll();
         if(newPassword.equals(repeatPassword) && userIterable.iterator().hasNext()) {
             final ApplicationUser applicationUser = userIterable.iterator().next();

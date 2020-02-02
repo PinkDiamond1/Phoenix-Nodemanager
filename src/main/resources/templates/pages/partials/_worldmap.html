@@ -196,9 +196,9 @@
         let popupConf = {
             popupTemplate: function(geo, data) {
                 return '<div class="hoverinfo">'+
-                    'Name: ' + data.name + '<br>' +
-                    'Address: ' + data.addr + '<br>' +
-                    'Votes: ' + data.voteCounts + '<br>'
+                    data.name + ': ' + data.addr + '<br>' +
+                    'Votes: ' + data.voteCounts + '<br>' +
+                    'Yield: ' + data.yield + '<br>'
             }
         };
 
