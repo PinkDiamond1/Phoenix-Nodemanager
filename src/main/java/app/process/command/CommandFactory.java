@@ -23,7 +23,7 @@ public final class CommandFactory {
     }
 
     public static ICommand runJar(final String jarPath){
-        return () -> new String[]{"java", "-jar", "-XX:MaxRam=10G",
+        return () -> new String[]{"java", "-jar", "-XX:MaxRAM=10G",
                 "-XX:+UnlockExperimentalVMOptions", "-XX:+UseG1GC" ,
                 "-XX:ActiveProcessorCount=6", jarPath};
     }
