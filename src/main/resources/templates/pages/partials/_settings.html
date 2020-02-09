@@ -1,0 +1,77 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="changePass">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-key-variant icon-md text-primary">  Change Password</h4>
+            <form th:action="@{settings}" method="post">
+                <div class="form-group">
+                    <label for="currentPassword">Current password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                        </div>
+                        <input class="form-control form-control-lg border-left-0" type="password" name="currentPassword" id="currentPassword" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                        </div>
+                        <input class="form-control form-control-lg border-left-0" type="password" name="newPassword" id="newPassword" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="passwordRepeat">Repeat new password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                        </div>
+                        <input class="form-control form-control-lg border-left-0" type="password" name="passwordRepeat" id="passwordRepeat" placeholder="Password">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="change">
+                        <i class="mdi mdi-key-variant"></i> Change
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="updateNode">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-rotate-right icon-md text-primary">  Update Nodemanager</h4>
+            <form th:action="@{settings}" method="post">
+                <h6 class="form-group">Please make sure your core is shut down before you restart the application</h6>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="update">
+                        <i class="mdi mdi-rotate-right icon-md"></i> Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="wipe">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-folder-remove icon-md text-primary">  Wipe Data</h4>
+            <form th:action="@{settings}" method="post">
+                <h6 class="form-group">This action allows you to clear all blockchain related data</h6>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="wipe">
+                        <i class="mdi mdi-folder-remove icon-md"></i> Wipe
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

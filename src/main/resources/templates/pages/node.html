@@ -19,15 +19,18 @@
                     <div class="col-md-4 grid-margin stretch-card">
                         <th:block th:include="partials/_info::lastTx"></th:block>
                     </div>
+                    <div class="col-md-4 grid-margin stretch-card">
+                        <th:block th:include="partials/_info::lastProducer"></th:block>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 grid-margin stretch-card">
                         <th:block th:include="partials/_node::nodeControl"></th:block>
                     </div>
-                    <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="col-md-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">TPS</h4>
+                                <h4 class="card-title">  </h4>
                                 <canvas id="tpsChart"></canvas>
                             </div>
                         </div>
@@ -45,56 +48,25 @@
 </div>
 <!-- container-scroller -->
 <th:block th:include="partials/_script::script"></th:block>
+<th:block th:include="partials/_tps::tps"></th:block>
 <script src="js/chart.js"></script>
 <script>
 
-    var tps;
-
     $(document).ready(function() {
-        setTimeout(getHeight, 200);
-        setTimeout(getTx, 200);
-        initTps();
-        setTimeout(updateTps, 200);
+        setTimeout(getStatus, 10);
+        setTimeout(updateTps, 10);
     });
 
-    function getHeight() {
+    function getStatus() {
         $.ajax({
-            url: 'api/nodeheight',
+            url: 'api/lastblock',
             success: function(data) {
-                $("#nodeHeight").text(data);
+                $("#nodeHeight").text(data.height.$numberLong);
+                $("#lastTx").text(data.timeStamp.$date);
+                $("#lastProducer").text(data.producer);
             }
         });
-        setTimeout(getHeight, 1000);
-    }
-
-    function getTx() {
-        $.ajax({
-            url: 'api/lasttx',
-            success: function(data) {
-                $("#lastTx").text(data);
-            }
-        });
-        setTimeout(getTx, 1000);
-    }
-
-    function initTps(){
-        $.ajax({
-            url: 'api/tpschart',
-            success: function(data) {
-                tps = new Chart($("#tpsChart"), $.parseJSON(data));
-            }
-        });
-    }
-
-    function updateTps(){
-        $.ajax({
-            url: 'api/tpschart',
-            success: function(data) {
-                tps.data.datasets[0] = $.parseJSON(data).data.datasets[0];
-                tps.update(0);
-            }
-        });
-        setTimeout(updateTps, 10000);
+        setTimeout(getStatus, 2000);
     }
 
 </script>

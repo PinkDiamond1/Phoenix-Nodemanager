@@ -21,8 +21,7 @@
         <typesafe.version>1.4.0</typesafe.version>
         <h2.version>1.4.200</h2.version>
         <mongodb.version>3.12.0</mongodb.version>
-        <chart.api.version>2.5.0</chart.api.version>
-        <apex.sdk.version>1aa522a3cdf342c38d3eed42c62975449158af52</apex.sdk.version>
+        <apex.sdk.version>89e6f9cd47545e5dab9b066a768e4347ad7ccbd8</apex.sdk.version>
         <spring.version>5.2.0.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
     </properties>
@@ -44,17 +43,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
         <dependency>
@@ -126,12 +114,6 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>${mongodb.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>be.ceau</groupId>
-            <artifactId>chart</artifactId>
-            <version>${chart.api.version}</version>
         </dependency>
 
         <dependency>

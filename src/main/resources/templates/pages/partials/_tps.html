@@ -1,0 +1,72 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="tps">
+
+<script>
+    let chart;
+    let tpschart = {
+        type: 'line',
+        data: {
+            labels: ['', '', '', '', '', '', '', '', '', ''],
+            datasets: [{
+                data: [0,0,0,0,0,0,0,0,0,0],
+                label: 'Tx',
+                backgroundColor: '#0275d8',
+                borderColor: '#0275d8',
+                fill: false,
+                borderCapStyle : "butt",
+                borderDashOffset : 0.0,
+                borderJoinStyle : "miter",
+                pointBorderColor : "#000000",
+                pointBackgroundColor : "#000000",
+                pointBorderWidth : 1,
+                pointRadius : 1,
+                pointHoverRadius : 5,
+                pointHitRadius : 10,
+                pointHoverBackgroundColor : "#000000",
+                pointHoverBorderColor : "#000000",
+                pointHoverBorderWidth : 2,
+                spanGaps : false
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '10 Seconds'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Transactions'
+                    },
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    };
+
+    window.onload = function() {
+        chart = new Chart($("#tpsChart"), tpschart);
+    };
+
+    function updateTps(){
+        $.ajax({
+            url: 'api/tps',
+            success: function(data) {
+                chart.data.datasets[0].data = data.values;
+                chart.data.labels = data.labels;
+                chart.update(0);
+            }
+        });
+        setTimeout(updateTps, 10000);
+    }
+
+</script>
+
+</div>

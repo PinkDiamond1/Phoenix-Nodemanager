@@ -68,8 +68,10 @@ public class ConfigController {
 
     @PostMapping
     public String postConfig(@RequestParam final Map<String, Object> formParams) throws IOException {
+
         ConfigurationFileService.writeSettings(settingsPath, parseRootComponent.getRootComponent(formParams));
         return ApplicationPaths.CONFIG_PATH;
+
     }
 
 }
