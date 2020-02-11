@@ -120,15 +120,15 @@ public class InformationController {
                 .iterator()
                 .forEachRemaining(entry -> producerBlocksCount.put((String) entry.get("addr"), 0L));
 
-        log.info(producerBlocksCount.toString());
-
         mongoClient.getDatabase("apex")
            	    .getCollection("block")
            	    .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
                 .projection(include("producer"))
+                .projection(include("height"))
            	    .iterator().forEachRemaining(entry -> {
            	        final String address = entry.get("producer").toString();
-           	        final Long currentCount = producerBlocksCount.get(address);
+           	        final long currentCount = producerBlocksCount.get(address);
+           	        log.info(String.valueOf(currentCount));
            	        producerBlocksCount.put(address, currentCount + 1L);
            	    });
 
