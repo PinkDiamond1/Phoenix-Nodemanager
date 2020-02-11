@@ -108,11 +108,9 @@ public class InformationController {
                 .limit(1).iterator();
 
         final String currentProducer = latestBlock.hasNext() ? latestBlock.next().getString("producer") : "";
-        final BsonDateTime currentTimestamp = latestBlock.hasNext() ?
-                new BsonDateTime(latestBlock.next().getLong("timestamp")) :
-                new BsonDateTime(Instant.now().toEpochMilli());
-        log.info("Current Producer:" + currentProducer);
-        log.info("Timestamp:" + currentTimestamp);
+        final long currentTimestamp = latestBlock.hasNext() ?
+                latestBlock.next().getLong("timestamp") :
+                Instant.now().toEpochMilli();
 
         final HashMap<String, Long> producerBlocksCount = new HashMap<>();
         mongoClient.getDatabase("apex")
@@ -122,15 +120,19 @@ public class InformationController {
                 .iterator()
                 .forEachRemaining(entry -> producerBlocksCount.put((String) entry.get("addr"), 0L));
 
+        log.info(producerBlocksCount.toString());
+
         mongoClient.getDatabase("apex")
            	    .getCollection("block")
-           	    .find(gte("timeStamp", currentTimestamp))
+           	    .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
                 .projection(include("producer"))
            	    .iterator().forEachRemaining(entry -> {
            	        final String address = entry.get("producer").toString();
            	        final Long currentCount = producerBlocksCount.get(address);
            	        producerBlocksCount.put(address, currentCount + 1L);
            	    });
+
+        log.info(producerBlocksCount.toString());
 
         if(witnesses.hasNext()){
             final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
