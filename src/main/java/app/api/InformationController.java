@@ -131,8 +131,8 @@ public class InformationController {
                     entry.put("name", witness.get("name"));
                     entry.put("addr", witness.get("addr"));
                     entry.put("voteCounts", witness.get("voteCounts"));
-                    final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / 350) * 100.0;
-                    final String formattedString = String.format("%.01f", yield) + "%";
+                    final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / 343) * 100;
+                    final String formattedString = String.format("%.01f", Math.min(yield, 100.0)) + "%";
                     entry.put("yield", formattedString);
                     entry.put("longitude", witness.get("longitude"));
                     entry.put("latitude", witness.get("latitude"));
