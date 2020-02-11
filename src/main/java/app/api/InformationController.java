@@ -125,14 +125,13 @@ public class InformationController {
 
             if (witnesses.hasNext()) {
                 final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
-                final int maxBlocksPerHour = 7200 / witnessList.size();
                 witnessList.forEach(witness -> {
                     final HashMap<String, Object> entry = new HashMap<>();
                     final String address = (String) witness.get("addr");
                     entry.put("name", witness.get("name"));
                     entry.put("addr", witness.get("addr"));
                     entry.put("voteCounts", witness.get("voteCounts"));
-                    final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / maxBlocksPerHour) * 100.0;
+                    final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / 350) * 100.0;
                     final String formattedString = String.format("%.01f", yield) + "%";
                     entry.put("yield", formattedString);
                     entry.put("longitude", witness.get("longitude"));
