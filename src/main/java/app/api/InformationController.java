@@ -94,10 +94,6 @@ public class InformationController {
     @ResponseBody
     public String getWitnesses() {
 
-        final int blocksPerHour = 7200;
-        final long witnessNum = 21L;
-        final double maxBlocksPerHour = blocksPerHour/ (witnessNum * 1.0f);
-
         final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
@@ -127,12 +123,11 @@ public class InformationController {
                     .iterator().forEachRemaining(entry -> {
                         final String address = entry.get("producer").toString();
                         producerBlocksCount.put(address, producerBlocksCount.get(address) + 1L);
-            });
-
-            log.info(producerBlocksCount.toString());
+                    });
 
             if (witnesses.hasNext()) {
                 final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
+                final int maxBlocksPerHour = 7200 / witnessList.size();
                 witnessList.forEach(witness -> {
                     final HashMap<String, Object> entry = new HashMap<>();
                     final String address = (String) witness.get("addr");
