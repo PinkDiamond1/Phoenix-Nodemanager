@@ -28,6 +28,8 @@ import java.time.Instant;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.excludeId;
+import static com.mongodb.client.model.Projections.include;
 
 @Controller
 @RequestMapping(ApiPaths.API)
@@ -94,34 +96,39 @@ public class InformationController {
 
         final int blocksPerHour = 7200;
         final long witnessNum = 21L;
-        final double maxBlocksPerHour = blocksPerHour/ (witnessNum *1.0f);
+        final double maxBlocksPerHour = blocksPerHour/ (witnessNum * 1.0f);
 
         final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
 
-        final MongoCursor<Document> producer = mongoClient.getDatabase("apex")
+        final MongoCursor<Document> latestBlock = mongoClient.getDatabase("apex")
                 .getCollection("block")
                 .find().sort(new Document("height", -1))
                 .limit(1).iterator();
 
+        final String currentProducer = latestBlock.hasNext() ? latestBlock.next().getString("producer") : "";
+        final Document currentTimestamp = latestBlock.hasNext() ? latestBlock.next() : new Document();
+
         final HashMap<String, Long> producerBlocksCount = new HashMap<>();
         mongoClient.getDatabase("apex")
                 .getCollection("miner")
-                .find().sort(new Document("addr", -1))
+                .find()
+                .projection(include("addr"))
                 .iterator()
                 .forEachRemaining(entry -> producerBlocksCount.put((String) entry.get("addr"), 0L));
 
         mongoClient.getDatabase("apex")
            	    .getCollection("block")
-           	    .find(gte("timeStamp", new BsonDateTime(Instant.now().toEpochMilli() - 3600000L)))   
+           	    .find(gte("timeStamp", currentTimestamp))
+                .projection(include("producer"))
            	    .iterator().forEachRemaining(entry -> {
            	        final String address = entry.get("producer").toString();
-           	        if(address.equals("true")) producerBlocksCount.put(address, producerBlocksCount.get(address) + 1L);
+           	        final Long currentCount = producerBlocksCount.get(address);
+           	        producerBlocksCount.put(address, currentCount + 1L);
            	    });
 
-        if(witnesses.hasNext() && producer.hasNext()){
-            final String currentProducer = producer.next().getString("producer");
+        if(witnesses.hasNext()){
             final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
             witnessList.forEach(witness -> {
                 final HashMap<String, Object> entry = new HashMap<>();
@@ -144,6 +151,7 @@ public class InformationController {
                 return "[]";
             }
         }
+
         return "[]";
 
     }
