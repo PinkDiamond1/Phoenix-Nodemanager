@@ -110,7 +110,7 @@ public class InformationController {
         if(latestBlock.hasNext()) {
             final Document lastBlock = latestBlock.next();
             final String currentProducer = lastBlock.getString("producer");
-            final long currentTimestamp = lastBlock.getLong("timeStamp");
+            final long currentTimestamp = lastBlock.getDate("timeStamp").getTime();
 
             log.info(String.valueOf(Instant.now().toEpochMilli()));
             log.info(String.valueOf(currentTimestamp));
