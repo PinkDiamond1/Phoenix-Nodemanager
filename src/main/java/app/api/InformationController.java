@@ -112,9 +112,6 @@ public class InformationController {
             final String currentProducer = lastBlock.getString("producer");
             final long currentTimestamp = lastBlock.getDate("timeStamp").getTime();
 
-            log.info(String.valueOf(Instant.now().toEpochMilli()));
-            log.info(String.valueOf(currentTimestamp));
-
             final HashMap<String, Long> producerBlocksCount = new HashMap<>();
             mongoClient.getDatabase("apex")
                     .getCollection("miner")
@@ -125,7 +122,7 @@ public class InformationController {
 
             mongoClient.getDatabase("apex")
                     .getCollection("block")
-                    .find(gte("timeStamp", currentTimestamp - 3600000L))
+                    .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
                     .projection(include("producer"))
                     .projection(include("height"))
                     .iterator().forEachRemaining(entry -> {
