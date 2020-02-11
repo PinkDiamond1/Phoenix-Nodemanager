@@ -24,11 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.time.Instant;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Projections.excludeId;
 import static com.mongodb.client.model.Projections.include;
 
 @Controller
