@@ -108,7 +108,11 @@ public class InformationController {
                 .limit(1).iterator();
 
         final String currentProducer = latestBlock.hasNext() ? latestBlock.next().getString("producer") : "";
-        final Document currentTimestamp = latestBlock.hasNext() ? latestBlock.next() : new Document();
+        final BsonDateTime currentTimestamp = latestBlock.hasNext() ?
+                new BsonDateTime(latestBlock.next().getLong("timestamp")) :
+                new BsonDateTime(Instant.now().toEpochMilli());
+        log.info("Current Producer:" + currentProducer);
+        log.info("Timestamp:" + currentTimestamp);
 
         final HashMap<String, Long> producerBlocksCount = new HashMap<>();
         mongoClient.getDatabase("apex")
