@@ -124,11 +124,9 @@ public class InformationController {
                     .getCollection("block")
                     .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
                     .projection(include("producer"))
-                    .projection(include("height"))
                     .iterator().forEachRemaining(entry -> {
-                final String address = entry.get("producer").toString();
-                final long currentCount = producerBlocksCount.get(address);
-                producerBlocksCount.put(address, currentCount + 1L);
+                        final String address = entry.get("producer").toString();
+                        producerBlocksCount.put(address, producerBlocksCount.get(address) + 1L);
             });
 
             log.info(producerBlocksCount.toString());
