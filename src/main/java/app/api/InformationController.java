@@ -122,13 +122,12 @@ public class InformationController {
 
         mongoClient.getDatabase("apex")
            	    .getCollection("block")
-           	    .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
+           	    .find(gte("timeStamp", currentTimestamp - 3600000L))
                 .projection(include("producer"))
                 .projection(include("height"))
            	    .iterator().forEachRemaining(entry -> {
            	        final String address = entry.get("producer").toString();
            	        final long currentCount = producerBlocksCount.get(address);
-           	        log.info(String.valueOf(currentCount));
            	        producerBlocksCount.put(address, currentCount + 1L);
            	    });
 
