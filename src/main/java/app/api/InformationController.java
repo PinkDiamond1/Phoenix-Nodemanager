@@ -109,7 +109,7 @@ public class InformationController {
 
         final String currentProducer = latestBlock.hasNext() ? latestBlock.next().getString("producer") : "";
         final long currentTimestamp = latestBlock.hasNext() ?
-                latestBlock.next().getLong("timestamp") :
+                latestBlock.next().getLong("timeStamp") :
                 Instant.now().toEpochMilli();
 
         final HashMap<String, Long> producerBlocksCount = new HashMap<>();
@@ -122,7 +122,7 @@ public class InformationController {
 
         mongoClient.getDatabase("apex")
            	    .getCollection("block")
-           	    .find(gte("timeStamp", currentTimestamp - 3600000L))
+           	    .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
                 .projection(include("producer"))
                 .projection(include("height"))
            	    .iterator().forEachRemaining(entry -> {
