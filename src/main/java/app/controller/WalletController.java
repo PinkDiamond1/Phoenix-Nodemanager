@@ -271,6 +271,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Registration registration = Registration.builder()
+                            .fromPubKeyHash(CPXKey.getScriptHashFromCPXAddress(from))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .country(country != null ? country : "")
                             .url(url != null ? url : "")
@@ -279,12 +280,10 @@ public class WalletController {
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
                             .build();
-                    log.info(jacksonWriter.getStringFromRequestObject(registration));
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce,
                             new FixedNumber(0, FixedNumber.P),
                             new FixedNumber(gasPrice, FixedNumber.KGP),
                             new FixedNumber(gasLimit, FixedNumber.KP));
-                    log.info(jacksonWriter.getStringFromRequestObject(tx));
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
