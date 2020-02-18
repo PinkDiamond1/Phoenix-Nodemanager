@@ -253,6 +253,7 @@ public class WalletController {
                            @RequestParam(value = "gasPriceVm") final double gasPrice,
                            @RequestParam(value = "gasLimitVm") final long gasLimit,
                            @RequestParam(value = "walletPasswordVm") final String password,
+                           @RequestParam(value = "registerAddress") final String registerAddress,
                            @RequestParam(value = "registerType") final String type,
                            @RequestParam(value = "company", required = false) final String company,
                            @RequestParam(value = "url", required = false) final String url,
@@ -271,7 +272,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Registration registration = Registration.builder()
-                            .fromPubKeyHash(CPXKey.getScriptHashFromCPXAddress(from))
+                            .fromPubKeyHash(CPXKey.getScriptHashFromCPXAddress(registerAddress))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .country(country != null ? country : "")
                             .url(url != null ? url : "")
