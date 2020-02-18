@@ -280,6 +280,7 @@ public class WalletController {
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
                             .voteCounts(new FixedNumber(0.0, FixedNumber.CPX))
+                            .frozen(false)
                             .build();
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce,
                             new FixedNumber(0, FixedNumber.P),
