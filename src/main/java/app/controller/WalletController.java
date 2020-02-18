@@ -253,6 +253,7 @@ public class WalletController {
                            @RequestParam(value = "gasPriceVm") final double gasPrice,
                            @RequestParam(value = "gasLimitVm") final long gasLimit,
                            @RequestParam(value = "walletPasswordVm") final String password,
+                           @RequestParam(value = "registerAddress") final String registerAddress,
                            @RequestParam(value = "registerType") final String type,
                            @RequestParam(value = "company", required = false) final String company,
                            @RequestParam(value = "url", required = false) final String url,
@@ -271,6 +272,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Registration registration = Registration.builder()
+                            .fromPubKeyHash(CPXKey.getScriptHashFromCPXAddress(registerAddress))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .country(country != null ? country : "")
                             .url(url != null ? url : "")
@@ -278,6 +280,10 @@ public class WalletController {
                             .address(location != null ? location : "")
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
+                            .voteCounts(new FixedNumber(0.0, FixedNumber.CPX))
+                            .register(true)
+                            .frozen(false)
+                            .genesisWitness(false)
                             .build();
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce,
                             new FixedNumber(0, FixedNumber.P),
