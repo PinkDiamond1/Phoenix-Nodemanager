@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.time.Instant;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.include;
 
 @Controller
 @RequestMapping(ApiPaths.API)
@@ -92,58 +92,62 @@ public class InformationController {
     @ResponseBody
     public String getWitnesses() {
 
-        final int blocksPerHour = 7200;
-        final long witnessNum = 21L;
-        final double maxBlocksPerHour = blocksPerHour/ (witnessNum *1.0f);
-
         final ArrayList<HashMap<String, Object>> responseList = new ArrayList<>();
         final MongoCursor<Document> witnesses = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
 
-        final MongoCursor<Document> producer = mongoClient.getDatabase("apex")
+        final MongoCursor<Document> latestBlock = mongoClient.getDatabase("apex")
                 .getCollection("block")
                 .find().sort(new Document("height", -1))
                 .limit(1).iterator();
 
-        final HashMap<String, Long> producerBlocksCount = new HashMap<>();
-        mongoClient.getDatabase("apex")
-                .getCollection("miner")
-                .find().sort(new Document("addr", -1))
-                .iterator()
-                .forEachRemaining(entry -> producerBlocksCount.put((String) entry.get("addr"), 0L));
+        if(latestBlock.hasNext()) {
+            final Document lastBlock = latestBlock.next();
+            final String currentProducer = lastBlock.getString("producer");
+            final long currentTimestamp = lastBlock.getDate("timeStamp").getTime();
 
-        mongoClient.getDatabase("apex")
-           	    .getCollection("block")
-           	    .find(gte("timeStamp", new BsonDateTime(Instant.now().toEpochMilli() - 3600000L)))   
-           	    .iterator().forEachRemaining(entry -> {
-           	        final String address = entry.get("producer").toString();
-           	        if(address.equals("true")) producerBlocksCount.put(address, producerBlocksCount.get(address) + 1L);
-           	    });
+            final HashMap<String, Long> producerBlocksCount = new HashMap<>();
+            mongoClient.getDatabase("apex")
+                    .getCollection("miner")
+                    .find()
+                    .projection(include("addr"))
+                    .iterator()
+                    .forEachRemaining(entry -> producerBlocksCount.put((String) entry.get("addr"), 0L));
 
-        if(witnesses.hasNext() && producer.hasNext()){
-            final String currentProducer = producer.next().getString("producer");
-            final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
-            witnessList.forEach(witness -> {
-                final HashMap<String, Object> entry = new HashMap<>();
-                final String address = (String) witness.get("addr");
-                entry.put("name", witness.get("name"));
-                entry.put("addr", witness.get("addr"));
-                entry.put("voteCounts", witness.get("voteCounts"));               
-                final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / maxBlocksPerHour) * 100.0;
-                final String formattedString = String.format("%.01f", yield) + "%";
-                entry.put("yield", formattedString);
-                entry.put("longitude", witness.get("longitude"));
-                entry.put("latitude", witness.get("latitude"));
-                entry.put("radius", address.equals(currentProducer) ? 12 : 4);
-                entry.put("fillKey", address.equals(currentProducer) ? "yellowFill" : "blackFill");
-                responseList.add(entry);
-            });
-            try {
-                return jacksonWriter.getStringFromRequestObject(responseList);
-            } catch (JsonProcessingException e) {
-                return "[]";
+            mongoClient.getDatabase("apex")
+                    .getCollection("block")
+                    .find(gte("timeStamp", new BsonDateTime(currentTimestamp - 3600000L)))
+                    .projection(include("producer"))
+                    .iterator().forEachRemaining(entry -> {
+                        final String address = entry.get("producer").toString();
+                        producerBlocksCount.put(address, producerBlocksCount.get(address) + 1L);
+                    });
+
+            if (witnesses.hasNext()) {
+                final List<Map> witnessList = witnesses.next().getList("witnesses", Map.class);
+                witnessList.forEach(witness -> {
+                    final HashMap<String, Object> entry = new HashMap<>();
+                    final String address = (String) witness.get("addr");
+                    entry.put("name", witness.get("name"));
+                    entry.put("addr", witness.get("addr"));
+                    entry.put("voteCounts", witness.get("voteCounts"));
+                    final double yield = ((producerBlocksCount.getOrDefault(address, 0L)) * 1.0 / 343) * 100;
+                    final String formattedString = String.format("%.01f", Math.min(yield, 100.0)) + "%";
+                    entry.put("yield", formattedString);
+                    entry.put("longitude", witness.get("longitude"));
+                    entry.put("latitude", witness.get("latitude"));
+                    entry.put("radius", address.equals(currentProducer) ? 12 : 4);
+                    entry.put("fillKey", address.equals(currentProducer) ? "yellowFill" : "blackFill");
+                    responseList.add(entry);
+                });
+                try {
+                    return jacksonWriter.getStringFromRequestObject(responseList);
+                } catch (JsonProcessingException e) {
+                    return "[]";
+                }
             }
         }
+
         return "[]";
 
     }

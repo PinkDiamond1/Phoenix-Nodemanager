@@ -104,7 +104,9 @@ public class WalletController {
 
         final MongoCursor<Document> witnessesDoc = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
-        final List<Map> witnessList = witnessesDoc.next().getList("witnesses", Map.class);
+        final List<Map> witnessList = witnessesDoc.hasNext() ?
+                witnessesDoc.next().getList("witnesses", Map.class) :
+                new ArrayList<>();
         final ArrayList<String> witnesses = new ArrayList<>();
         witnessList.forEach(w -> witnesses.add((String)w.get("addr")));
 
