@@ -282,6 +282,7 @@ public class WalletController {
                             .voteCounts(new FixedNumber(0.0, FixedNumber.CPX))
                             .register(true)
                             .frozen(false)
+                            .genesisWitness(false)
                             .build();
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce,
                             new FixedNumber(0, FixedNumber.P),
