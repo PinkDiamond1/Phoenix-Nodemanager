@@ -272,6 +272,7 @@ public class WalletController {
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Registration registration = Registration.builder()
+                            .version(1)
                             .fromPubKeyHash(CPXKey.getScriptHashFromCPXAddress(registerAddress))
                             .operationType(type.equals("add") ? OperationType.REGISTER : OperationType.REGISTER_CANCEL)
                             .country(country != null ? country : "")
@@ -280,7 +281,7 @@ public class WalletController {
                             .address(location != null ? location : "")
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
-                            .voteCounts(new FixedNumber(0.0, FixedNumber.CPX))
+                            .voteCounts(new FixedNumber(0, FixedNumber.P))
                             .register(true)
                             .frozen(false)
                             .genesisWitness(false)
