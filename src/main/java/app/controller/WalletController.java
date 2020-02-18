@@ -261,6 +261,18 @@ public class WalletController {
                            @RequestParam(value = "longitude", required = false) final Integer longitude,
                            @RequestParam(value = "latitude", required = false) final Integer latitude) {
 
+        log.info(from);
+        log.info(String.valueOf(gasPrice));
+        log.info(String.valueOf(gasLimit));
+        log.info(password);
+        log.info(type);
+        log.info(company);
+        log.info(url);
+        log.info(country);
+        log.info(location);
+        log.info(longitude.toString());
+        log.info(latitude.toString());
+
         final Optional<Wallet> wallet = walletRepository.findById(from);
         wallet.ifPresent(account -> {
             try {
