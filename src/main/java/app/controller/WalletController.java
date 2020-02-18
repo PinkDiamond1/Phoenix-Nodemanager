@@ -261,18 +261,6 @@ public class WalletController {
                            @RequestParam(value = "longitude", required = false) final Integer longitude,
                            @RequestParam(value = "latitude", required = false) final Integer latitude) {
 
-        log.info(from);
-        log.info(String.valueOf(gasPrice));
-        log.info(String.valueOf(gasLimit));
-        log.info(password);
-        log.info(type);
-        log.info(company);
-        log.info(url);
-        log.info(country);
-        log.info(location);
-        log.info(longitude.toString());
-        log.info(latitude.toString());
-
         final Optional<Wallet> wallet = walletRepository.findById(from);
         wallet.ifPresent(account -> {
             try {
@@ -291,10 +279,12 @@ public class WalletController {
                             .longitude(longitude != null ? longitude : 0)
                             .latitude(latitude != null ? latitude : 0)
                             .build();
+                    log.info(jacksonWriter.getStringFromRequestObject(registration));
                     final Transaction tx = txFactory.create(TxObj.REGISTER, key, registration, Registration.SCRIPT_HASH, nonce,
                             new FixedNumber(0, FixedNumber.P),
                             new FixedNumber(gasPrice, FixedNumber.KGP),
                             new FixedNumber(gasLimit, FixedNumber.KP));
+                    log.info(jacksonWriter.getStringFromRequestObject(tx));
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
                     requestCaller.postRequest(rpcUrl, cmd);
                 }
