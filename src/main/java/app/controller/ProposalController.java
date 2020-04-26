@@ -89,6 +89,13 @@ public class ProposalController {
                 "No registered Producer found" :
                 "Producer " + accounts.get(0));
 
+        try {
+            final String responseString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
+            model.addAttribute("proposals", responseString);
+        } catch (Exception e) {
+            model.addAttribute("proposals", "No Proposals found");
+        }
+
         return ApplicationPaths.PROPOSAL_PAGE;
 
     }

@@ -73,6 +73,7 @@
         <div class="card-body">
             <h4 class="card-title text-primary mdi mdi-clock-alert icon-md">  Active Proposals</h4>
             <!-- Accordion card -->
+            <h6 th:text="${proposals}"> </h6>
             <div class="card" th:each="wallet : ${wallets}">
                 <!-- Card header -->
                 <div class="card-header" role="tab" th:id="${'headingOne_'+wallet.get('walletAddress')}">
