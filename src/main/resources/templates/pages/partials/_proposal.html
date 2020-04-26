@@ -3,19 +3,21 @@
         <div class="card-body">
             <form th:method="post" th:action="@{proposal}">
                 <h4 class="card-title mdi mdi-chevron-double-right">  New Proposal</h4>
-                <h6 th:text="'Producer: '+ ${producer}"></h6>
-                <input type="hidden" name="producer" id="producer" th:value="${producer}">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6 th:text="${producer}"></h6>
+                        <input type="hidden" name="producer" id="producer" th:value="${producer}">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group row">
-                            <div class="form-group">
-                                <label for="proposalType">Type</label>
-                                <select class="form-control" id="proposalType" name="proposalType" required>
-                                    <option value="1" selected>Block Award</option>
-                                    <option value="2">TX minimum GAS</option>
-                                    <option value="3">TX maximum GAS</option>
-                                </select>
-                            </div>
+                            <label for="proposalType">Type</label>
+                            <select class="form-control" id="proposalType" name="proposalType" required>
+                                <option value="1" selected>Block Award</option>
+                                <option value="2">TX minimum GAS</option>
+                                <option value="3">TX maximum GAS</option>
+                            </select>
                         </div>
                     </div>
                 </div>

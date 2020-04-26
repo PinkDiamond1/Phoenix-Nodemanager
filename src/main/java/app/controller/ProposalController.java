@@ -1,6 +1,5 @@
 package app.controller;
 
-import app.api.ApiPaths;
 import app.config.ApplicationPaths;
 import app.entity.Wallet;
 import app.repository.WalletRepository;
@@ -63,29 +62,32 @@ public class ProposalController {
     @Value("${app.core.rpc}")
     private String rpcUrl;
 
-    private Logger log = LoggerFactory.getLogger(ProposalController.class);
+    private final Logger log = LoggerFactory.getLogger(ProposalController.class);
 
     @GetMapping
     public String getProposalPage(Model model) {
 
-        final ArrayList<String> addresses = new ArrayList<>();
-        StreamSupport.stream(walletRepository.findAll().spliterator(), false)
+        final List<String> addresses = StreamSupport.stream(walletRepository.findAll().spliterator(), false)
         .collect(Collectors.toList())
-        .forEach(wallet -> addresses.add(wallet.getAddress()));
+                .stream()
+                .map(Wallet::getAddress)
+                .collect(Collectors.toList());
 
         final MongoCursor<Document> witnessesDoc = mongoClient.getDatabase("apex")
                 .getCollection("witnessStatus").find().limit(1).iterator();
+
         final List<Map> witnessList = witnessesDoc.hasNext() ?
                 witnessesDoc.next().getList("witnesses", Map.class) :
                 new ArrayList<>();
 
-        final ArrayList<String> accounts = new ArrayList<>();
-        witnessList.forEach(w -> {
-            final String addr = (String) w.get("addr");
-            if(addresses.contains(addr)) accounts.add(addr);
-        });
+        final List<String> accounts = witnessList.stream()
+                .filter(w -> addresses.contains(w.get("addr")))
+                .map(w -> (String) w.get("addr"))
+                .collect(Collectors.toList());
 
-        model.addAttribute("producer", accounts.isEmpty() ? "" : accounts.get(0));
+        model.addAttribute("producer", accounts.isEmpty() ?
+                "No registered Producer found" :
+                "Producer " + accounts.get(0));
 
         return ApplicationPaths.PROPOSAL_PAGE;
 
