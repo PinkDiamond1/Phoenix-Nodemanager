@@ -96,7 +96,7 @@ public class ProposalController {
     @PostMapping(params = "action=new")
     public String newProposal(@RequestParam(value = "producer") final String producer,
                               @RequestParam(value = "password") final String password,
-                              @RequestParam(value = "type") final int type,
+                              @RequestParam(value = "proposalType") final int type,
                               @RequestParam(value = "amount") final double amount,
                               @RequestParam(value = "timestamp") final long timestamp){
 
