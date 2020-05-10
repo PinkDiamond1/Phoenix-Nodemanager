@@ -111,6 +111,7 @@ public class ProposalController {
         log.info("Find producer wallet for " + producer);
         final Optional<Wallet> wallet = walletRepository.findById(producer);
         log.info(wallet.isPresent() ? "Wallet was found" : "Wallet not found");
+        walletRepository.findAll().iterator().forEachRemaining(w -> log.info(w.getAddress()));
         wallet.ifPresent(account -> {
             try{
                 final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
