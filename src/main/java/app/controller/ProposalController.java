@@ -108,11 +108,8 @@ public class ProposalController {
                               @RequestParam(value = "proposalType") final int type,
                               @RequestParam(value = "amount") final double amount,
                               @RequestParam(value = "timestamp") final long timestamp){
-        log.info("Find producer wallet for " + producer);
-        final Optional<Wallet> wallet = walletRepository.findById(producer);
-        log.info(wallet.isPresent() ? "Wallet was found" : "Wallet not found");
-        walletRepository.findAll().iterator().forEachRemaining(w -> log.info(w.getAddress()));
-        wallet.ifPresent(account -> {
+        final Optional<Wallet> wallet = walletRepository.findByAddress(producer);
+        wallet.ifPresentOrElse(account -> {
             try{
                 final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
                         password, CryptoService.KEY_NAME).getPrivate();
@@ -152,7 +149,7 @@ public class ProposalController {
                 log.warn("Proposal failed with: " + e.getMessage());
                 Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             }
-        });
+        }, () -> log.warn("Wallet for Producer " + producer + " could not be loaded"));
 
         return ApplicationPaths.PROPOSAL_PAGE;
 
