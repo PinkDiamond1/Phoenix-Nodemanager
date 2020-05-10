@@ -29,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.interfaces.ECPrivateKey;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +89,7 @@ public class ProposalController {
         model.addAttribute("producer", accounts.isEmpty() ?
                 "No registered Producer found" :
                 "Producer " + accounts.get(0));
+        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli());
 
         try {
             final String responseString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
@@ -113,8 +115,11 @@ public class ProposalController {
             try{
                 final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
                         password, CryptoService.KEY_NAME).getPrivate();
+                log.info("Private key loaded");
                 final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(producer));
+                log.info("Get producer account was: " + accountString);
                 final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
+                log.info("Result was: " + resultAccount.getResult().toString() + "\nStatus: " + resultAccount.getStatus());
                 if(resultAccount.isSucceed()) {
                     final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
                     final Proposal proposal = Proposal.builder()
@@ -137,8 +142,10 @@ public class ProposalController {
                             new FixedNumber(0, FixedNumber.P),
                             new FixedNumber(1, FixedNumber.KGP),
                             new FixedNumber(500, FixedNumber.KP));
+                    log.info("Transaction was build");
                     final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
-                    requestCaller.postRequest(rpcUrl, cmd);
+                    final String result = requestCaller.postRequest(rpcUrl, cmd);
+                    log.info("Execute result was: " + result);
                 }
             } catch (Exception e){
                 log.warn("Proposal failed with: " + e.getMessage());
