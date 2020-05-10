@@ -108,9 +108,9 @@ public class ProposalController {
                               @RequestParam(value = "proposalType") final int type,
                               @RequestParam(value = "amount") final double amount,
                               @RequestParam(value = "timestamp") final long timestamp){
-
+        log.info("Find producer wallet for " + producer);
         final Optional<Wallet> wallet = walletRepository.findById(producer);
-
+        log.info(wallet.isPresent() ? "Wallet was found" : "Wallet not found");
         wallet.ifPresent(account -> {
             try{
                 final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
