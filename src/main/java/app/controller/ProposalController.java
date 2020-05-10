@@ -89,7 +89,7 @@ public class ProposalController {
         model.addAttribute("producer", accounts.isEmpty() ?
                 "No registered Producer found" :
                 accounts.get(0));
-        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli());
+        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (72 * 3600 * 1000));
 
         try {
             final String responseString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
@@ -152,7 +152,7 @@ public class ProposalController {
             }
         }, () -> log.warn("Wallet for Producer " + producer + " could not be loaded"));
 
-        return ApplicationPaths.PROPOSAL_PAGE;
+        return ApplicationPaths.PROPOSAL_PATH;
 
     }
 
