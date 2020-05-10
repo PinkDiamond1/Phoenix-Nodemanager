@@ -88,7 +88,7 @@ public class ProposalController {
 
         model.addAttribute("producer", accounts.isEmpty() ?
                 "No registered Producer found" :
-                "Producer " + accounts.get(0));
+                accounts.get(0));
         model.addAttribute("currentTimestamp", Instant.now().toEpochMilli());
 
         try {
@@ -109,9 +109,7 @@ public class ProposalController {
                               @RequestParam(value = "amount") final double amount,
                               @RequestParam(value = "timestamp") final long timestamp){
         log.info("Producer: " + producer);
-        final Optional<Wallet> wallet = walletRepository.findAll().stream()
-                .filter(wal -> wal.getAddress().equals(producer))
-                .findFirst();
+        final Optional<Wallet> wallet = walletRepository.findById(producer);
         wallet.ifPresentOrElse(account -> {
             try{
                 final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
