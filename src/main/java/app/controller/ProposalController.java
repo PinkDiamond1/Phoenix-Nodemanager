@@ -89,7 +89,7 @@ public class ProposalController {
         model.addAttribute("producer", accounts.isEmpty() ?
                 "No registered Producer found" :
                 accounts.get(0));
-        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (72 * 3600 * 1000));
+        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (73 * 3600 * 1000));
 
         try {
             final String responseString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
