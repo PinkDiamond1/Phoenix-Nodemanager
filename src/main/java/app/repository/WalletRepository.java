@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface WalletRepository extends CrudRepository<Wallet, String> {
-    List<Wallet> getAllWallets();
+    List<Wallet> findAll();
 }

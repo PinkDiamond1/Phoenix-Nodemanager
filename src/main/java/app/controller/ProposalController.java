@@ -109,7 +109,7 @@ public class ProposalController {
                               @RequestParam(value = "amount") final double amount,
                               @RequestParam(value = "timestamp") final long timestamp){
         log.info("Producer: " + producer);
-        final Optional<Wallet> wallet = walletRepository.getAllWallets().stream()
+        final Optional<Wallet> wallet = walletRepository.findAll().stream()
                 .filter(wal -> wal.getAddress().equals(producer))
                 .findFirst();
         wallet.ifPresentOrElse(account -> {
