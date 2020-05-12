@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCursor;
 import crypto.CryptoService;
 import message.request.cmd.GetAccountCmd;
 import message.request.cmd.GetAllProposalCmd;
+import message.request.cmd.GetAllProposalVotesCmd;
 import message.request.cmd.SendRawTransactionCmd;
 import message.response.ExecResult;
 import message.transaction.FixedNumber;
@@ -94,6 +95,8 @@ public class ProposalController {
         try {
             final String responseString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
             model.addAttribute("proposals", responseString);
+            final String votesString = requestCaller.postRequest(rpcUrl, new GetAllProposalVotesCmd());
+            model.addAttribute("votes", votesString);
         } catch (Exception e) {
             model.addAttribute("proposals", "No Proposals found");
         }
