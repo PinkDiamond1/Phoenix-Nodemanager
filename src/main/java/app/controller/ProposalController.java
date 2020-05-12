@@ -4,7 +4,6 @@ import app.config.ApplicationPaths;
 import app.entity.Wallet;
 import app.repository.WalletRepository;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
@@ -23,7 +22,6 @@ import message.transaction.payload.ProposalType;
 import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 import org.bson.Document;
-import org.h2.util.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,12 +179,13 @@ public class ProposalController {
                         .getAsJsonObject()
                         .get("proposals").getAsJsonArray().iterator()
                         .forEachRemaining(proposalList::add);
-
                 return proposalList.stream()
                         .map(JsonElement::getAsJsonObject)
                         .map(proposal -> {
                             final HashMap<String, String> values = new HashMap<>();
-                            proposal.keySet().forEach(key -> values.put(key, proposal.get(key).toString()));
+                            proposal.keySet().stream()
+                                    .filter(key -> !key.equals("voters"))
+                                    .forEach(key -> values.put(key, proposal.get(key).getAsString()));
                             return values;
                         })
                         .collect(Collectors.toList());
