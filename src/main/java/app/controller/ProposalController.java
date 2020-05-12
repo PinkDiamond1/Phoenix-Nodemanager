@@ -192,6 +192,7 @@ public class ProposalController {
                         .collect(Collectors.toList());
             }
         } catch (Exception e) {
+            Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
             log.error("Failed to get the Proposal list");
         }
 
