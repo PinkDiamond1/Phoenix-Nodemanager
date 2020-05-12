@@ -64,7 +64,7 @@ public class WalletController {
     @Value("${app.core.rpc}")
     private String rpcUrl;
 
-    private Logger log = LoggerFactory.getLogger(WalletController.class);
+    private final Logger log = LoggerFactory.getLogger(WalletController.class);
 
     @GetMapping
     public String getWalletPage(Model model) {

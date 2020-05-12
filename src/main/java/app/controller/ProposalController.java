@@ -3,6 +3,9 @@ package app.controller;
 import app.config.ApplicationPaths;
 import app.entity.Wallet;
 import app.repository.WalletRepository;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import crypto.CryptoService;
@@ -20,6 +23,7 @@ import message.transaction.payload.ProposalType;
 import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 import org.bson.Document;
+import org.h2.util.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +35,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.interfaces.ECPrivateKey;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping(value = "/" + ApplicationPaths.PROPOSAL_PAGE)
@@ -69,37 +69,14 @@ public class ProposalController {
     @GetMapping
     public String getProposalPage(Model model) {
 
-        final List<String> addresses = StreamSupport.stream(walletRepository.findAll().spliterator(), false)
-        .collect(Collectors.toList())
-                .stream()
-                .map(Wallet::getAddress)
-                .collect(Collectors.toList());
-
-        final MongoCursor<Document> witnessesDoc = mongoClient.getDatabase("apex")
-                .getCollection("witnessStatus").find().limit(1).iterator();
-
-        final List<Map> witnessList = witnessesDoc.hasNext() ?
-                witnessesDoc.next().getList("witnesses", Map.class) :
-                new ArrayList<>();
-
-        final List<String> accounts = witnessList.stream()
-                .filter(w -> addresses.contains(w.get("addr")))
-                .map(w -> (String) w.get("addr"))
-                .collect(Collectors.toList());
-
-        model.addAttribute("producer", accounts.isEmpty() ?
+        final Optional<String> producerAccount = getProducerAccount();
+        model.addAttribute("producer", producerAccount.isEmpty() ?
                 "No registered Producer found" :
-                accounts.get(0));
-        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (73 * 3600 * 1000));
+                producerAccount.get());
 
-        try {
-            final String responseString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
-            model.addAttribute("proposals", responseString);
-            final String votesString = requestCaller.postRequest(rpcUrl, new GetAllProposalVotesCmd());
-            model.addAttribute("votes", votesString);
-        } catch (Exception e) {
-            model.addAttribute("proposals", "No Proposals found");
-        }
+        model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (73 * 3600 * 1000));
+        model.addAttribute("proposals", getProposalList().toString());
+        model.addAttribute("votes", "votes");
 
         return ApplicationPaths.PROPOSAL_PAGE;
 
@@ -169,6 +146,57 @@ public class ProposalController {
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             return "{}";
         }
+    }
+
+    private Optional<String> getProducerAccount(){
+
+        final List<String> addresses = new ArrayList<>(walletRepository.findAll())
+                .stream()
+                .map(Wallet::getAddress)
+                .collect(Collectors.toList());
+
+        final MongoCursor<Document> witnessesDoc = mongoClient.getDatabase("apex")
+                .getCollection("witnessStatus").find().limit(1).iterator();
+
+        final List<Map> witnessList = witnessesDoc.hasNext() ?
+                witnessesDoc.next().getList("witnesses", Map.class) :
+                new ArrayList<>();
+
+        return witnessList.stream()
+                .filter(w -> addresses.contains(w.get("addr")))
+                .map(w -> (String) w.get("addr"))
+                .findFirst();
+
+    }
+
+    private List<Map<String, String>> getProposalList(){
+
+        try {
+            final String allProposalsString = requestCaller.postRequest(rpcUrl, new GetAllProposalCmd());
+            final ExecResult allProposalsResult = jacksonWriter.getObjectFromString(ExecResult.class, allProposalsString);
+            if(allProposalsResult.isSucceed()){
+                final List<JsonElement> proposalList = new ArrayList<>();
+                JsonParser.parseString
+                        (jacksonWriter.getStringFromRequestObject(allProposalsResult.getResult()))
+                        .getAsJsonObject()
+                        .get("proposals").getAsJsonArray().iterator()
+                        .forEachRemaining(proposalList::add);
+
+                return proposalList.stream()
+                        .map(JsonElement::getAsJsonObject)
+                        .map(proposal -> {
+                            final HashMap<String, String> values = new HashMap<>();
+                            proposal.keySet().forEach(key -> values.put(key, proposal.get(key).getAsString()));
+                            return values;
+                        })
+                        .collect(Collectors.toList());
+            }
+        } catch (Exception e) {
+            log.error("Failed to get the Proposal list");
+        }
+
+        return new ArrayList<>();
+
     }
 
 }
