@@ -186,7 +186,7 @@ public class ProposalController {
                         .map(JsonElement::getAsJsonObject)
                         .map(proposal -> {
                             final HashMap<String, String> values = new HashMap<>();
-                            proposal.keySet().forEach(key -> values.put(key, proposal.get(key).getAsString()));
+                            proposal.keySet().forEach(key -> values.put(key, proposal.get(key).toString()));
                             return values;
                         })
                         .collect(Collectors.toList());
