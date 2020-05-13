@@ -3,7 +3,9 @@
         let proposalsIDs = [[${proposalIDs}]];
         proposalsIDs.forEach(getChart)
         function getChart(id) {
-            new Chart($("vote-" + id),
+            let chartId = "#vote-" + id;
+            console.log(chartId);
+            new Chart($(chartId),
                 {
                     "type": "doughnut", "data": {
                         "labels": ["Yes", "No", "Not Voted"],
