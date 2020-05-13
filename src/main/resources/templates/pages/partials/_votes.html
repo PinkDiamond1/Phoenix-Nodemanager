@@ -1,0 +1,18 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="votes">
+    <script th:inline="javascript">
+        function getChart(id) {
+            // let data = [[${voteData.get(id)}]];
+            new Chart($("vote-" + id),
+                {
+                    "type": "doughnut", "data": {
+                        "labels": ["Yes", "No", "Not Voted"],
+                        "datasets": [{
+                            "label": "My First Dataset", "data": [10,10,10],
+                            "backgroundColor": ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"]
+                        }]
+                    }
+                }
+            );
+        }
+    </script>
+</div>

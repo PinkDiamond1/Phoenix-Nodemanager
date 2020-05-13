@@ -73,7 +73,7 @@ public class ProposalController {
                 producerAccount.get());
 
         model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (73 * 3600 * 1000));
-        model.addAttribute("proposals", getProposalList().toString());
+        model.addAttribute("proposals", getProposalList());
         model.addAttribute("votes", "votes");
 
         return ApplicationPaths.PROPOSAL_PAGE;

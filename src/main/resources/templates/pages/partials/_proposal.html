@@ -73,39 +73,23 @@
         <div class="card-body">
             <h4 class="card-title text-primary mdi mdi-clock-alert icon-md">  Active Proposals</h4>
             <!-- Accordion card -->
-            <h6 th:text="${proposals}"> </h6>
-            <h6 th:text="${votes}"></h6>
-            <div class="card" th:each="wallet : ${wallets}">
+            <div class="card" th:each="proposal : ${proposals}">
                 <!-- Card header -->
-                <div class="card-header" role="tab" th:id="${'headingOne_'+wallet.get('walletAddress')}">
-                    <a data-toggle="collapse" th:data-target="${'#collapseOne_'+wallet.get('walletAddress')}" aria-expanded="true">
+                <div class="card-header" role="tab" th:id="${'headingOne_'+proposal.get('proposalID')}">
+                    <a data-toggle="collapse" th:data-target="${'#collapseOne_'+proposal.get('proposalID')}" aria-expanded="true">
                         <div class="row">
                             <div class="col-md-11">
-                                <p class="mb-0" th:text="${wallet.get('walletAddress')}"></p>
+                                <p class="mb-0" th:text="proposal.get('proposalID')"></p>
                             </div>
                         </div>
                     </a>
                 </div>
                 <!-- Card body -->
-                <div th:id="${'collapseOne_'+wallet.get('walletAddress')}" class="collapse hide">
+                <div th:id="${'collapseOne_'+proposal.get('proposalID')}" class="collapse hide">
                     <div class="card-body">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <h5 class="mdi mdi-cash-100 icon-sm" th:text="${' ' + __${wallet.get('balance')}__ + ' CPX'}"></h5>
-                            </div>
-                            <div class="col-md-4">
-                                <h5 class="mdi mdi-chevron-double-up icon-sm" th:text="${' ' + __${wallet.get('nonce')}__}"></h5>
-                            </div>
-                            <form th:method="post" th:action="@{wallet}">
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-inverse-dark btn-icon"
-                                            name="action" th:value="deleteWallet">
-                                        <i class="mdi mdi-delete"></i>
-                                    </button>
-                                    <input type="hidden" name="address" th:value="${wallet.get('walletAddress')}">
-                                </div>
-                            </form>
-                        </div>
+                        <canvas th:id="${'votes-'+proposal.get('proposalID')}"
+                                th:onload="'javascript:getChart(\''+ ${proposal.get('proposalID')} +'\');'">
+                        </canvas>
                     </div>
                 </div>
             </div>
