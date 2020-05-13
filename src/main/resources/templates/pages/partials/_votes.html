@@ -1,16 +1,16 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="votes">
     <script th:inline="javascript">
         let proposalsIDs = [[${proposalIDs}]];
+        let voteData = [[${voteData}]];
         proposalsIDs.forEach(getChart)
         function getChart(id) {
             let chartId = "#vote-" + id;
-            console.log(chartId);
             new Chart($(chartId),
                 {
                     "type": "doughnut", "data": {
                         "labels": ["Yes", "No", "Not Voted"],
                         "datasets": [{
-                            "label": "My First Dataset", "data": [10,10,10],
+                            "label": "Vote Dataset", "data": voteData.get(id),
                             "backgroundColor": ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"]
                         }]
                     }

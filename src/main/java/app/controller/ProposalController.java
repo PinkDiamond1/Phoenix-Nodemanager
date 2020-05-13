@@ -73,12 +73,18 @@ public class ProposalController {
                 producerAccount.get());
 
         model.addAttribute("currentTimestamp", Instant.now().toEpochMilli() + (73 * 3600 * 1000));
+
         final List<Map<String, String>> proposals = getProposalList();
         model.addAttribute("proposals", proposals);
-        model.addAttribute("proposalIDs", proposals.stream()
+
+        final List<String> proposalIDs = proposals.stream()
                 .map(proposal -> proposal.get("proposalID"))
-                .collect(Collectors.toList()));
-        model.addAttribute("votes", "votes");
+                .collect(Collectors.toList());
+        model.addAttribute("proposalIDs", proposalIDs);
+
+        final HashMap<String, List<Integer>> voteData = new HashMap<>();
+        proposalIDs.forEach(id -> voteData.put(id, Arrays.asList(10,12,13)));
+        model.addAttribute("voteData", voteData);
 
         return ApplicationPaths.PROPOSAL_PAGE;
 
