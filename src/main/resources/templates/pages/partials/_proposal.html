@@ -79,7 +79,7 @@
                     <a data-toggle="collapse" th:data-target="${'#collapseOne_'+proposal.get('proposalID')}" aria-expanded="true">
                         <div class="row">
                             <div class="col-md-11">
-                                <p class="mb-0" th:text="proposal.get('proposalID')"></p>
+                                <p class="mb-0" th:text="${proposal.get('proposalID')}"></p>
                             </div>
                         </div>
                     </a>
