@@ -75,8 +75,7 @@
             <!-- Accordion card -->
             <div class="card" th:each="proposal : ${proposals}">
                 <!-- Card header -->
-                <div class="card-header" role="tab" th:id="${'headingOne_'+proposal.get('proposalID')}"
-                     th:onclick="'javascript:getChart(\''+ ${proposal.get('proposalID')} +'\');'">
+                <div class="card-header" role="tab" th:id="${'headingOne_'+proposal.get('proposalID')}">
                     <a data-toggle="collapse" th:data-target="${'#collapseOne_'+proposal.get('proposalID')}" aria-expanded="true">
                         <div class="row">
                             <div class="col-md-11">
