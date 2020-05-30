@@ -8,13 +8,15 @@
             new Chart($(chartId),
                 {
                     "type": "doughnut",
-                    "position": "left",
                     "data": {
                         "labels": ["Yes", "No", "Not Voted"],
                         "datasets": [{
                             "label": "Vote Dataset", "data": voteData[id],
                             "backgroundColor": ["rgb(92,184,92)", "rgb(217,83,79)", "rgb(41, 43, 44)"]
                         }]
+                    },
+                    "options" : {
+                        "position": "left"
                     }
                 }
             );
