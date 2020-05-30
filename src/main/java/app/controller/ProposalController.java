@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
 import crypto.CryptoService;
+import crypto.UInt256;
 import message.request.cmd.GetAccountCmd;
 import message.request.cmd.GetAllProposalCmd;
 import message.request.cmd.GetAllProposalVotesCmd;
@@ -17,8 +18,7 @@ import message.transaction.FixedNumber;
 import message.transaction.IProduceTransaction;
 import message.transaction.Transaction;
 import message.transaction.TxObj;
-import message.transaction.payload.Proposal;
-import message.transaction.payload.ProposalType;
+import message.transaction.payload.*;
 import message.util.GenericJacksonWriter;
 import message.util.RequestCallerService;
 import org.bson.Document;
@@ -65,7 +65,7 @@ public class ProposalController {
     private final Logger log = LoggerFactory.getLogger(ProposalController.class);
 
     @GetMapping
-    public String getProposalPage(Model model) {
+    public String getProposalPage(Model model) throws Exception {
 
         final Optional<String> producerAccount = getProducerAccount();
         model.addAttribute("producer", producerAccount.isEmpty() ?
@@ -85,6 +85,8 @@ public class ProposalController {
         final HashMap<String, List<Integer>> voteData = new HashMap<>();
         proposalIDs.forEach(id -> voteData.put(id, Arrays.asList(10,12,13)));
         model.addAttribute("voteData", voteData);
+
+        model.addAttribute("ongoing", requestCaller.postRequest(rpcUrl, new GetAllProposalVotesCmd()));
 
         return ApplicationPaths.PROPOSAL_PAGE;
 
@@ -175,7 +177,36 @@ public class ProposalController {
     private void vote(final String producer, final String password, final String proposalID, final boolean value){
         final Optional<Wallet> wallet = walletRepository.findById(producer);
         wallet.ifPresentOrElse(account -> {
-
+            try {
+                final ECPrivateKey key = (ECPrivateKey) cryptoService.loadKeyPairFromKeyStore(account.getKeystore(),
+                        password, CryptoService.KEY_NAME).getPrivate();
+                log.info("Private key loaded");
+                final String accountString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(producer));
+                log.info("Get producer account was: " + accountString);
+                final ExecResult resultAccount = jacksonWriter.getObjectFromString(ExecResult.class, accountString);
+                log.info("Result was: " + resultAccount.getResult().toString() + "\nStatus: " + resultAccount.getStatus());
+                if (resultAccount.isSucceed()) {
+                    final long nonce = ((Number)resultAccount.getResult().get("nextNonce")).longValue();
+                    final UInt256 proposal = new UInt256();
+                    proposal.fromString(proposalID);
+                    final ProposalVote vote = ProposalVote.builder()
+                            .version(1)
+                            .proposalId(proposal)
+                            .vote(value)
+                            .build();
+                    final Transaction tx = txFactory.create(TxObj.CALL, key, vote, ProposalVote.SCRIPT_HASH, nonce,
+                            new FixedNumber(0, FixedNumber.P),
+                            new FixedNumber(1, FixedNumber.KGP),
+                            new FixedNumber(500, FixedNumber.KP));
+                    log.info("Transaction was build");
+                    final SendRawTransactionCmd cmd = new SendRawTransactionCmd(cryptoService.signBytes(key, tx));
+                    final String result = requestCaller.postRequest(rpcUrl, cmd);
+                    log.info("Execute result was: " + result);
+                }
+            } catch (Exception e){
+                log.warn("Vote failed with: " + e.getMessage());
+                Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
+            }
         }, () -> log.warn("Wallet for Producer " + producer + " could not be loaded"));
     }
 
