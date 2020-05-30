@@ -144,6 +144,22 @@ public class ProposalController {
 
     }
 
+    @PostMapping(params = "action=vote-yes")
+    public String voteProposalYes(@RequestParam(value = "producer") final String producer,
+                                  @RequestParam(value = "proposalID") final String proposalID,
+                                  @RequestParam(value = "password") final String password){
+        vote(producer, password, proposalID, true);
+        return ApplicationPaths.PROPOSAL_PATH;
+    }
+
+    @PostMapping(params = "action=vote-no")
+    public String voteProposalNo(@RequestParam(value = "producer") final String producer,
+                                 @RequestParam(value = "proposalID") final String proposalID,
+                                 @RequestParam(value = "password") final String password){
+        vote(producer, password, proposalID, false);
+        return ApplicationPaths.PROPOSAL_PATH;
+    }
+
     @RequestMapping(value = "all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getProposals() {
@@ -154,6 +170,13 @@ public class ProposalController {
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             return "{}";
         }
+    }
+
+    private void vote(final String producer, final String password, final String proposalID, final boolean value){
+        final Optional<Wallet> wallet = walletRepository.findById(producer);
+        wallet.ifPresentOrElse(account -> {
+
+        }, () -> log.warn("Wallet for Producer " + producer + " could not be loaded"));
     }
 
     private Optional<String> getProducerAccount(){
