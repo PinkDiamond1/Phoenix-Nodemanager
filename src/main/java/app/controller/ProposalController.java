@@ -4,6 +4,7 @@ import app.config.ApplicationPaths;
 import app.entity.Wallet;
 import app.repository.WalletRepository;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
@@ -36,6 +37,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping(value = "/" + ApplicationPaths.PROPOSAL_PAGE)
@@ -82,11 +84,7 @@ public class ProposalController {
                 .collect(Collectors.toList());
         model.addAttribute("proposalIDs", proposalIDs);
 
-        final HashMap<String, List<Integer>> voteData = new HashMap<>();
-        proposalIDs.forEach(id -> voteData.put(id, Arrays.asList(10,12,13)));
-        model.addAttribute("voteData", voteData);
-
-        model.addAttribute("ongoing", requestCaller.postRequest(rpcUrl, new GetAllProposalVotesCmd()));
+        model.addAttribute("voteData", getVoteData());
 
         return ApplicationPaths.PROPOSAL_PAGE;
 
@@ -172,6 +170,34 @@ public class ProposalController {
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.warn(stackTraceElement.toString()));
             return "{}";
         }
+    }
+
+    private HashMap<String, List<Integer>> getVoteData() throws Exception {
+        final HashMap<String, List<Integer>> result = new HashMap<>();
+        final int witnessNum = (int) StreamSupport.stream(mongoClient.getDatabase("apex")
+                .getCollection("witnessStatus").find().limit(1).spliterator(), false).count();
+        final String allVotesString = requestCaller.postRequest(rpcUrl, new GetAllProposalVotesCmd());
+        final ExecResult allVotesResult = jacksonWriter.getObjectFromString(ExecResult.class, allVotesString);
+        if(allVotesResult.isSucceed()){
+            final List<JsonElement> votesList = new ArrayList<>();
+            JsonParser.parseString
+                    (jacksonWriter.getStringFromRequestObject(allVotesResult.getResult()))
+                    .getAsJsonObject()
+                    .get("votes").getAsJsonArray().iterator()
+                    .forEachRemaining(votesList::add);
+            final Map<String, List<JsonObject>> groupedVotes = votesList.stream()
+                    .map(JsonElement::getAsJsonObject)
+                    .collect(Collectors.groupingBy(vote -> vote.get("proposalID").getAsString()));
+            groupedVotes.keySet().forEach(proposal -> {
+                final Map<Boolean, List<JsonObject>> partitionedMap = groupedVotes.get(proposal).stream()
+                        .collect(Collectors.partitioningBy(jsonObject -> jsonObject.get("agree").getAsBoolean()));
+                final int votedYes = partitionedMap.get(true).size();
+                final int votedNo = partitionedMap.get(false).size();
+                final int notVoted = witnessNum - votedNo - votedYes;
+                result.put(proposal, Arrays.asList(votedYes, votedNo, notVoted));
+            });
+        }
+        return result;
     }
 
     private void vote(final String producer, final String password, final String proposalID, final boolean value){
