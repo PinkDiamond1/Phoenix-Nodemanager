@@ -7,11 +7,13 @@
             let chartId = "#vote-" + id;
             new Chart($(chartId),
                 {
-                    "type": "doughnut", "data": {
+                    "type": "doughnut",
+                    "position": "left",
+                    "data": {
                         "labels": ["Yes", "No", "Not Voted"],
                         "datasets": [{
                             "label": "Vote Dataset", "data": voteData[id],
-                            "backgroundColor": ["rgb(92,184,92)", "rgb(217,83,79)", "rgb(247, 247, 247)"]
+                            "backgroundColor": ["rgb(92,184,92)", "rgb(217,83,79)", "rgb(41, 43, 44)"]
                         }]
                     }
                 }
