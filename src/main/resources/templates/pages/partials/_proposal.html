@@ -118,7 +118,7 @@
                         </div>
                         <div class="col-md-12">
                             <form th:action="@{proposal}" method="post">
-                                <input type="hidden" th:value="proposal.get('proposalID')" name="proposalID">
+                                <input type="hidden" th:value="${proposal.get('proposalID')}" name="proposalID">
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label" for="passwordVote">Wallet Password</label>
                                     <div class="col-sm-9">
