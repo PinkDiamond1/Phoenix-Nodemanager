@@ -174,8 +174,10 @@ public class ProposalController {
 
     private HashMap<String, List<Integer>> getVoteData() throws Exception {
         final HashMap<String, List<Integer>> result = new HashMap<>();
-        final int witnessNum = (int) StreamSupport.stream(mongoClient.getDatabase("apex")
-                .getCollection("witnessStatus").find().limit(1).spliterator(), false).count();
+        final int witnessNum = mongoClient.getDatabase("apex")
+                .getCollection("witnessStatus").find().limit(1)
+                .iterator().next().getList("witnesses", Map.class)
+                .size();
         final String allVotesString = requestCaller.postRequest(rpcUrl, new GetAllProposalVotesCmd());
         final ExecResult allVotesResult = jacksonWriter.getObjectFromString(ExecResult.class, allVotesString);
         if(allVotesResult.isSucceed()){
