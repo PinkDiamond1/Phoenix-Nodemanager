@@ -39,14 +39,14 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-primary btn-lg" name="action" value="run">
-                        <i class="mdi mr-4"></i>Stop
+                        <i class="mdi mr-4"></i>Start
                     </button>
                 </div>
             </form>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} eq 'running'">
                 <div class="form-group">
                     <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="stop">
-                        <i class="mdi mr-4"></i>Start
+                        <i class="mdi mr-4"></i>Stop
                     </button>
                 </div>
             </form>
