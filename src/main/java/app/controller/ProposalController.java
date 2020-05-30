@@ -37,7 +37,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping(value = "/" + ApplicationPaths.PROPOSAL_PAGE)
