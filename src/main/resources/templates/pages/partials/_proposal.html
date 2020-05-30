@@ -78,7 +78,7 @@
                 <div class="card-header" role="tab" th:id="${'headingOne_'+proposal.get('proposalID')}">
                     <a data-toggle="collapse" th:data-target="${'#collapseOne_'+proposal.get('proposalID')}" aria-expanded="true">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-12">
                                 <p class="mb-0" th:text="${proposal.get('proposalID')}"></p>
                             </div>
                         </div>
@@ -87,7 +87,47 @@
                 <!-- Card body -->
                 <div th:id="${'collapseOne_'+proposal.get('proposalID')}" class="collapse hide">
                     <div class="card-body">
-                        <canvas th:id="${'vote-'+proposal.get('proposalID')}"></canvas>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Type: ' + ${proposal.get('proposalType')}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Proposed value: ' + ${proposal.get('proposalValue')}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Vote ends: ' + ${proposal.get('endVoteTime')}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Active from: ' + ${proposal.get('activeTime')}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <canvas th:id="${'vote-'+proposal.get('proposalID')}"></canvas>
+                        </div>
+                        <div class="col-md-12">
+                            <form th:action="@{proposal}" method="post">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-block btn-primary btn-lg" th:value="true" name="action" value="vote">
+                                                <i class="mdi mr-4"></i>YES
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-block btn-primary btn-lg" th:value="false" name="action" value="vote">
+                                                <i class="mdi mr-4"></i>NO
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
