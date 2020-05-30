@@ -26,4 +26,7 @@ public final class ApplicationPaths {
     public static final String WALLET_PATH = "redirect:/wallet";
     public static final String WALLET_PAGE = "wallet";
 
+    public static final String PROPOSAL_PATH = "redirect:/proposal";
+    public static final String PROPOSAL_PAGE = "proposal";
+
 }

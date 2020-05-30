@@ -45,7 +45,7 @@ public class InformationController {
     @Value("${app.core.rpc}")
     private String rpcUrl;
 
-    private Logger log = LoggerFactory.getLogger(InformationController.class);
+    private final Logger log = LoggerFactory.getLogger(InformationController.class);
 
     @RequestMapping(value = ApiPaths.LAST_BLOCK, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

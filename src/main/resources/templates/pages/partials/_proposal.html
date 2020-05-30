@@ -1,0 +1,152 @@
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="newProposal">
+    <div class="card">
+        <div class="card-body">
+            <form th:method="post" th:action="@{proposal}">
+                <h4 class="card-title text-primary mdi mdi-chevron-double-right">  New Proposal</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6 th:text="${producer}"></h6>
+                        <input type="hidden" name="producer" id="producer" th:value="${producer}">
+                        <br/>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="proposalType">Type</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="proposalType" name="proposalType" required>
+                                    <option value="1" selected>Block Award</option>
+                                    <option value="2">TX minimum GAS</option>
+                                    <option value="3">TX maximum GAS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="amount">CPX</label>
+                            <div class="col-sm-9">
+                                <input type="number" min="0" step="any" value="0" class="form-control" name="amount" id="amount" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="timestamp">Earliest Active Time</label>
+                            <div class="col-sm-9">
+                                <input type="number" min="0" step="1" class="form-control" th:value="${currentTimestamp}" name="timestamp" id="timestamp" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="password">Wallet Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control" name="password" id="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 grid-margin stretch-card"></div>
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="new">
+                            <i class="mdi mr-4"></i>Create Proposal
+                        </button>
+                    </div>
+                    <div class="col-md-3 grid-margin stretch-card"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="voteProposal">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title text-primary mdi mdi-clock-alert icon-md">  Active Proposals</h4>
+            <!-- Accordion card -->
+            <div class="card" th:each="proposal : ${proposals}">
+                <!-- Card header -->
+                <div class="card-header" role="tab" th:id="${'headingOne_'+proposal.get('proposalID')}">
+                    <a data-toggle="collapse" th:data-target="${'#collapseOne_'+proposal.get('proposalID')}" aria-expanded="true">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="mb-0" th:text="${proposal.get('proposalID')}"></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Card body -->
+                <div th:id="${'collapseOne_'+proposal.get('proposalID')}" class="collapse hide">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Type: ' + ${proposal.get('proposalType')}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Proposed value: ' + ${proposal.get('proposalValue')}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Vote ends: ' + ${proposal.get('endVoteTime')}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-0" th:text="'Active from: ' + ${proposal.get('activeTime')}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <p> </p>
+                            </div>
+                            <div class="row">
+                                <canvas th:id="${'vote-'+proposal.get('proposalID')}"></canvas>
+                            </div>
+                            <div class="row">
+                                <p> </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <form th:action="@{proposal}" method="post">
+                                <input type="hidden" th:value="${proposal.get('proposalID')}" name="proposalID">
+                                <input type="hidden" name="producer" id="producerVote" th:value="${producer}">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label" for="passwordVote">Wallet Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" name="password" id="passwordVote">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-block btn-outline-success btn-lg" name="action" value="vote-yes">
+                                            <i class="mdi mr-4"></i>Yes
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-block btn-outline-danger btn-lg" name="action" value="vote-no">
+                                            <i class="mdi mr-4"></i>No
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Accordion card -->
+        </div>
+    </div>
+</div>
+<div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="passedProposal">
+
+</div>

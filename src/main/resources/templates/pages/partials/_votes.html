@@ -1,0 +1,27 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="votes">
+    <script th:inline="javascript">
+        let proposalsIDs = [[${proposalIDs}]];
+        let voteData = [[${voteData}]];
+        proposalsIDs.forEach(getChart)
+        function getChart(id) {
+            let chartId = "#vote-" + id;
+            new Chart($(chartId),
+                {
+                    "type": "doughnut",
+                    "data": {
+                        "labels": ["Yes", "No", "Not Voted"],
+                        "datasets": [{
+                            "label": "Vote Dataset", "data": voteData[id],
+                            "backgroundColor": ["rgb(92,184,92)", "rgb(217,83,79)", "rgb(41, 43, 44)"]
+                        }]
+                    },
+                    "options" : {
+                        "legend" : {
+                            "position": "left"
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+</div>
