@@ -21,14 +21,12 @@ public class RegisterController {
 
     @GetMapping
     public String getRegisterPage(Model model){
-
         if(applicationUserRepository.findAll().iterator().hasNext()){
             return ApplicationPaths.LOGIN_PATH;
         } else {
             model.addAttribute("secret", Base32.random());
             return ApplicationPaths.REGISTER_PAGE;
         }
-
     }
 
     @PostMapping
@@ -36,7 +34,6 @@ public class RegisterController {
                                    @RequestParam(value = "inputPassword") final String password,
                                    @RequestParam(value = "inputPasswordRepeat") final String passwordRepeat,
                                    @RequestParam(value = "secret") final String secret) {
-
         if(!applicationUserRepository.findAll().iterator().hasNext() && password.equals(passwordRepeat)) {
             final ApplicationUser initialUser = ApplicationUser.builder()
                     .username(username)
@@ -47,7 +44,6 @@ public class RegisterController {
             applicationUserRepository.save(initialUser);
         }
         return ApplicationPaths.LOGIN_PATH;
-
     }
 
 }

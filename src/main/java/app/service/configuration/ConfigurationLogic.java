@@ -1,7 +1,12 @@
 package app.service.configuration;
 
+import app.entity.ApplicationUser;
+import app.process.ProcessExecutor;
+import app.repository.ApplicationUserRepository;
 import app.service.configuration.parse.IParseRootComponent;
+import app.settings.ConfigurationFileService;
 import app.settings.component.*;
+import com.mongodb.MongoClient;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
@@ -22,12 +27,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Stream;
 
 @Primary
 @Service("ConfigurationLogic")
-public class ConfigurationLogic implements IAddRootComponentToModel {
+public class ConfigurationLogic implements IAddRootComponentToModel, IGenericConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(ConfigurationLogic.class);
 
@@ -37,6 +43,15 @@ public class ConfigurationLogic implements IAddRootComponentToModel {
     @Autowired
     @Qualifier("RootComponentParser")
     private IParseRootComponent parseRootComponent;
+
+    @Autowired
+    private ApplicationUserRepository userRepository;
+
+    @Autowired
+    private ProcessExecutor processExecutor;
+
+    @Autowired
+    private MongoClient mongoClient;
 
     @Value("${app.settings}")
     private String settingsPath;
@@ -100,6 +115,51 @@ public class ConfigurationLogic implements IAddRootComponentToModel {
                 .setFormatted(true)
                 .setJson(true));
         return jacksonWriter.getObjectFromString(RootComponent.class, configJson);
+    }
+
+    @Override
+    public void updateApp() {
+        new Thread(() -> processExecutor.updateManager()).start();
+    }
+
+    @Override
+    public void wipeData() {
+        try {
+            final RootComponent component = Files.isReadable(Paths.get(settingsPath)) ?
+                    ConfigurationFileService.loadSettings(settingsPath) :
+                    ConfigurationFileService.loadSettings(ResourceUtils.getFile(settingsDefaultPath).getAbsolutePath());
+            final ArrayList<String> dirs = new ArrayList<>();
+            final ChainComponent chainComponent = jacksonWriter.getObjectFromString(ChainComponent.class,
+                    jacksonWriter.getStringFromRequestObject(component.getComponents().get(ChainComponent.NAME)));
+            dirs.add((String) chainComponent.getBlockBase().get(SettingsField.CHAIN_DIR));
+            dirs.add((String) chainComponent.getForkBase().get(SettingsField.CHAIN_DIR));
+            dirs.add((String) chainComponent.getDataBase().get(SettingsField.CHAIN_DIR));
+            dirs.add("peers");
+            dirs.add("logs");
+            processExecutor.wipe(dirs);
+            mongoClient.getDatabase("apex").drop();
+        } catch (IOException e) {
+            log.error("Wipe command failed");
+        }
+    }
+
+    @Override
+    public boolean changePassword(final String currentPassword, final String newPassword, final String repeatPassword) {
+        final Iterable<ApplicationUser> userIterable = userRepository.findAll();
+        if(newPassword.equals(repeatPassword) && userIterable.iterator().hasNext()) {
+            final ApplicationUser applicationUser = userIterable.iterator().next();
+            if(applicationUser.getPassword().equals(currentPassword)){
+                applicationUser.setPassword(newPassword);
+                userRepository.save(applicationUser);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void resetUser() {
+
     }
 
 }
