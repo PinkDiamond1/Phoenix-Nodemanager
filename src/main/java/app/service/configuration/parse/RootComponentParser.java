@@ -1,6 +1,6 @@
 package app.service.configuration.parse;
 
-import app.settings.component.*;
+import app.component.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 

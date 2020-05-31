@@ -1,4 +1,4 @@
-package app.settings.component;
+package app.component;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

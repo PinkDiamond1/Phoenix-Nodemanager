@@ -1,11 +1,10 @@
 package app.service.configuration;
 
+import app.component.*;
 import app.entity.ApplicationUser;
 import app.process.ProcessExecutor;
 import app.repository.ApplicationUserRepository;
 import app.service.configuration.parse.IParseRootComponent;
-import app.settings.ConfigurationFileService;
-import app.settings.component.*;
 import com.mongodb.MongoClient;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -126,8 +125,8 @@ public class ConfigurationLogic implements IAddRootComponentToModel, IGenericCon
     public void wipeData() {
         try {
             final RootComponent component = Files.isReadable(Paths.get(settingsPath)) ?
-                    ConfigurationFileService.loadSettings(settingsPath) :
-                    ConfigurationFileService.loadSettings(ResourceUtils.getFile(settingsDefaultPath).getAbsolutePath());
+                    loadSettings(settingsPath) :
+                    loadSettings(ResourceUtils.getFile(settingsDefaultPath).getAbsolutePath());
             final ArrayList<String> dirs = new ArrayList<>();
             final ChainComponent chainComponent = jacksonWriter.getObjectFromString(ChainComponent.class,
                     jacksonWriter.getStringFromRequestObject(component.getComponents().get(ChainComponent.NAME)));
