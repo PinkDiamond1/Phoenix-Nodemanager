@@ -8,6 +8,6 @@ public interface IGenericConfiguration {
 
     boolean changePassword(String currentPassword, String newPassword, String repeatPassword);
 
-    void resetUser();
+    void resetUser(String username, String password);
 
 }

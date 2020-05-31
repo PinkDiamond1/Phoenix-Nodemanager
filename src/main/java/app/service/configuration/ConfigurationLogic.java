@@ -158,8 +158,12 @@ public class ConfigurationLogic implements IAddRootComponentToModel, IGenericCon
     }
 
     @Override
-    public void resetUser() {
-
+    public void resetUser(final String username, final String password) {
+        userRepository.findByUsername(username)
+                .ifPresent(user -> {
+                    if(user.getPassword().equals(password)){
+                        userRepository.delete(user);
+                    }
+                });
     }
-
 }
