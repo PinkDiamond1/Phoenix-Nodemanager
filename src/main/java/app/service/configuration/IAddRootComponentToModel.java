@@ -6,8 +6,8 @@ import java.util.Map;
 
 public interface IAddRootComponentToModel {
 
-    void loadToModel(final Model model);
+    void loadToModel(Model model);
 
-    void save(final Map<String, Object> formParams);
+    void save(Map<String, Object> formParams);
 
 }

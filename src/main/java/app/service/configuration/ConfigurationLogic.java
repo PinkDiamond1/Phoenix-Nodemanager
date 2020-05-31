@@ -1,6 +1,5 @@
 package app.service.configuration;
 
-import app.controller.ProposalController;
 import app.service.configuration.parse.IParseRootComponent;
 import app.settings.component.*;
 import com.typesafe.config.Config;
@@ -30,7 +29,7 @@ import java.util.stream.Stream;
 @Service("ConfigurationLogic")
 public class ConfigurationLogic implements IAddRootComponentToModel {
 
-    private final Logger log = LoggerFactory.getLogger(ProposalController.class);
+    private final Logger log = LoggerFactory.getLogger(ConfigurationLogic.class);
 
     @Autowired
     private GenericJacksonWriter jacksonWriter;
