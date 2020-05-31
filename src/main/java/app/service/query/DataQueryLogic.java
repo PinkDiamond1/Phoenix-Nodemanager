@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCursor;
+import message.request.cmd.GetAccountCmd;
 import message.request.cmd.GetAllProposalCmd;
 import message.request.cmd.GetAllProposalVotesCmd;
 import message.response.ExecResult;
@@ -21,12 +22,16 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.logging.StreamHandler;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static com.mongodb.client.model.Filters.in;
 
 @Primary
 @Service("DataQueryLogic")
-public class DataQueryLogic implements IQueryProposal, IQueryProducer {
+public class DataQueryLogic implements IQueryProposal, IQueryProducer, IQueryWallet {
 
     private final Logger log = LoggerFactory.getLogger(DataQueryLogic.class);
 
@@ -140,8 +145,64 @@ public class DataQueryLogic implements IQueryProposal, IQueryProducer {
     }
 
     @Override
+    public List<String> getAllWitnesses() {
+        final MongoCursor<Document> witnessesDoc = mongoClient.getDatabase("apex")
+                .getCollection("witnessStatus").find().limit(1).iterator();
+        final List<Map> witnessList = witnessesDoc.hasNext() ?
+                witnessesDoc.next().getList("witnesses", Map.class) :
+                new ArrayList<>();
+        final ArrayList<String> witnesses = new ArrayList<>();
+        witnessList.forEach(w -> witnesses.add((String)w.get("addr")));
+        return witnesses;
+    }
+
+    @Override
     public boolean isProducer() {
         return getProducerAddress().isPresent();
     }
 
+    @Override
+    public List<String> getAllWalletAddress() {
+        return walletRepository.findAll().stream()
+                .map(Wallet::getAddress)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllWalletMaps() {
+        final ArrayList<Map<String, Object>> walletList = new ArrayList<>();
+        getAllWalletAddress().forEach(walletAddress -> {
+            final HashMap<String, Object> result = new HashMap<>();
+            result.put("walletAddress", walletAddress);
+            result.put("balance", "0");
+            result.put("nonce", "0");
+            try {
+                final String responseString = requestCaller.postRequest(rpcUrl, new GetAccountCmd(walletAddress));
+                final ExecResult response = jacksonWriter.getObjectFromString(ExecResult.class, responseString);
+                result.put("balance", response.getResult().get("balance") != null ? (String) response.getResult().get("balance") : "0");
+                result.put("nonce", response.getResult().get("nextNonce") != null ? response.getResult().get("nextNonce") : 0);
+                walletList.add(result);
+            } catch (Exception e) {
+                walletList.add(result);
+                log.warn("Wallet request failed");
+            }
+        });
+        return walletList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllTxForWallets() {
+        final MongoCursor<Document> cursor = mongoClient.getDatabase("apex")
+                .getCollection("transaction")
+                .find(in("from", getAllWalletAddress()))
+                .sort(new Document("createdAt", -1))
+                .limit(15).iterator();
+        final ArrayList<Map<String, Object>> txList = new ArrayList<>();
+        cursor.forEachRemaining(document -> {
+            final HashMap<String, Object> txEntry = new HashMap<>();
+            document.forEach(txEntry::put);
+            txList.add(txEntry);
+        });
+        return txList;
+    }
 }
