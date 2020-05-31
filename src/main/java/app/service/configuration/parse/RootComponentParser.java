@@ -1,4 +1,4 @@
-package app.service;
+package app.service.configuration.parse;
 
 import app.settings.component.*;
 import org.springframework.context.annotation.Primary;
