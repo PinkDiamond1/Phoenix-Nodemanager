@@ -1,6 +1,6 @@
-package app.service;
+package app.service.configuration.parse;
 
-import app.settings.component.RootComponent;
+import app.component.RootComponent;
 
 import java.util.Map;
 

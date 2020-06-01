@@ -16,11 +16,9 @@ public class LoginController {
 
     @GetMapping
     public String getLoginPage(){
-
         return !applicationUserRepository.findAll().iterator().hasNext() ?
                 ApplicationPaths.REGISTER_PATH :
                 ApplicationPaths.LOGIN_PAGE;
-
     }
 
 }

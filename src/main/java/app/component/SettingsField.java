@@ -1,4 +1,4 @@
-package app.settings.component;
+package app.component;
 
 public class SettingsField {
 
