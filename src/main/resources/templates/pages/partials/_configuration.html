@@ -1,25 +1,25 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="actor">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-adjust">  Actor Parameters</h4>
+            <h4 class="card-title mdi mdi-adjust" th:text="#{actor-parameters}"></h4>
             <div class="form-group">
-                <label for="mailbox-type">Mailbox Type</label>
+                <label for="mailbox-type" th:text="#{mailbox-type}"></label>
                 <input type="text" class="form-control" name="mailbox-type" id="mailbox-type" th:value="${actor.getNodeMailbox().get('mailbox-type')}" required>
             </div>
             <div class="form-group">
-                <label for="executor">Executor</label>
+                <label for="executor" th:text="#{executor}"></label>
                 <input type="text" class="form-control" name="executor" id="executor" th:value="${actor.getRpcDispatcher().get('executor')}" required>
             </div>
             <div class="form-group">
-                <label for="fixed-pool-size">Thread Pool Size</label>
+                <label for="fixed-pool-size" th:text="#{thread-pool}"></label>
                 <input type="number" class="form-control" id="fixed-pool-size" name="fixed-pool-size" th:value="${actor.getRpcDispatcher().get('thread-pool-executor').get('fixed-pool-size')}" required>
             </div>
             <div class="form-group">
-                <label for="throughput">Throughput</label>
+                <label for="throughput" th:text="#{throughput}">Throughput</label>
                 <input type="number" class="form-control" name="throughput" id="throughput" th:value="${actor.getRpcDispatcher().get('throughput')}" required>
             </div>
             <div class="form-group">
-                <label for="type">Type</label>
+                <label for="type" th:text="#{type}"></label>
                 <input type="text" class="form-control" name="type" id="type" th:value="${actor.getRpcDispatcher().get('type')}" required>
             </div>
         </div>
@@ -28,35 +28,35 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="blockDB">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-database">  Blockchain Database</h4>
+            <h4 class="card-title mdi mdi-database" th:text="#{blockchain-db}"></h4>
             <div class="form-inline">
-                <label class="sr-only" for="blockBasecacheSize">Cache Size</label>
+                <label class="sr-only" for="blockBasecacheSize" th:text="#{cache-size}"></label>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Cache Size</div>
+                        <div class="input-group-text" th:text="#{cache-size}"></div>
                     </div>
                     <input type="number" class="form-control" id="blockBasecacheSize" th:value="${chain.getBlockBase().get('cacheSize')}" name="blockBasecacheSize" required>
                 </div>
-                <label class="sr-only" for="blockBasedir">Directory</label>
+                <label class="sr-only" for="blockBasedir" th:text="#{directory}"></label>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Directory</div>
+                        <div class="input-group-text" th:text="#{directory}"></div>
                     </div>
                     <input type="text" class="form-control" id="blockBasedir" th:value="${chain.getBlockBase().get('dir')}" name="blockBasedir" required>
                 </div>
             </div>
             <div class="form-group">
-                <label for="blockBasedbType">Database Type</label>
+                <label for="blockBasedbType" th:text="#{database-type}"></label>
                 <select class="form-control" id="blockBasedbType" name="blockBasedbType" required>
-                    <option value="0" th:selected="${chain.getBlockBase().get('dbType')}">In Memory</option>
-                    <option value="1" th:selected="${chain.getBlockBase().get('dbType')}">LevelDB</option>
-                    <option value="2" th:selected="${chain.getBlockBase().get('dbType')}">RocksDB</option>
+                    <option value="0" th:selected="${chain.getBlockBase().get('dbType')}" th:text="#{db-in-memory}"></option>
+                    <option value="1" th:selected="${chain.getBlockBase().get('dbType')}" th:text="#{db-level-db}"></option>
+                    <option value="2" th:selected="${chain.getBlockBase().get('dbType')}" th:text="#{db-rocks-db}"></option>
                 </select>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="blockBasecacheEnabled" name="blockBasecacheEnabled" th:checked="${chain.getBlockBase().get('cacheEnabled')}">
-                    Cache Enabled
+                    <input type="checkbox" class="form-check-input" id="blockBasecacheEnabled" name="blockBasecacheEnabled"
+                           th:checked="${chain.getBlockBase().get('cacheEnabled')}" th:text="#{cache-enabled}">
                 </label>
             </div>
         </div>
@@ -65,35 +65,35 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="defaultDB">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-database">  Main Database</h4>
+            <h4 class="card-title mdi mdi-database" th:text="#{main-db}"></h4>
             <div class="form-inline">
-                <label class="sr-only" for="dataBasecacheSize">Cache Size</label>
+                <label class="sr-only" for="dataBasecacheSize" th:text="#{cache-size}"></label>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Cache Size</div>
+                        <div class="input-group-text" th:text="#{cache-size}"></div>
                     </div>
                     <input type="number" class="form-control" id="dataBasecacheSize" th:value="${chain.getDataBase().get('cacheSize')}" name="dataBasecacheSize" required>
                 </div>
-                <label class="sr-only" for="dataBasedir">Directory</label>
+                <label class="sr-only" for="dataBasedir" th:text="#{directory}"></label>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Directory</div>
+                        <div class="input-group-text" th:text="#{directory}"></div>
                     </div>
                     <input type="text" class="form-control" id="dataBasedir" th:value="${chain.getDataBase().get('dir')}" name="dataBasedir" required>
                 </div>
             </div>
             <div class="form-group">
-                <label for="dataBasedbType">Database Type</label>
+                <label for="dataBasedbType" th:text="#{database-type}"></label>
                 <select class="form-control" id="dataBasedbType" name="dataBasedbType" required>
-                    <option value="0" th:selected="${chain.getDataBase().get('dbType')}">In Memory</option>
-                    <option value="1" th:selected="${chain.getDataBase().get('dbType')}">LevelDB</option>
-                    <option value="2" th:selected="${chain.getDataBase().get('dbType')}">RocksDB</option>
+                    <option value="0" th:selected="${chain.getDataBase().get('dbType')}" th:text="#{db-in-memory}"></option>
+                    <option value="1" th:selected="${chain.getDataBase().get('dbType')}" th:text="#{db-level-db}"></option>
+                    <option value="2" th:selected="${chain.getDataBase().get('dbType')}" th:text="#{db-rocks-db}"></option>
                 </select>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="dataBasecacheEnabled" name="dataBasecacheEnabled" th:checked="${chain.getDataBase().get('cacheEnabled')}" >
-                    Cache Enabled
+                    <input type="checkbox" class="form-check-input" id="dataBasecacheEnabled" name="dataBasecacheEnabled"
+                           th:checked="${chain.getDataBase().get('cacheEnabled')}" th:text="#{cache-enabled}">
                 </label>
             </div>
         </div>
@@ -102,35 +102,35 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="forkDB">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-database">  Fork Database</h4>
+            <h4 class="card-title mdi mdi-database" th:text="#{fork-db}"></h4>
             <div class="form-inline">
-                <label class="sr-only" for="forkBasecacheSize">Cache Size</label>
+                <label class="sr-only" for="forkBasecacheSize" th:text="#{cache-size}"></label>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Cache Size</div>
+                        <div class="input-group-text" th:text="#{cache-size}"></div>
                     </div>
                     <input type="number" class="form-control" id="forkBasecacheSize" th:value="${chain.getForkBase().get('cacheSize')}" name="forkBasecacheSize" required>
                 </div>
-                <label class="sr-only" for="forkBasedir">Directory</label>
+                <label class="sr-only" for="forkBasedir" th:text="#{directory}"></label>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Directory</div>
+                        <div class="input-group-text" th:text="#{directory}"></div>
                     </div>
                     <input type="text" class="form-control" id="forkBasedir" th:value="${chain.getForkBase().get('dir')}" name="forkBasedir" required>
                 </div>
             </div>
             <div class="form-group">
-                <label for="forkBasedbType">Database Type</label>
+                <label for="forkBasedbType" th:text="#{database-type}"></label>
                 <select class="form-control" id="forkBasedbType" name="forkBasedbType" required>
-                    <option value="0" th:selected="${chain.getForkBase().get('dbType')}">In Memory</option>
-                    <option value="1" th:selected="${chain.getForkBase().get('dbType')}">LevelDB</option>
-                    <option value="2" th:selected="${chain.getForkBase().get('dbType')}">RocksDB</option>
+                    <option value="0" th:selected="${chain.getForkBase().get('dbType')}" th:text="#{db-in-memory}"></option>
+                    <option value="1" th:selected="${chain.getForkBase().get('dbType')}" th:text="#{db-level-db}"></option>
+                    <option value="2" th:selected="${chain.getForkBase().get('dbType')}" th:text="#{db-rocks-db}"></option>
                 </select>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" id="forkBaseecacheEnabled" name="forkBasecacheEnabled" th:checked="${chain.getForkBase().get('cacheEnabled')}" >
-                    Cache Enabled
+                    <input type="checkbox" class="form-check-input" id="forkBaseecacheEnabled" name="forkBasecacheEnabled"
+                           th:checked="${chain.getForkBase().get('cacheEnabled')}" th:text="#{cache-enabled}">
                 </label>
             </div>
         </div>
@@ -139,21 +139,21 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="genesis">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-regex">  Genesis Block</h4>
+            <h4 class="card-title mdi mdi-regex" th:text="#{genesis}"></h4>
             <div class="form-group">
-                <label for="timestamp">Timestamp</label>
+                <label for="timeStamp" th:text="#{timestamp}"></label>
                 <input type="text" class="form-control" id="timeStamp" th:value="${chain.getGenesis().get('timeStamp')}" name="timeStamp" required>
             </div>
             <div class="form-group">
-                <label for="minerAward">Miner Block Award</label>
+                <label for="minerAward" th:text="#{miner-award}"></label>
                 <input type="number" step="any" class="form-control" id="minerAward" th:value="${chain.getMinerAward()}" name="minerAward" required>
             </div>
             <div class="form-group">
-                <label for="candidateAward">Candidate Block Award</label>
+                <label for="candidateAward" th:text="#{candidate-award}"></label>
                 <input type="number" step="any" class="form-control" id="candidateAward" th:value="${consensus.getCandidateAward()}" name="candidateAward" required>
             </div>
             <div class="form-group">
-                <label for="privateKey">Private Key</label>
+                <label for="privateKey" th:text="#{private-key}"></label>
                 <input type="password" class="form-control" name="privateKey" th:value="${chain.getGenesis().get('privateKey')}"  id="privateKey" required>
             </div>
         </div>
@@ -162,17 +162,17 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="airdrop">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-weather-cloudy">  Initial Airdrop</h4>
+            <h4 class="card-title mdi mdi-weather-cloudy" th:text="#{initial-airdrop}"></h4>
             <div class="form-inline" th:each="drop,iter : ${chain.getGenesis().get('genesisCoinAirdrop')}">
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Address</div>
+                        <div class="input-group-text" th:text="#{address}"></div>
                     </div>
                     <input type="text" class="form-control" th:value="${drop.get('addr')}" th:id="${'genesisCoinAirdropaddr'+iter.index}" th:name="${'genesisCoinAirdropaddr'+iter.index}" required>
                 </div>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Amount</div>
+                        <div class="input-group-text" th:text="#{amount}"></div>
                     </div>
                     <input type="number" step="any" class="form-control" th:value="${drop.get('coins')}" th:id="${'genesisCoinAirdropcoins'+iter.index}" th:name="${'genesisCoinAirdropcoins'+iter.index}" required>
                 </div>
@@ -183,11 +183,11 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="consensus">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-vector-circle">  Consensus</h4>
+            <h4 class="card-title mdi mdi-vector-circle" th:text="#{consensus}"></h4>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Max Latency</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{max-latency}"></label>
                         <div class="col-sm-9">
                             <input type="number" id="acceptableTimeError" name="acceptableTimeError" th:value="${consensus.getAcceptableTimeError()}" class="form-control" required/>
                         </div>
@@ -195,7 +195,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Election Round Time</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{elect-time}"></label>
                         <div class="col-sm-9">
                             <input type="number" id="electeTime" name="electeTime" th:value="${consensus.getElecteTime()}" class="form-control" required/>
                         </div>
@@ -205,7 +205,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Production Interval</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{interval}"></label>
                         <div class="col-sm-9">
                             <input type="number" id="produceInterval" name="produceInterval" th:value="${consensus.getProduceInterval()}" class="form-control" required/>
                         </div>
@@ -213,7 +213,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Producer Repetition</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{repetition}"></label>
                         <div class="col-sm-9">
                             <input type="number" id="producerRepetitions" name="producerRepetitions" th:value="${consensus.getProducerRepetitions()}" class="form-control" required/>
                         </div>
@@ -223,7 +223,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Overall Witnesses</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{overall-witness}"></label>
                         <div class="col-sm-9">
                             <input type="number" id="totalWitnessNum" name="totalWitnessNum" th:value="${consensus.getTotalWitnessNum()}" class="form-control" required/>
                         </div>
@@ -231,7 +231,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Producer Witnesses</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{producer-witness}"></label>
                         <div class="col-sm-9">
                             <input type="number" id="witnessNum" name="witnessNum" th:value="${consensus.getWitnessNum()}" class="form-control" required/>
                         </div>
@@ -244,17 +244,17 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="initialWitnesses">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-account-star">  Initial Witnesses</h4>
+            <h4 class="card-title mdi mdi-account-star" th:text="#{initial-witness}"></h4>
             <div class="form-inline" th:each="witness,iter : ${consensus.getInitialWitness()}">
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Address</div>
+                        <div class="input-group-text" th:text="#{address}"></div>
                     </div>
                     <input type="text" class="form-control" th:value="${witness.get('addr')}" th:id="${'initialWitnessaddr'+iter.index}" th:name="${'initialWitnessaddr'+iter.index}" required>
                 </div>
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Name</div>
+                        <div class="input-group-text" th:text="#{name}"></div>
                     </div>
                     <input type="text" class="form-control" th:value="${witness.get('name')}" th:id="${'initialWitnessname'+iter.index}" th:name="${'initialWitnessname'+iter.index}" required>
                 </div>
@@ -265,29 +265,29 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="general">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-shape-polygon-plus">  General Settings</h4>
+            <h4 class="card-title mdi mdi-shape-polygon-plus" th:text="#{general-settings}"></h4>
             <div th:if="${miner.getPrivKeys().size() > 0}" class="form-group">
-                <label for="privKeysNotEmpty">Producer Private Key</label>
+                <label for="privKeysNotEmpty" th:text="#{producer-private-key}"></label>
                 <input type="text" class="form-control" name="privKeys" th:value="${miner.getPrivKeys().get(0)}" id="privKeysNotEmpty">
             </div>
             <div th:if="${miner.getPrivKeys().size() eq 0}" class="form-group">
-                <label for="privKeysEmpty">Producer Private Key</label>
+                <label for="privKeysEmpty" th:text="#{producer-private-key}"></label>
                 <input type="text" class="form-control" name="privKeys" value="" id="privKeysEmpty">
             </div>
             <div class="form-group">
-                <label for="stopProcessTxTimeSlot">Stop Process Time</label>
+                <label for="stopProcessTxTimeSlot" th:text="#{stop-time}"></label>
                 <input type="number" step="1" class="form-control" name="stopProcessTxTimeSlot" th:value="${runtimeParas.getStopProcessTxTimeSlot()}" id="stopProcessTxTimeSlot" required>
             </div>
             <div class="form-group">
-                <label for="host">RPC Host IP</label>
+                <label for="host" th:text="#{rpc-host}"></label>
                 <input type="text" class="form-control" name="host" th:value="${rpc.getHost()}" id="host" required>
             </div>
             <div class="form-group">
-                <label for="port">RPC Port</label>
+                <label for="port" th:text="#{rpc-port}"></label>
                 <input type="number" step="1" class="form-control" id="port" th:value="${rpc.getPort()}" name="port" required>
             </div>
             <div class="form-group">
-                <label for="uri">Mongo DB URL</label>
+                <label for="uri" th:text="#{mongo-db-url}"></label>
                 <input type="text" class="form-control" name="uri" readonly th:value="${plugins.getMongoDb().get('uri')}" id="uri" required>
             </div>
             <div class="row">
@@ -295,8 +295,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="forceStartProduce" name="forceStartProduce" th:checked="${miner.isForceStartProduce()}">
-                                Force Production
+                                <input type="checkbox" class="form-check-input" id="forceStartProduce" name="forceStartProduce"
+                                       th:checked="${miner.isForceStartProduce()}" th:text="#{force-production}">
                             </label>
                         </div>
                     </div>
@@ -305,8 +305,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="mongodbenabled" name="mongodbenabled" onclick="return false" th:checked="${plugins.getMongoDb().get('enabled')}">
-                                MongoDB Enabled
+                                <input type="checkbox" class="form-check-input" id="mongodbenabled" name="mongodbenabled" onclick="return false"
+                                       th:checked="${plugins.getMongoDb().get('enabled')}" th:text="#{mongo-db-enabled}">
                             </label>
                         </div>
                     </div>
@@ -315,8 +315,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="enabled" name="enabled" th:checked="${rpc.isEnabled()}">
-                                RPC Enabled
+                                <input type="checkbox" class="form-check-input" id="enabled" name="enabled"
+                                       th:checked="${rpc.isEnabled()}" th:text="#{rpc-enabled}">
                             </label>
                         </div>
                     </div>
@@ -325,8 +325,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="lightNode" name="lightNode" th:checked="${chain.isLightNode()}">
-                                Light Node
+                                <input type="checkbox" class="form-check-input" id="lightNode" name="lightNode"
+                                       th:checked="${chain.isLightNode()}" th:text="#{light-node}">
                             </label>
                         </div>
                     </div>
@@ -338,11 +338,11 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="network">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-google-circles-extended">  Network</h4>
+            <h4 class="card-title mdi mdi-google-circles-extended" th:text="#{network}"></h4>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Agent Name</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{agent-name}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="agentName" name="agentName" th:value="${network.getAgentName()}" class="form-control" required/>
                         </div>
@@ -350,7 +350,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">App Version</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{app-version}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="appVersion" name="appVersion" th:value="${network.getAppVersion()}" class="form-control" required/>
                         </div>
@@ -360,7 +360,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Connection Timeout</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{connection-timeout}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="connectionTimeout" name="connectionTimeout" th:value="${network.getConnectionTimeout()}" class="form-control" required/>
                         </div>
@@ -368,7 +368,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Controller Timeout</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{controller-timeout}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="controllerTimeout" name="controllerTimeout" th:value="${network.getControllerTimeout()}" class="form-control" required/>
                         </div>
@@ -378,7 +378,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Bind IP</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{bind-ip}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="bindAddress" name="bindAddress" th:value="${network.getBindAddress()}" class="form-control" required/>
                         </div>
@@ -386,7 +386,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Declared IP</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{declared-ip}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="declaredAddress" name="declaredAddress" th:value="${network.getDeclaredAddress()}" class="form-control" required/>
                         </div>
@@ -396,7 +396,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Handshake Timeout</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{handshake-timeout}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="handshakeTimeout" name="handshakeTimeout" th:value="${network.getHandshakeTimeout()}" class="form-control" required/>
                         </div>
@@ -404,7 +404,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Node Name</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{node-name}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="nodeName" name="nodeName" class="form-control" th:value="${network.getNodeName()}" required/>
                         </div>
@@ -414,7 +414,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Max Peers in Database</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{max-peers}"></label>
                         <div class="col-sm-9">
                             <input type="number" step="1" id="peerDatabaseMax" name="peerDatabaseMax" th:value="${network.getPeerDatabaseMax()}" class="form-control" required/>
                         </div>
@@ -422,7 +422,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Peer Timegap</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{timegap}"></label>
                         <div class="col-sm-9">
                             <input type="number" step="1" id="peerMaxTimeGap" name="peerMaxTimeGap" th:value="${network.getPeerMaxTimeGap()}" class="form-control" required/>
                         </div>
@@ -432,7 +432,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Max Connections</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{max-connections}"></label>
                         <div class="col-sm-9">
                             <input type="number" step="1" id="maxConnections" name="maxConnections" th:value="${network.getMaxConnections()}" class="form-control" required/>
                         </div>
@@ -440,7 +440,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Max Syncing Requests</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{max-sync}"></label>
                         <div class="col-sm-9">
                             <input type="number" step="1" id="peerSyncNumber" name="peerSyncNumber" th:value="${network.getPeerSyncNumber()}" class="form-control" required/>
                         </div>
@@ -450,7 +450,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Max Packet Size</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{max-packet-size}"></label>
                         <div class="col-sm-9">
                             <input type="number" step="1" id="maxPacketSize" name="maxPacketSize" th:value="${network.getMaxPacketSize()}" class="form-control" required/>
                         </div>
@@ -458,7 +458,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Peers DB Path</label>
+                        <label class="col-sm-3 col-form-label" th:text="#{peers-db-path}"></label>
                         <div class="col-sm-9">
                             <input type="text" id="peersDB" name="peersDB" th:value="${network.getPeersDb()}" class="form-control" required/>
                         </div>
@@ -470,8 +470,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="acceptOtherPeers" name="acceptOtherPeers" th:checked="${network.isAcceptOtherPeers()}">
-                                Accept Peers
+                                <input type="checkbox" class="form-check-input" id="acceptOtherPeers" name="acceptOtherPeers"
+                                       th:checked="${network.isAcceptOtherPeers()}" th:text="#{accept-peers}">
                             </label>
                         </div>
                     </div>
@@ -480,8 +480,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="localOnly" name="localOnly" th:checked="${network.isLocalOnly()}">
-                                Local Only
+                                <input type="checkbox" class="form-check-input" id="localOnly" name="localOnly"
+                                       th:checked="${network.isLocalOnly()}" th:text="#{local-only}">
                             </label>
                         </div>
                     </div>
@@ -490,8 +490,8 @@
                     <div class="form-group row">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input" id="upnpEnabled" name="upnpEnabled" th:checked="${network.getUpnp() eq 'yes'}">
-                                UPnP Enabled
+                                <input type="checkbox" class="form-check-input" id="upnpEnabled" name="upnpEnabled"
+                                       th:checked="${network.getUpnp() eq 'yes'}" th:text="#{upnp-enabled}">
                             </label>
                         </div>
                     </div>
@@ -503,7 +503,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="knownPeers">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-apps">  Known Peers</h4>
+            <h4 class="card-title mdi mdi-apps" th:text="#{known-peers}"></h4>
             <div class="form-group" th:each="peer,iter : ${network.getKnownPeers()}">
                 <label th:for="${'knownPeers'+iter.index}" th:text="${'Peer '+ __${iter.index+1}__ }"></label>
                 <input type="text" class="form-control" th:value="${peer}" th:name="${'knownPeers'+iter.index}" th:id="${'knownPeers'+iter.index}" required>
@@ -514,7 +514,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="seedPeers">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-apps">  Seed Peers</h4>
+            <h4 class="card-title mdi mdi-apps" th:text="#{seed-peers}"></h4>
             <div class="form-group" th:each="peer,iter : ${network.getSeedPeers()}">
                 <label th:for="${'seedPeers'+iter.index}" th:text="${'Peer '+ __${iter.index+1}__ }"></label>
                 <input type="text" class="form-control" th:value="${peer}" th:name="${'seedPeers'+iter.index}" th:id="${'seedPeers'+iter.index}" required>

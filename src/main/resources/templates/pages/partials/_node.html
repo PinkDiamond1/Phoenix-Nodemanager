@@ -1,31 +1,21 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="nodeControl">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi mdi-earth">  Supernode</h4>
+            <h4 class="card-title mdi mdi mdi-earth" th:text="#{supernode}"></h4>
             <div class="form-group">
-                <h4 th:if="${nodeStatus} eq 'running'" class="mb-0 text-primary font-weight-bold">
-                    RUNNING
-                </h4>
-                <h4 th:if="${nodeStatus} eq 'finished'" class="mb-0 text-primary font-weight-bold">
-                    STOPPED
-                </h4>
-                <h4 th:if="${nodeStatus} eq 'failed'" class="mb-0 text-primary font-weight-bold">
-                    FAILED
-                </h4>
-                <h4 th:if="${nodeStatus} eq 'install'" class="mb-0 text-primary font-weight-bold">
-                    Installation running
-                </h4>
-                <h4 th:if="${nodeStatus} eq 'no'" class="mb-0 text-primary font-weight-bold">
-                    No Installation found
-                </h4>
+                <h4 th:if="${nodeStatus} eq 'running'" class="mb-0 text-primary font-weight-bold" th:text="#{running}"></h4>
+                <h4 th:if="${nodeStatus} eq 'finished'" class="mb-0 text-primary font-weight-bold" th:text="#{stopped}"></h4>
+                <h4 th:if="${nodeStatus} eq 'failed'" class="mb-0 text-primary font-weight-bold" th:text="#{failed}"></h4>
+                <h4 th:if="${nodeStatus} eq 'install'" class="mb-0 text-primary font-weight-bold" th:text="#{install-running}"></h4>
+                <h4 th:if="${nodeStatus} eq 'no'" class="mb-0 text-primary font-weight-bold" th:text="#{no-install}"></h4>
             </div>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} ne 'running'">
                 <div class="form-group">
-                    <label for="commit">Git Commit Hash or Branch</label>
+                    <label for="commit" th:text="#{git-commit}"></label>
                     <input type="text" class="form-control" name="commit" id="commit" placeholder="master">
                 </div>
                 <div class="form-group">
-                    <label for="release">Release Version</label>
+                    <label for="release" th:text="#{release-version}"></label>
                     <select class="form-control" id="release" name="release">
                         <option value="0.9.2" selected>0.9.2</option>
                         <option value="0.9.1" >0.9.1</option>
@@ -33,20 +23,20 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-primary btn-lg" name="action" value="install">
-                        <i class="mdi mr-4"></i>Install
+                    <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-primary btn-lg" name="action" value="install" th:text="#{install}">
+                        <i class="mdi mr-4"></i>
                     </button>
                 </div>
                 <div class="form-group">
-                    <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-primary btn-lg" name="action" value="run">
-                        <i class="mdi mr-4"></i>Start
+                    <button type="submit" th:disabled="${nodeStatus} eq 'install'" class="btn btn-block btn-primary btn-lg" name="action" value="run" th:text="#{start}">
+                        <i class="mdi mr-4"></i>
                     </button>
                 </div>
             </form>
             <form th:action="@{node}" method="post" th:if="${nodeStatus} eq 'running'">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="stop">
-                        <i class="mdi mr-4"></i>Stop
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="stop" th:text="#{stop}">
+                        <i class="mdi mr-4"></i>
                     </button>
                 </div>
             </form>
