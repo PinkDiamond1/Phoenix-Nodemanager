@@ -1,44 +1,44 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="changePass">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-key-variant icon-md text-primary">  Change Password</h4>
+            <h4 class="card-title mdi mdi-key-variant icon-md text-primary" th:text="#{change-password}"></h4>
             <form th:action="@{settings}" method="post">
                 <div class="form-group">
-                    <label for="currentPassword">Current password</label>
+                    <label for="currentPassword" th:text="#{current-password}"></label>
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                         </div>
-                        <input class="form-control form-control-lg border-left-0" type="password" name="currentPassword" id="currentPassword" placeholder="Password">
+                        <input class="form-control form-control-lg border-left-0" type="password" name="currentPassword" id="currentPassword" th:placeholder="#{current-password}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="newPassword">New password</label>
+                    <label for="newPassword" th:text="#{new-password}"></label>
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                         </div>
-                        <input class="form-control form-control-lg border-left-0" type="password" name="newPassword" id="newPassword" placeholder="Password">
+                        <input class="form-control form-control-lg border-left-0" type="password" name="newPassword" id="newPassword" th:placeholder="#{password}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="passwordRepeat">Repeat new password</label>
+                    <label for="passwordRepeat" th:text="#{new-password-repeat}"></label>
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                         </div>
-                        <input class="form-control form-control-lg border-left-0" type="password" name="passwordRepeat" id="passwordRepeat" placeholder="Password">
+                        <input class="form-control form-control-lg border-left-0" type="password" name="passwordRepeat" id="passwordRepeat" th:placeholder="#{password}">
                     </div>
                 </div>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="change">
-                        <i class="mdi mdi-key-variant"></i> Change
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="change" th:text="#{change-password}">
+                        <i class="mdi mdi-key-variant"></i>
                     </button>
                 </div>
             </form>
@@ -48,33 +48,33 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="resetUser">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-account-remove icon-md text-primary">  Reset Application User</h4>
+            <h4 class="card-title mdi mdi-account-remove icon-md text-primary" th:text="#{reset-user}"></h4>
             <form th:action="@{settings}" method="post">
                 <div class="form-group">
-                    <label for="resetUsername">Username</label>
+                    <label for="resetUsername" th:text="#{username}"></label>
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                         </div>
-                        <input class="form-control form-control-lg border-left-0" type="text" name="resetUsername" id="resetUsername" placeholder="Current Username">
+                        <input class="form-control form-control-lg border-left-0" type="text" name="resetUsername" id="resetUsername" th:placeholder="#{username}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="resetPassword">Password</label>
+                    <label for="resetPassword" th:text="#{password}"></label>
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                         </div>
-                        <input class="form-control form-control-lg border-left-0" type="password" name="resetPassword" id="resetPassword" placeholder="Current Password">
+                        <input class="form-control form-control-lg border-left-0" type="password" name="resetPassword" id="resetPassword" th:placeholder="#{current-password}">
                     </div>
                 </div>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="resetUser">
-                        <i class="mdi mdi-autorenew"></i> Reset User
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="resetUser" th:text="#{reset-user}">
+                        <i class="mdi mdi-autorenew"></i>
                     </button>
                 </div>
             </form>
@@ -84,12 +84,12 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="updateNode">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-rotate-right icon-md text-primary">  Update Nodemanager</h4>
+            <h4 class="card-title mdi mdi-rotate-right icon-md text-primary" th:text="#{update-nodemanager}"></h4>
             <form th:action="@{settings}" method="post">
-                <h6 class="form-group">Please make sure your core is shut down before you restart the application</h6>
+                <h6 class="form-group" th:text="#{update-text}"></h6>
                 <div class="form-group row">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="update">
-                        <i class="mdi mdi-rotate-right icon-md"></i> Update
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="update" th:text="#{update-nodemanager}">
+                        <i class="mdi mdi-rotate-right icon-md"></i>
                     </button>
                 </div>
             </form>
@@ -99,12 +99,12 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="wipe">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-folder-remove icon-md text-primary">  Wipe Data</h4>
+            <h4 class="card-title mdi mdi-folder-remove icon-md text-primary" th:text="#{wipe-data}"></h4>
             <form th:action="@{settings}" method="post">
-                <h6 class="form-group">This action allows you to clear all blockchain related data</h6>
+                <h6 class="form-group" th:text="#{wipe-text}"></h6>
                 <div class="form-group row">
-                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="wipe">
-                        <i class="mdi mdi-folder-remove icon-md"></i> Wipe
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="wipe" th:text="#{wipe-data}">
+                        <i class="mdi mdi-folder-remove icon-md"></i>
                     </button>
                 </div>
             </form>

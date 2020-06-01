@@ -1,11 +1,11 @@
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-mandatory">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-chevron-double-right">  Transaction</h4>
+            <h4 class="card-title mdi mdi-chevron-double-right" th:text="#{transaction}"></h4>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="fromAddress">From</label>
+                        <label class="col-sm-3 col-form-label" for="fromAddress" th:text="#{from}"></label>
                         <div class="col-sm-9">
                             <select class="form-control" id="fromAddress" name="fromAddress" required>
                                 <option th:each="address : ${addresses}" th:value="${address}" th:text="${address}"></option>
@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="toAddress">To</label>
+                        <label class="col-sm-3 col-form-label" for="toAddress" th:text="#{to}"></label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="toAddress" id="toAddress" maxlength="35" minlength="35" required>
                         </div>
@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="walletPassword">Wallet Password</label>
+                        <label class="col-sm-3 col-form-label" for="walletPassword" th:text="#{wallet-password}"></label>
                         <div class="col-sm-9">
                             <input type="password" class="form-control" name="walletPassword" id="walletPassword">
                         </div>
@@ -60,11 +60,11 @@
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-mandatory-vm">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-chevron-double-right">  Transaction</h4>
+            <h4 class="card-title mdi mdi-chevron-double-right" th:text="#{transaction}"></h4>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="fromAddressVm">From</label>
+                        <label class="col-sm-3 col-form-label" for="fromAddressVm" th:text="#{from}"></label>
                         <div class="col-sm-9">
                             <select class="form-control" id="fromAddressVm" name="fromAddressVm" required>
                                 <option th:each="address : ${addresses}" th:value="${address}" th:text="${address}"></option>
@@ -94,7 +94,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="walletPasswordVm">Wallet Password</label>
+                        <label class="col-sm-3 col-form-label" for="walletPasswordVm" th:text="#{wallet-password}"></label>
                         <div class="col-sm-9">
                             <input type="password" class="form-control" name="walletPasswordVm" id="walletPasswordVm">
                         </div>
@@ -107,8 +107,7 @@
 
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-create">
     <div class="col">
-        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#createModal">
-            CREATE
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#createModal" th:text="#{create}">
         </button>
     </div>
     <!-- Modal -->
@@ -125,17 +124,17 @@
                         <div class="form-group">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mdi mdi-account-plus">  New Wallet</h4>
+                                    <h4 class="card-title mdi mdi-account-plus" th:text="#{new-wallet}"></h4>
                                     <div class="form-group">
-                                        <label for="mnemonic">Mnemonic</label>
+                                        <label for="mnemonic" th:text="#{mnemonic}"></label>
                                         <textarea rows="4" class="form-control" name="mnemonic" id="mnemonic" th:text="${mnemonic}"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label for="newWalletPass">Password</label>
+                                        <label for="newWalletPass" th:text="#{password}"></label>
                                         <input type="password" class="form-control" name="newWalletPass" id="newWalletPass">
                                     </div>
                                     <div class="form-group">
-                                        <label for="newWalletPassRep">Repeat</label>
+                                        <label for="newWalletPassRep" th:text="#{repeat}"></label>
                                         <input type="password" class="form-control" name="newWalletPassRep" id="newWalletPassRep">
                                     </div>
                                 </div>
@@ -143,7 +142,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="submit" class="btn btn-github" name="action" th:value="create">Create</button>
+                        <button type="submit" class="btn btn-github" name="action" th:value="create" th:text="#{create}"></button>
                     </div>
                 </form>
             </div>
@@ -152,8 +151,7 @@
 </div>
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-import">
     <div class="col">
-        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#importModal">
-            IMPORT
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#importModal" th:text="#{import}">
         </button>
     </div>
     <!-- Modal -->
@@ -170,17 +168,17 @@
                         <div class="form-group">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mdi mdi-account-plus">  Import Wallet</h4>
+                                    <h4 class="card-title mdi mdi-account-plus" th:text="#{import-wallet}"></h4>
                                     <div class="form-group">
-                                        <label for="importSecret">Secret</label>
+                                        <label for="importSecret" th:text="#{secret}"></label>
                                         <textarea class="form-control" rows="6" name="importSecret" id="importSecret"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label for="importWalletPass">Password</label>
+                                        <label for="importWalletPass" th:text="#{password}"></label>
                                         <input type="password" class="form-control" name="newWalletPass" id="importWalletPass">
                                     </div>
                                     <div class="form-group">
-                                        <label for="importWalletPassRep">Repeat</label>
+                                        <label for="importWalletPassRep" th:text="#{repeat}"></label>
                                         <input type="password" class="form-control" name="newWalletPassRep" id="importWalletPassRep">
                                     </div>
                                 </div>
@@ -188,7 +186,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="submit" class="btn btn-github" name="action" th:value="import">Import</button>
+                        <button type="submit" class="btn btn-github" name="action" th:value="import" th:text="#{import}"></button>
                     </div>
                 </form>
             </div>
@@ -197,8 +195,7 @@
 </div>
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-transfer">
     <div class="col">
-        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#transferModal">
-            TRANSFER
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#transferModal" th:text="#{transfer}">
         </button>
     </div>
     <!-- Modal -->
@@ -215,7 +212,7 @@
                         <th:block th:include="partials/_wallet::tx-mandatory"></th:block>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="submit" class="btn btn-github" name="action" th:value="transfer">Execute Transaction</button>
+                        <button type="submit" class="btn btn-github" name="action" th:value="transfer" th:text="#{execute-tx}"></button>
                     </div>
                 </form>
             </div>
@@ -224,8 +221,7 @@
 </div>
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-vote">
     <div class="col">
-        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#voteModal">
-            VOTE
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#voteModal" th:text="#{vote}">
         </button>
     </div>
     <!-- Modal -->
@@ -245,22 +241,22 @@
                         <div class="form-group">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mdi mdi-shape-polygon-plus">  Voting Payload</h4>
+                                    <h4 class="card-title mdi mdi-shape-polygon-plus" th:text="#{vote-payload}"></h4>
                                     <div class="form-group">
-                                        <label for="voteCandidate">Candidate</label>
+                                        <label for="voteCandidate" th:text="#{candidate}"></label>
                                         <select class="form-control" id="voteCandidate" name="voteCandidate" required>
                                             <option th:each="witness : ${witnesses}" th:value="${witness}" th:text="${witness}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="voteAmount">Amount Votes</label>
+                                        <label for="voteAmount" th:text="#{amount-votes}"></label>
                                         <input type="number" min="0" step="any" value="1" class="form-control" name="voteAmount" id="voteAmount">
                                     </div>
                                     <div class="form-group">
-                                        <label for="voteType">Mode</label>
+                                        <label for="voteType" th:text="#{mode}"></label>
                                         <select class="form-control" id="voteType" name="voteType" required>
-                                            <option value="add">Add</option>
-                                            <option value="remove">Revoke</option>
+                                            <option value="add" th:text="#{add}"></option>
+                                            <option value="remove" th:text="#{revoke}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -268,7 +264,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="submit" class="btn btn-github" name="action" th:value="vote">Execute Transaction</button>
+                        <button type="submit" class="btn btn-github" name="action" th:value="vote" th:text="#{execute-tx}"></button>
                     </div>
                 </form>
             </div>
@@ -277,8 +273,7 @@
 </div>
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="tx-register">
     <div class="col">
-        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#registerModal">
-            REGISTER
+        <button type="button" class="btn btn-github col-12" data-toggle="modal" data-target="#registerModal" th:text="#{register}">
         </button>
     </div>
     <!-- Modal -->
@@ -298,42 +293,42 @@
                         <div class="form-group">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mdi mdi-account-plus">  Registration Payload</h4>
+                                    <h4 class="card-title mdi mdi-account-plus" th:text="#{registration-payload}"></h4>
                                     <div class="form-group">
-                                        <label for="registerAddress">Address</label>
+                                        <label for="registerAddress" th:text="#{address}"></label>
                                         <select class="form-control" id="registerAddress" name="registerAddress" required>
                                             <option th:each="wallet : ${wallets}" th:value="${wallet.get('walletAddress')}" th:text="${wallet.get('walletAddress')}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="registerType">Mode</label>
+                                        <label for="registerType" th:text="#{mode}"></label>
                                         <select class="form-control" id="registerType" name="registerType" required>
-                                            <option value="add" selected>Register</option>
-                                            <option value="remove">Revoke</option>
+                                            <option value="add" selected th:text="#{register}"></option>
+                                            <option value="remove" th:text="#{revoke}"></option>
                                         </select>
                                     </div>
                                     <div class="form-group" id="companyDiv">
-                                        <label for="company">Company Name</label>
+                                        <label for="company" th:text="#{company}"></label>
                                         <input type="text" class="form-control" name="company" id="company">
                                     </div>
                                     <div class="form-group" id="urlDiv">
-                                        <label for="url">URL</label>
+                                        <label for="url" th:text="#{url}"></label>
                                         <input type="text" class="form-control" name="url" id="url">
                                     </div>
                                     <div class="form-group" id="countryDiv">
-                                        <label for="country">Country</label>
+                                        <label for="country" th:text="#{country}"></label>
                                         <input type="text" class="form-control" name="country" id="country">
                                     </div>
                                     <div class="form-group" id="locationDiv">
-                                        <label for="location">Location</label>
+                                        <label for="location" th:text="#{location}"></label>
                                         <input type="text" class="form-control" name="location" id="location">
                                     </div>
                                     <div class="form-group" id="longitudeDiv">
-                                        <label for="longitude">Longitude</label>
+                                        <label for="longitude" th:text="#{longitude}"></label>
                                         <input type="number" min="-180" max="180" step="any" value="1" class="form-control" name="longitude" id="longitude">
                                     </div>
                                     <div class="form-group" id="latitudeDiv">
-                                        <label for="latitude">Latitude</label>
+                                        <label for="latitude" th:text="#{latitude}"></label>
                                         <input type="number" min="-90" max="90" step="any" value="1" class="form-control" name="latitude" id="latitude">
                                     </div>
                                 </div>
@@ -341,7 +336,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="submit" class="btn btn-github" name="action" th:value="register">Execute Transaction</button>
+                        <button type="submit" class="btn btn-github" name="action" th:value="register" th:text="#{execute-tx}"></button>
                     </div>
                 </form>
             </div>
@@ -352,7 +347,7 @@
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="walletList">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title text-primary mdi mdi-wallet icon-md">  Wallets</h4>
+            <h4 class="card-title text-primary mdi mdi-wallet icon-md" th:text="#{wallet}"></h4>
             <!-- Accordion card -->
             <div class="card" th:each="wallet : ${wallets}">
                 <!-- Card header -->
@@ -395,7 +390,7 @@
 <div lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="txList">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title text-primary mdi mdi-chevron-double-right icon-md">  Transactions</h4>
+            <h4 class="card-title text-primary mdi mdi-chevron-double-right icon-md" th:text="#{transaction}"></h4>
             <!-- Accordion card -->
             <div class="card" th:each="transaction : ${transactions}">
                 <!-- Card header -->
