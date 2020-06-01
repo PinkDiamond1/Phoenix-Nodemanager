@@ -1,18 +1,12 @@
 package app.service.wallet;
 
-import app.controller.WalletController;
 import app.entity.Wallet;
 import app.repository.WalletRepository;
-import com.mongodb.MongoClient;
 import crypto.CPXKey;
 import crypto.CryptoService;
-import message.transaction.IProduceTransaction;
-import message.util.GenericJacksonWriter;
-import message.util.RequestCallerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -31,21 +25,6 @@ public class WalletLogic implements IWalletOperations {
 
     @Autowired
     private WalletRepository walletRepository;
-
-    @Autowired
-    private MongoClient mongoClient;
-
-    @Autowired
-    private RequestCallerService requestCaller;
-
-    @Autowired
-    private GenericJacksonWriter jacksonWriter;
-
-    @Autowired
-    private IProduceTransaction txFactory;
-
-    @Value("${app.core.rpc}")
-    private String rpcUrl;
 
     @Override
     public void create(final String secret, final String password, final String repeat) {
