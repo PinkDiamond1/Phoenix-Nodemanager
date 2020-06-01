@@ -1,6 +1,5 @@
 package app.service.wallet;
 
-import app.controller.WalletController;
 import app.entity.Wallet;
 import app.repository.WalletRepository;
 import com.mongodb.MongoClient;
