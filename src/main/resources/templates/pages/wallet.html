@@ -16,7 +16,7 @@
                         <div class="col-md-4 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mdi mdi-wallet icon-md text-github">  Wallet</h4>
+                                    <h4 class="card-title mdi mdi-wallet icon-md text-github" th:text="#{wallet}"></h4>
                                     <div class="row">
                                         <div class="col-md-6 grid-margin stretch-card">
                                             <th:block th:include="partials/_wallet::tx-create"></th:block>
@@ -31,7 +31,7 @@
                         <div class="col-md-8 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title mdi mdi-chevron-double-right icon-md text-github">  Transaction</h4>
+                                    <h4 class="card-title mdi mdi-chevron-double-right icon-md text-github" th:text="#{transaction}"></h4>
                                     <div class="row">
                                         <div class="col-md-4 grid-margin stretch-card">
                                             <th:block th:include="partials/_wallet::tx-transfer"></th:block>
