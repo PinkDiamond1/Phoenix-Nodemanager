@@ -45,8 +45,8 @@ public class SettingsController {
     }
 
     @PostMapping(params = "action=resetUser")
-    public String resetUser(@RequestParam(value = "username") final String username,
-                            @RequestParam(value = "password") final String password) {
+    public String resetUser(@RequestParam(value = "resetUsername") final String username,
+                            @RequestParam(value = "resetPassword") final String password) {
         configurationLogic.resetUser(username, password);
         return ApplicationPaths.LOGOUT_PATH;
     }
