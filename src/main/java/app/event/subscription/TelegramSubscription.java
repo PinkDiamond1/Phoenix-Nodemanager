@@ -12,7 +12,7 @@ import java.util.Optional;
 public class TelegramSubscription implements ISubscriber {
 
     private static final String headerAttention = "❗❗ ATTENTION ❗❗\n\n";
-    private static final String headerInfo = "\uD83D\uDFE2 INFORMATION \uD83D\uDFE2+\n\n";
+    private static final String headerInfo = "\uD83D\uDFE2 INFORMATION \uD83D\uDFE2\n\n";
 
     @Autowired
     @Qualifier("TelegramBotRunner")
