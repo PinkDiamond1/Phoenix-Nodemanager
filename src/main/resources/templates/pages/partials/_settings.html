@@ -114,14 +114,14 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="telegramConf">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title mdi mdi-key-variant icon-md text-primary" th:text="#{telegram-desc}"></h4>
+            <h4 class="card-title mdi mdi-telegram icon-md text-primary" th:text="#{telegram-desc}"></h4>
             <form th:action="@{settings}" method="post">
                 <div class="form-group">
                     <label for="telegramBotToken" th:text="#{telegram-token}"></label>
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
-                        <i class="mdi mdi-lock-outline text-primary"></i>
+                        <i class="mdi mdi-account-key text-primary"></i>
                       </span>
                         </div>
                         <input class="form-control form-control-lg border-left-0" type="password" name="telegramBotToken" id="telegramBotToken" th:value="${botToken}">
@@ -132,7 +132,7 @@
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                       <span class="input-group-text bg-transparent border-right-0">
-                        <i class="mdi mdi-lock-outline text-primary"></i>
+                        <i class="mdi mdi-account-box text-primary"></i>
                       </span>
                         </div>
                         <input class="form-control form-control-lg border-left-0" type="text" name="telegramBotName" id="telegramBotName" th:value="${botName}">
