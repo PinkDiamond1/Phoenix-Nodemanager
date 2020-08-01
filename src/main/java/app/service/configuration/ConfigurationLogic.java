@@ -2,9 +2,12 @@ package app.service.configuration;
 
 import app.component.*;
 import app.entity.ApplicationUser;
+import app.entity.TelegramConfiguration;
 import app.process.ProcessExecutor;
 import app.repository.ApplicationUserRepository;
+import app.repository.TelegramConfigurationRepository;
 import app.service.configuration.parse.IParseRootComponent;
+import app.service.monitoring.IProvideMonitoring;
 import com.mongodb.MongoClient;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -27,12 +30,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
 @Primary
 @Service("ConfigurationLogic")
-public class ConfigurationLogic implements IAddRootComponentToModel, IGenericConfiguration {
+public class ConfigurationLogic implements IAddRootComponentToModel, IGenericConfiguration, IHandleTelegram {
 
     private final Logger log = LoggerFactory.getLogger(ConfigurationLogic.class);
 
@@ -47,7 +51,14 @@ public class ConfigurationLogic implements IAddRootComponentToModel, IGenericCon
     private ApplicationUserRepository userRepository;
 
     @Autowired
+    private TelegramConfigurationRepository telegramRepository;
+
+    @Autowired
     private ProcessExecutor processExecutor;
+
+    @Autowired
+    @Qualifier("TelegramBotRunner")
+    private IProvideMonitoring telegramBotRunner;
 
     @Autowired
     private MongoClient mongoClient;
@@ -163,6 +174,28 @@ public class ConfigurationLogic implements IAddRootComponentToModel, IGenericCon
                     if(user.getPassword().equals(password)){
                         userRepository.delete(user);
                     }
+                });
+    }
+
+    @Override
+    public void startTelegram(final String botToken, final String botName) {
+        final Iterator<TelegramConfiguration> configurationIterable = telegramRepository.findAll().iterator();
+        final TelegramConfiguration config = configurationIterable.hasNext() ?
+                configurationIterable.next() :
+                new TelegramConfiguration();
+            config.setBotName(botName);
+            config.setToken(botToken);
+        config.setBotName(botName);
+        config.setToken(botToken);
+        telegramRepository.save(config);
+        telegramBotRunner.run();
+    }
+
+    public void loadTelegramData(Model model) {
+        telegramRepository.findFirstByTokenNotNull()
+                .ifPresent(config -> {
+                    model.addAttribute("botToken", config.getToken());
+                    model.addAttribute("botName", config.getBotName());
                 });
     }
 }

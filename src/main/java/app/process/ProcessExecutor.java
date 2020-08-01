@@ -1,6 +1,8 @@
 package app.process;
 
 import app.entity.ProcessLogger;
+import app.event.EventHandler;
+import app.event.ManagerEvent;
 import app.process.command.CommandFactory;
 import app.repository.ProcessLoggerRepository;
 import org.slf4j.Logger;
@@ -15,6 +17,9 @@ import java.util.stream.Stream;
 
 @Service
 public class ProcessExecutor {
+
+    @Autowired
+    private EventHandler eventHandler;
 
     private final Logger log = LoggerFactory.getLogger(ProcessExecutor.class);
     public static final String JAR_NAME = "blockchain-core.jar";
@@ -56,9 +61,11 @@ public class ProcessExecutor {
                     .waitFor();
             logProcess(ProcessStatus.FINISHED);
             log.info("Installation finished");
+            eventHandler.handleEvent(ManagerEvent.CORE_INSTALL);
         } catch (InterruptedException | IOException e) {
             logProcess(ProcessStatus.FAILED);
             log.error("Installation failed: ");
+            eventHandler.handleEvent(ManagerEvent.CORE_INSTALL_FAILED);
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
         }
 
@@ -80,8 +87,10 @@ public class ProcessExecutor {
                     .start()
                     .waitFor();
             log.info("Update finished");
+            eventHandler.handleEvent(ManagerEvent.CORE_UPDATE);
         } catch (InterruptedException | IOException e) {
             log.error("Update failed");
+            eventHandler.handleEvent(ManagerEvent.CORE_UPDATE_FAILED);
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
         }
 
@@ -95,9 +104,11 @@ public class ProcessExecutor {
                     .inheritIO()
                     .start();
             logProcess(ProcessStatus.RUNNING, process.pid());
+            eventHandler.handleEvent(ManagerEvent.CORE_START);
         } catch (IOException e){
             logProcess(ProcessStatus.FAILED);
             log.error("Running jar failed");
+            eventHandler.handleEvent(ManagerEvent.CORE_START_FAILED);
             Stream.of(e.getStackTrace()).forEach(stackTraceElement -> log.error(stackTraceElement.toString()));
         }
 
@@ -105,13 +116,14 @@ public class ProcessExecutor {
 
     public void stopJar(){
 
-        processLoggerRepository.findById(JAR_NAME).ifPresent(processLogger -> {
+        processLoggerRepository.findById(JAR_NAME).ifPresentOrElse(processLogger -> {
             if(processLogger.getStatus().equals(ProcessStatus.RUNNING.getStatus())) {
                 ProcessHandle.of(processLogger.getPid()).ifPresent(ProcessHandle::destroy);
                 logProcess(ProcessStatus.FINISHED);
                 log.info("Stopped jar");
+                eventHandler.handleEvent(ManagerEvent.CORE_STOP);
             }
-        });
+        }, () -> eventHandler.handleEvent(ManagerEvent.CORE_START_FAILED));
 
     }
 

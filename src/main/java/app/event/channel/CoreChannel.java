@@ -1,4 +1,6 @@
 package app.event.channel;
 
-public class CoreChannel extends AChannel {
-}
+import org.springframework.stereotype.Component;
+
+@Component
+public class CoreChannel extends AChannel {}
