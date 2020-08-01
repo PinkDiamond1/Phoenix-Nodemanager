@@ -1,11 +1,7 @@
 package app.config;
 
 import app.ManagerApplication;
-import app.event.EventHandler;
-import app.event.ManagerEvent;
-import app.event.channel.CoreChannel;
-import app.event.channel.ManagerChannel;
-import app.event.subscription.AppSubscription;
+import app.service.monitoring.telegram.TelegramSessionManager;
 import com.mongodb.MongoClient;
 import crypto.CryptoService;
 import message.transaction.IProduceTransaction;
@@ -54,25 +50,8 @@ public class ApplicationConfiguration extends SpringBootServletInitializer {
     public IProduceTransaction getTxFactory(){ return new TransactionFactory();}
 
     @Bean
-    public EventHandler getEventHandler(){
-
-        final CoreChannel coreChannel = new CoreChannel();
-        coreChannel.addEvent(ManagerEvent.CORE_INSTALL);
-        coreChannel.addEvent(ManagerEvent.CORE_STOP);
-        coreChannel.addEvent(ManagerEvent.CORE_UPDATE);
-        coreChannel.addEvent(ManagerEvent.CORE_START);
-        coreChannel.subscribe(new AppSubscription());
-
-        final ManagerChannel managerChannel = new ManagerChannel();
-        managerChannel.addEvent(ManagerEvent.LOGIN_SUCCESS);
-        managerChannel.addEvent(ManagerEvent.LOGIN_FAIL);
-
-        final EventHandler eventHandler = new EventHandler();
-        eventHandler.addChannel(coreChannel);
-        eventHandler.addChannel(managerChannel);
-
-        return eventHandler;
-
+    public TelegramSessionManager getTelegramSessionManager(){
+        return new TelegramSessionManager();
     }
 
 }

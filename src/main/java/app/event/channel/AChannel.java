@@ -1,7 +1,7 @@
 package app.event.channel;
 
-import app.event.subscription.ISubscriber;
 import app.event.ManagerEvent;
+import app.event.subscription.ISubscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public abstract class AChannel {
 
     public void notifySubscribers(final ManagerEvent event){
         subscribers.forEach(subscriber -> {
-            if(managerEvents.contains(event)) subscriber.update();
+            if(managerEvents.contains(event)) subscriber.update(event);
         });
     }
 

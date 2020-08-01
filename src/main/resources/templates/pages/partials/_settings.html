@@ -111,3 +111,39 @@
         </div>
     </div>
 </div>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="telegramConf">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mdi mdi-key-variant icon-md text-primary" th:text="#{telegram-desc}"></h4>
+            <form th:action="@{settings}" method="post">
+                <div class="form-group">
+                    <label for="telegramBotToken" th:text="#{telegram-token}"></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                        </div>
+                        <input class="form-control form-control-lg border-left-0" type="password" name="telegramBotToken" id="telegramBotToken" th:value="${botToken}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="telegramBotName" th:text="#{telegram-name}"></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-lock-outline text-primary"></i>
+                      </span>
+                        </div>
+                        <input class="form-control form-control-lg border-left-0" type="text" name="telegramBotName" id="telegramBotName" th:value="${botName}">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg" name="action" value="startTelegram" th:text="#{save-config}">
+                        <i class="mdi mdi-key-variant"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
