@@ -100,7 +100,7 @@ public class TransactionLogic implements IProposalTx, ITransferTx, IProducerTx {
             executeTx(from, password, () -> new byte[0],
                     new FixedNumber(amount, FixedNumber.CPX),
                     new FixedNumber(gasPrice, FixedNumber.KGP),
-                    new FixedNumber(amount, FixedNumber.KP),
+                    new FixedNumber(gasLimit, FixedNumber.KP),
                     TxObj.TRANSFER, CPXKey.getScriptHashFromCPXAddress(to));
         } catch (Exception e) {
             log.error("This is not a valid address: " + to);
